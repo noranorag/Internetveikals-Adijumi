@@ -18,11 +18,11 @@
             <img src="images/logo.png" alt="Logo">
         </div>
         <ul class="nav-links">
-            <li><a href="#">SĀKUMS</a></li>
-            <li><a href="#">INTERNETVEIKALS</a></li>
-            <li><a href="#">PAR MANI</a></li>
-            <li><a href="#">GALERIJA</a></li>
-            <li><a href="#">TIRDZIŅI</a></li>
+            <li><a href="index.php">SĀKUMS</a></li>
+            <li><a href="internetveikals.php">INTERNETVEIKALS</a></li>
+            <li><a href="par-mani.php">PAR MANI</a></li>
+            <li><a href="galerija.php">GALERIJA</a></li>
+            <li><a href="tirdzini.php">TIRDZIŅI</a></li>
         </ul>
         <div class="nav-icons">
             <a href="#" data-hover-text="Mans profils"><i class="fas fa-user"></i></a>
@@ -106,6 +106,26 @@
         </div>
     </div>
 </section>
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-logo">
+            <img src="images/logo.png" alt="Logo">
+        </div>
+        <nav class="footer-nav">
+            <ul>
+                <li><a href="#">Sākums</a></li>
+                <li><a href="#">Par Mums</a></li>
+                <li><a href="#">Produkti</a></li>
+                <li><a href="#">Kontakti</a></li>
+            </ul>
+        </nav>
+        <div class="footer-links">
+            <a href="#">Privātuma Politika</a>
+            <a href="#">Sīkdatņu Politika</a>
+        </div>
+    </div>
+</footer>
 
 
 <!-- <section class="about-section">
