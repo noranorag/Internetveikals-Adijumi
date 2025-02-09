@@ -1,4 +1,4 @@
-<!-- filepath: /c:/Users/user/Desktop/Servera faili/Internetveikals-Adijumi/internetveikals.php -->
+
 <!DOCTYPE html>
 <html lang="lv">
 <head>
@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Preču Katalogs</title>
     <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 <div class="header-banner">
@@ -31,9 +33,8 @@
     </nav>
 
     <section class="product-catalog">
-        <h2>Preču Katalogs</h2>
         <div class="filter-search-container">
-            <button class="filter-button">Filtrēšana</button>
+            <button class="filter-button" onclick="toggleFilterPanel()">Filtrēšana</button>
             <div class="search-container">
                 <input type="text" class="search-input" placeholder="Meklēt produktu">
                 <button class="search-button">Meklēt</button>
@@ -116,6 +117,60 @@
         </div>
     </section>
 
+    <div class="filter-panel" id="filterPanel">
+        <h3>Filtrēšana</h3>
+        <div class="filter-option">
+            <label for="dzimums">Dzimums</label>
+            <select id="dzimums">
+                <option value="visi">Visi</option>
+                <option value="viriesi">Vīrieši</option>
+                <option value="sievietes">Sievietes</option>
+                <option value="berni">Bērni</option>
+            </select>
+        </div>
+        <div class="filter-option">
+            <label for="krasa">Krāsa</label>
+            <select id="krasa">
+                <option value="visi">Visas</option>
+                <option value="sarkana">Sarkana</option>
+                <option value="zila">Zila</option>
+                <option value="zalā">Zaļā</option>
+                <option value="melna">Melna</option>
+            </select>
+        </div>
+        <div class="filter-option">
+            <label for="kategorija">Kategorija</label>
+            <select id="kategorija">
+                <option value="visi">Visas</option>
+                <option value="apgerbi">Apģērbi</option>
+                <option value="aksesuari">Aksesuāri</option>
+                <option value="apavi">Apavi</option>
+            </select>
+        </div>
+        <div class="filter-option">
+            <label for="izmers">Izmērs</label>
+            <select id="izmers">
+                <option value="visi">Visi</option>
+                <option value="s">S</option>
+                <option value="m">M</option>
+                <option value="l">L</option>
+                <option value="xl">XL</option>
+            </select>
+        </div>
+        <div class="filter-option">
+            <label for="sezona">Sezona</label>
+            <select id="sezona">
+                <option value="visi">Visas</option>
+                <option value="ziema">Ziema</option>
+                <option value="pavasaris">Pavasaris</option>
+                <option value="vasara">Vasara</option>
+                <option value="rudens">Rudens</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="overlay"></div>
+
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-logo">
@@ -137,3 +192,5 @@
     </footer>
 </body>
 </html>
+
+

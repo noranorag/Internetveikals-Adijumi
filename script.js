@@ -19,29 +19,106 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 3000);
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    const carousel = document.querySelector('.carousel');
+    if (carousel) {
+        const items = document.querySelectorAll('.carousel-item');
+        const totalItems = items.length;
+        const visibleItems = 5;
+        let currentIndex = 0;
+
+        function moveCarousel() {
+            currentIndex++;
+            if (currentIndex >= totalItems - visibleItems) {
+                carousel.style.transition = 'transform 1s ease';
+                carousel.style.transform = `translateX(-${currentIndex * (100 / visibleItems)}%)`;
+                setTimeout(() => {
+                    carousel.style.transition = 'none';
+                    carousel.style.transform = `translateX(0)`;
+                    currentIndex = 0;
+                }, 1000); 
+            } else {
+                carousel.style.transition = 'transform 1s ease';
+                carousel.style.transform = `translateX(-${currentIndex * (100 / visibleItems)}%)`;
+            }
+        }
+
+        setInterval(moveCarousel, 3000); 
+    }
+});
+
+
 
 document.addEventListener('DOMContentLoaded', function() {
     const carousel = document.querySelector('.carousel');
-    const items = document.querySelectorAll('.carousel-item');
-    const totalItems = items.length;
-    const visibleItems = 5; // Number of visible items
-    let currentIndex = 0;
+    if (carousel) {
+        const items = document.querySelectorAll('.carousel-item');
+        const totalItems = items.length;
+        const visibleItems = 5;
+        let currentIndex = 0;
 
-    function moveCarousel() {
-        currentIndex++;
-        if (currentIndex >= totalItems - visibleItems) {
-            carousel.style.transition = 'transform 1s ease';
-            carousel.style.transform = `translateX(-${currentIndex * (100 / visibleItems)}%)`;
-            setTimeout(() => {
-                carousel.style.transition = 'none';
-                carousel.style.transform = `translateX(0)`;
-                currentIndex = 0;
-            }, 1000); // Adjust this timeout to match the transition duration
-        } else {
-            carousel.style.transition = 'transform 1s ease';
-            carousel.style.transform = `translateX(-${currentIndex * (100 / visibleItems)}%)`;
+        function moveCarousel() {
+            currentIndex++;
+            if (currentIndex >= totalItems - visibleItems) {
+                carousel.style.transition = 'transform 1s ease';
+                carousel.style.transform = `translateX(-${currentIndex * (100 / visibleItems)}%)`;
+                setTimeout(() => {
+                    carousel.style.transition = 'none';
+                    carousel.style.transform = `translateX(0)`;
+                    currentIndex = 0;
+                }, 1000); 
+            } else {
+                carousel.style.transition = 'transform 1s ease';
+                carousel.style.transform = `translateX(-${currentIndex * (100 / visibleItems)}%)`;
+            }
         }
-    }
 
-    setInterval(moveCarousel, 3000); // Change every 3 seconds
+        setInterval(moveCarousel, 3000); 
+    }
 });
+
+function toggleFilterPanel() {
+    const filterPanel = document.getElementById('filterPanel');
+    const overlay = document.getElementById('overlay');
+    filterPanel.classList.toggle('active');
+    overlay.classList.toggle('active');
+}
+
+document.addEventListener('click', function(event) {
+    const filterPanel = document.getElementById('filterPanel');
+    const filterButton = document.querySelector('.filter-button');
+    const overlay = document.getElementById('overlay');
+    if (filterPanel.classList.contains('active') && !filterPanel.contains(event.target) && !filterButton.contains(event.target) && !overlay.contains(event.target)) {
+        filterPanel.classList.remove('active');
+        overlay.classList.remove('active');
+    }
+});
+
+document.getElementById('overlay').addEventListener('click', function() {
+    const filterPanel = document.getElementById('filterPanel');
+    const overlay = document.getElementById('overlay');
+    filterPanel.classList.remove('active');
+    overlay.classList.remove('active');
+});
+
+function openModal(image) {
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    modal.style.display = 'block';
+    modalImage.src = image.src;
+}
+
+function closeModal() {
+    const modal = document.getElementById('imageModal');
+    modal.style.display = 'none';
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById('imageModal');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+}
+
+window.openModal = openModal;
+window.closeModal = closeModal;
