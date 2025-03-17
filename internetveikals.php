@@ -1,196 +1,267 @@
-
 <!DOCTYPE html>
-<html lang="lv">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Preču Katalogs</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Internetveikals</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="header-banner">
-        <span class="banner-text active">Pirkumiem virs 70 eiro bezmaksas piegāde</span>
-        <span class="banner-text">Nopērc kvalitatīvus adījumus jau šodien</span>
-    </div>
-    <nav class="navigation">
-        <div class="nav-logo">
-            <img src="images/logo.png" alt="Logo">
-        </div>
-        <ul class="nav-links">
-            <li><a href="index.php">SĀKUMS</a></li>
-            <li><a href="internetveikals.php">INTERNETVEIKALS</a></li>
-            <li><a href="par-mani.php">PAR MANI</a></li>
-            <li><a href="galerija.php">GALERIJA</a></li>
-            <li><a href="tirdzini.php">TIRDZIŅI</a></li>
-        </ul>
-        <div class="nav-icons">
-            <a href="#" data-hover-text="Mans profils"><i class="fas fa-user"></i></a>
-            <a href="#" data-hover-text="Iepirkumu grozs"><i class="fas fa-shopping-cart"></i></a>
-            <a href="#" data-hover-text="Favorīti"><i class="fas fa-heart"></i></a>
-        </div>
-    </nav>
+    <!-- Announcement Bar -->
+    <div class="announcement" id="announcement"></div>
 
-    <section class="product-catalog">
-        <div class="filter-search-container">
-            <button class="filter-button" onclick="toggleFilterPanel()">Filtrēšana</button>
-            <div class="search-container">
-                <input type="text" class="search-input" placeholder="Meklēt produktu">
-                <button class="search-button">Meklēt</button>
-            </div>
-        </div>
-        <div class="product-grid">
-            <div class="product-item">
-                <img src="images/berniem.png" alt="Bērnu kombinzoni">
-                <h3>Bērnu kombinzoni</h3>
-                <p>€50.00</p>
-                <a href="#" class="product-button">Pirkt</a>
-            </div>
-            <div class="product-item">
-                <img src="images/viriesiem.png" alt="Vīriešu Cepure">
-                <h3>Vīriešu Cepure</h3>
-                <p>€25.00</p>
-                <a href="#" class="product-button">Pirkt</a>
-            </div>
-            <div class="product-item">
-                <img src="images/sievietem.png" alt="Sieviešu Šalle">
-                <h3>Sieviešu Šalle</h3>
-                <p>€35.00</p>
-                <a href="#" class="product-button">Pirkt</a>
-            </div>
-            <div class="product-item">
-                <img src="images/berniem.png" alt="Bērnu Džemperis">
-                <h3>Bērnu Džemperis</h3>
-                <p>€30.00</p>
-                <a href="#" class="product-button">Pirkt</a>
-            </div>
-            <!-- Add more product items as needed -->
-            <div class="product-item">
-                <img src="images/berniem.png" alt="Bērnu kombinzoni">
-                <h3>Bērnu kombinzoni</h3>
-                <p>€50.00</p>
-                <a href="#" class="product-button">Pirkt</a>
-            </div>
-            <div class="product-item">
-                <img src="images/viriesiem.png" alt="Vīriešu Cepure">
-                <h3>Vīriešu Cepure</h3>
-                <p>€25.00</p>
-                <a href="#" class="product-button">Pirkt</a>
-            </div>
-            <div class="product-item">
-                <img src="images/sievietem.png" alt="Sieviešu Šalle">
-                <h3>Sieviešu Šalle</h3>
-                <p>€35.00</p>
-                <a href="#" class="product-button">Pirkt</a>
-            </div>
-            <div class="product-item">
-                <img src="images/berniem.png" alt="Bērnu Džemperis">
-                <h3>Bērnu Džemperis</h3>
-                <p>€30.00</p>
-                <a href="#" class="product-button">Pirkt</a>
-            </div>
-            <div class="product-item">
-                <img src="images/berniem.png" alt="Bērnu kombinzoni">
-                <h3>Bērnu kombinzoni</h3>
-                <p>€50.00</p>
-                <a href="#" class="product-button">Pirkt</a>
-            </div>
-            <div class="product-item">
-                <img src="images/viriesiem.png" alt="Vīriešu Cepure">
-                <h3>Vīriešu Cepure</h3>
-                <p>€25.00</p>
-                <a href="#" class="product-button">Pirkt</a>
-            </div>
-            <div class="product-item">
-                <img src="images/sievietem.png" alt="Sieviešu Šalle">
-                <h3>Sieviešu Šalle</h3>
-                <p>€35.00</p>
-                <a href="#" class="product-button">Pirkt</a>
-            </div>
-            <div class="product-item">
-                <img src="images/berniem.png" alt="Bērnu Džemperis">
-                <h3>Bērnu Džemperis</h3>
-                <p>€30.00</p>
-                <a href="#" class="product-button">Pirkt</a>
-            </div>
-        </div>
-    </section>
+    <?php include 'files/navbar.php'; ?>
 
-    <div class="filter-panel" id="filterPanel">
-        <h3>Filtrēšana</h3>
-        <div class="filter-option">
-            <label for="dzimums">Dzimums</label>
-            <select id="dzimums">
-                <option value="visi">Visi</option>
-                <option value="viriesi">Vīrieši</option>
-                <option value="sievietes">Sievietes</option>
-                <option value="berni">Bērni</option>
-            </select>
+    <div class="container mt-5 pt-5">
+        <div class="heading-container">
+            <h1 class="mb-4">Internetveikals</h1>
         </div>
-        <div class="filter-option">
-            <label for="krasa">Krāsa</label>
-            <select id="krasa">
-                <option value="visi">Visas</option>
-                <option value="sarkana">Sarkana</option>
-                <option value="zila">Zila</option>
-                <option value="zalā">Zaļā</option>
-                <option value="melna">Melna</option>
-            </select>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <button class="btn btn-secondary" onclick="toggleFilterModal()">Filtrēt</button>
+            <div class="d-flex">
+                <input type="text" class="form-control mr-2" placeholder="Meklēt produktus">
+                <button class="btn btn-secondary">Meklēt</button>
+            </div>
         </div>
-        <div class="filter-option">
-            <label for="kategorija">Kategorija</label>
-            <select id="kategorija">
-                <option value="visi">Visas</option>
-                <option value="apgerbi">Apģērbi</option>
-                <option value="aksesuari">Aksesuāri</option>
-                <option value="apavi">Apavi</option>
-            </select>
-        </div>
-        <div class="filter-option">
-            <label for="izmers">Izmērs</label>
-            <select id="izmers">
-                <option value="visi">Visi</option>
-                <option value="s">S</option>
-                <option value="m">M</option>
-                <option value="l">L</option>
-                <option value="xl">XL</option>
-            </select>
-        </div>
-        <div class="filter-option">
-            <label for="sezona">Sezona</label>
-            <select id="sezona">
-                <option value="visi">Visas</option>
-                <option value="ziema">Ziema</option>
-                <option value="pavasaris">Pavasaris</option>
-                <option value="vasara">Vasara</option>
-                <option value="rudens">Rudens</option>
-            </select>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card mb-4 text-center">
+                    <img src="images/berniem.png" class="card-img-top" alt="Product Image">
+                    <div class="card-body">
+                        <h5 class="card-title">Produkts 1</h5>
+                        <p class="card-text">Īss apraksts par produktu.</p>
+                        <p class="card-text"><strong>€20.00</strong></p>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#productModal" onclick="showProductDetails('Produkts 1', 'Īss apraksts par produktu.', 'Garāks apraksts par produktu.', 'Sarkans', 'M', 'Kokvilna', 'Mazgāt ar rokām.')">Apskatīt</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card mb-4 text-center">
+                    <img src="images/berniem.png" class="card-img-top" alt="Product Image">
+                    <div class="card-body">
+                        <h5 class="card-title">Produkts 2</h5>
+                        <p class="card-text">Īss apraksts par produktu.</p>
+                        <p class="card-text"><strong>€25.00</strong></p>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#productModal" onclick="showProductDetails('Produkts 2', 'Īss apraksts par produktu.', 'Garāks apraksts par produktu.', 'Zils', 'L', 'Vilna', 'Mazgāt ar rokām.')">Apskatīt</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card mb-4 text-center">
+                    <img src="images/berniem.png" class="card-img-top" alt="Product Image">
+                    <div class="card-body">
+                        <h5 class="card-title">Produkts 3</h5>
+                        <p class="card-text">Īss apraksts par produktu.</p>
+                        <p class="card-text"><strong>€30.00</strong></p>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#productModal" onclick="showProductDetails('Produkts 3', 'Īss apraksts par produktu.', 'Garāks apraksts par produktu.', 'Zaļš', 'S', 'Lins', 'Mazgāt ar rokām.')">Apskatīt</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card mb-4 text-center">
+                    <img src="images/berniem.png" class="card-img-top" alt="Product Image">
+                    <div class="card-body">
+                        <h5 class="card-title">Produkts 4</h5>
+                        <p class="card-text">Īss apraksts par produktu.</p>
+                        <p class="card-text"><strong>€35.00</strong></p>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#productModal" onclick="showProductDetails('Produkts 4', 'Īss apraksts par produktu.', 'Garāks apraksts par produktu.', 'Dzeltens', 'XL', 'Poliesters', 'Mazgāt ar rokām.')">Apskatīt</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card mb-4 text-center">
+                    <img src="images/berniem.png" class="card-img-top" alt="Product Image">
+                    <div class="card-body">
+                        <h5 class="card-title">Produkts 4</h5>
+                        <p class="card-text">Īss apraksts par produktu.</p>
+                        <p class="card-text"><strong>€35.00</strong></p>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#productModal" onclick="showProductDetails('Produkts 4', 'Īss apraksts par produktu.', 'Garāks apraksts par produktu.', 'Dzeltens', 'XL', 'Poliesters', 'Mazgāt ar rokām.')">Apskatīt</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card mb-4 text-center">
+                    <img src="images/berniem.png" class="card-img-top" alt="Product Image">
+                    <div class="card-body">
+                        <h5 class="card-title">Produkts 4</h5>
+                        <p class="card-text">Īss apraksts par produktu.</p>
+                        <p class="card-text"><strong>€35.00</strong></p>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#productModal" onclick="showProductDetails('Produkts 4', 'Īss apraksts par produktu.', 'Garāks apraksts par produktu.', 'Dzeltens', 'XL', 'Poliesters', 'Mazgāt ar rokām.')">Apskatīt</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card mb-4 text-center">
+                    <img src="images/berniem.png" class="card-img-top" alt="Product Image">
+                    <div class="card-body">
+                        <h5 class="card-title">Produkts 4</h5>
+                        <p class="card-text">Īss apraksts par produktu.</p>
+                        <p class="card-text"><strong>€35.00</strong></p>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#productModal" onclick="showProductDetails('Produkts 4', 'Īss apraksts par produktu.', 'Garāks apraksts par produktu.', 'Dzeltens', 'XL', 'Poliesters', 'Mazgāt ar rokām.')">Apskatīt</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card mb-4 text-center">
+                    <img src="images/berniem.png" class="card-img-top" alt="Product Image">
+                    <div class="card-body">
+                        <h5 class="card-title">Produkts 4</h5>
+                        <p class="card-text">Īss apraksts par produktu.</p>
+                        <p class="card-text"><strong>€35.00</strong></p>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#productModal" onclick="showProductDetails('Produkts 4', 'Īss apraksts par produktu.', 'Garāks apraksts par produktu.', 'Dzeltens', 'XL', 'Poliesters', 'Mazgāt ar rokām.')">Apskatīt</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div id="overlay"></div>
-
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-logo">
-                <img src="images/logo.png" alt="Logo">
-            </div>
-            <nav class="footer-nav">
-                <ul>
-                    <li><a href="#">Sākums</a></li>
-                    <li><a href="#">Par Mums</a></li>
-                    <li><a href="#">Produkti</a></li>
-                    <li><a href="#">Kontakti</a></li>
-                </ul>
-            </nav>
-            <div class="footer-links">
-                <a href="#">Privātuma Politika</a>
-                <a href="#">Sīkdatņu Politika</a>
+    <!-- Product Modal -->
+    <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg-custom">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel">Product Name</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="images/berniem.png" class="img-fluid" alt="Product Image">
+                        </div>
+                        <div class="col-md-6">
+                            <h5 id="productName">Product Name</h5>
+                            <p id="productShortDescription">Short description</p>
+                            <p id="productLongDescription">Long description</p>
+                            <p><strong>Krāsa:</strong> <span id="productColor">Color</span></p>
+                            <p><strong>Izmērs:</strong> <span id="productSize">Size</span></p>
+                            <p><strong>Materiāls:</strong> <span id="productMaterial">Material</span></p>
+                            <p><strong>Kopšana:</strong> <span id="productCare">Care instructions</span></p>
+                        </div>
+                    </div>
+                    <h5 class="mt-4">Līdzīgi produkti</h5>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="card mb-4 text-center">
+                                <img src="images/berniem.png" class="card-img-top" alt="Product Image">
+                                <div class="card-body">
+                                    <h5 class="card-title">Produkts 5</h5>
+                                    <p class="card-text">Īss apraksts par produktu.</p>
+                                    <p class="card-text"><strong>€40.00</strong></p>
+                                    <a href="#" class="btn btn-primary">Apskatīt</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card mb-4 text-center">
+                                <img src="images/berniem.png" class="card-img-top" alt="Product Image">
+                                <div class="card-body">
+                                    <h5 class="card-title">Produkts 6</h5>
+                                    <p class="card-text">Īss apraksts par produktu.</p>
+                                    <p class="card-text"><strong>€45.00</strong></p>
+                                    <a href="#" class="btn btn-primary">Apskatīt</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card mb-4 text-center">
+                                <img src="images/berniem.png" class="card-img-top" alt="Product Image">
+                                <div class="card-body">
+                                    <h5 class="card-title">Produkts 7</h5>
+                                    <p class="card-text">Īss apraksts par produktu.</p>
+                                    <p class="card-text"><strong>€50.00</strong></p>
+                                    <a href="#" class="btn btn-primary">Apskatīt</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card mb-4 text-center">
+                                <img src="images/berniem.png" class="card-img-top" alt="Product Image">
+                                <div class="card-body">
+                                    <h5 class="card-title">Produkts 8</h5>
+                                    <p class="card-text">Īss apraksts par produktu.</p>
+                                    <p class="card-text"><strong>€55.00</strong></p>
+                                    <a href="#" class="btn btn-primary">Apskatīt</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Aizvērt</button>
+                </div>
             </div>
         </div>
-    </footer>
+    </div>
+
+    <!-- Filter Modal -->
+    <div class="filter-modal" id="filterModal">
+        <div class="filter-modal-header d-flex justify-content-between align-items-center">
+            <h5>Filtrēt</h5>
+            <button type="button" class="close" onclick="toggleFilterModal()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="filter-modal-body">
+            <form>
+                <div class="form-group">
+                    <label for="filterColor">Krāsa</label>
+                    <select class="form-control" id="filterColor">
+                        <option>Sarkans</option>
+                        <option>Zils</option>
+                        <option>Zaļš</option>
+                        <option>Dzeltens</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="filterSize">Izmērs</label>
+                    <select class="form-control" id="filterSize">
+                        <option>S</option>
+                        <option>M</option>
+                        <option>L</option>
+                        <option>XL</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="filterPrice">Cena</label>
+                    <input type="range" class="form-control-range" id="filterPrice" min="8" max="70" oninput="updatePriceValue(this.value)">
+                    <span id="priceValue">39</span>
+                </div>
+                <button type="submit" class="btn btn-primary">Piemērot</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Custom JS -->
+    <script src="scripts.js"></script>
+    <script>
+        function showProductDetails(name, shortDescription, longDescription, color, size, material, care) {
+            document.getElementById('productModalLabel').innerText = name;
+            document.getElementById('productName').innerText = name;
+            document.getElementById('productShortDescription').innerText = shortDescription;
+            document.getElementById('productLongDescription').innerText = longDescription;
+            document.getElementById('productColor').innerText = color;
+            document.getElementById('productSize').innerText = size;
+            document.getElementById('productMaterial').innerText = material;
+            document.getElementById('productCare').innerText = care;
+        }
+        
+        function updatePriceValue(value) {
+            document.getElementById('priceValue').innerText = value + '€';
+        }
+
+        
+    </script>
 </body>
 </html>
-
-

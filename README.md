@@ -1,1 +1,0 @@
-# Internetveikals-Adijumi

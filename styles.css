@@ -1,0 +1,564 @@
+:root {
+    /* --main: #816d6d; */
+    --main: #5b6751;
+    --mainHover: #47503f;
+    --second: #f9f9f9;
+}
+
+body{
+    background-color: var(--second);
+}
+
+.announcement {
+    background-color: var(--main);
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 0.9em;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    position: relative;
+    height: 30px; /* Adjust height as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10; /* Ensure the announcement bar is above other elements */
+}
+
+.announcement span {
+    display: inline-block;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    transition: transform 1s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.navbar {
+    position: absolute;
+    top: 30px; /* Adjust to be below the announcement bar */
+    left: 0;
+    width: 100%;
+    z-index: 5; /* Ensure the navbar is above the hero image */
+    background-color: white;
+    border-bottom: 1px solid #ccc; /* Add gray border underneath the navbar */
+}
+
+.nav-link.btn {
+    border-radius: 20px; /* Increase the border radius */
+}
+
+.nav-item .btn:hover{
+    background-color: var(--mainHover);
+    color: white !important;
+}
+
+.navbar-nav.nav-links .nav-item {
+    margin-right: 1px !important; /* Adjust the margin as needed */
+}
+
+.navbar-nav.nav-links .nav-item:last-child {
+    margin-right: 0; /* Remove margin from the last item */
+}
+
+.navbar-nav .nav-item .nav-link {
+    display: flex;
+    align-items: center;
+    color: var(--main);
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-item .nav-link i {
+    font-size: 1.2rem;
+    margin-right: 5px;
+}
+
+.navbar-nav .nav-item .navbar-text {
+    margin-left: 5px;
+    color: var(--main);
+}
+
+.navbar-nav .nav-item .dropdown-menu {
+    min-width: 200px;
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+    color: var(--mainHover);
+}
+
+.navbar-nav .nav-item .nav-link i {
+    font-size: 1.2rem;
+    margin-right: 5px;
+}
+
+.navbar-nav .nav-item {
+    display: flex;
+    align-items: center;
+}
+
+
+.btn-main {
+    background-color: var(--main);
+    border: none;
+    color: white;
+}
+
+.btn-outline-main {
+    background-color: transparent;
+    border: 2px solid var(--main);
+    color: var(--main);
+}
+
+.btn-outline-main:hover {
+    background-color: Darkened((--main));
+    color: white;
+}
+
+.hero-section {
+    position: relative; 
+    width: 100%;
+    height: 550px;
+}
+
+.hero-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 650px; 
+    object-fit: cover;
+    filter: brightness(0.5) blur(3px);
+    z-index: 1;
+}
+
+.hero-text {
+    position: absolute;
+    top: calc(50% - 25px); 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+    z-index: 4;
+    padding-bottom: 20px;
+}
+
+.hero-text h1 {
+    font-size: 3.2rem;
+    margin-bottom: 10px;
+    z-index: 4;
+}
+
+.hero-text p {
+    font-size: 1.4rem;
+    margin-bottom: 30px;
+    z-index: 4;
+}
+
+.hero-button {
+    padding: 10px 20px;
+    background-color: var(--main);
+    color: white;
+    border: none;
+    border-radius: 20px; 
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease;
+}
+
+.hero-button:hover {
+    background-color: var(--mainHover); /* Darkened color */
+    color: white; /* Ensure text color remains white */
+    text-decoration: none; /* Remove underline */
+}
+
+.hero-categories {
+    position: absolute; 
+    bottom: -450px; 
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    z-index: 3; 
+}
+
+.category {
+    text-align: center;
+    background-color: var(--second);
+    padding: 25px;
+    border: 1px solid var(--second);  
+    position: relative; 
+    z-index: 4; 
+}
+
+.category-image {
+    width: 300px;
+    height: 350px;
+    object-fit: cover;
+    border: 3px solid var(--second);
+    aspect-ratio: 1;
+}
+
+.category h2 {
+    font-size: 1.5rem;
+    margin-top: 30px;
+    position: relative;
+    padding-bottom: 10px; 
+}
+
+.category h2::after {
+    content: '';
+    display: block;
+    width: 50%; 
+    height: 2px; 
+    background-color: #6d6d6d; 
+    margin: 20px auto; 
+}
+
+.category-button {
+    display: inline-block;
+    padding: 10px 35px; 
+    background-color: transparent;  
+    color: var(--main);  
+    text-decoration: none;
+    font-size: 1rem; 
+    font-weight: bold;
+    border: 2px solid var(--main);  
+    border-radius: 20px;  
+    transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
+}
+
+.category-button:hover {
+    background-color: var(--main);
+    color: white; 
+    text-decoration: none;
+}
+
+.about-us-section {
+    margin-top: 525px;
+    background-color: var(--main); 
+    padding: 40px 10px;
+    display: flex;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.carousel-container {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.carousel {
+    display: flex;
+    transition: transform 1s ease;
+}
+
+.carousel div h3 {
+    font-size: 1.4rem;
+    margin: 0;
+    color: white;
+    display: block; /* Ensure this is not set to none */
+    visibility: visible;
+}
+
+.carousel div {
+    min-width: calc(20% - 20px); 
+    box-sizing: border-box;
+    padding: 70px 20px;
+    text-align: center;
+    background-color: var(--main);
+    color: white;
+    border-radius: 10px;
+    margin: 10px;
+    flex-shrink: 0;
+    border: 2px solid white; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+.modal-lg-custom {
+    max-width: 80%;
+}
+
+.card-body .btn{
+    background-color: var(--main);
+    border: none;
+}
+
+.card-body .btn:hover{
+    background-color: var(--mainHover);
+}
+
+.filter-modal {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    height: 100%;
+    width: 300px;
+    background-color: white;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+    transition: left 0.3s ease;
+    z-index: 1050;
+}
+
+.filter-modal.show {
+    left: 0;
+}
+
+.filter-modal-header {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.filter-modal-body {
+    padding: 15px;
+}
+
+.gallery {
+    column-count: 3;
+    column-gap: 1rem;
+}
+.gallery-item {
+    position: relative;
+    break-inside: avoid;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    overflow: hidden; /* Ensure the overlay stays within the bounds */
+}
+
+.gallery-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: opacity 0.3s ease;
+}
+
+.gallery-item .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Black overlay */
+    color: white;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gallery-item:hover .overlay {
+    opacity: 1;
+}
+
+.dimmed {
+    opacity: 0.6;
+}
+
+.dimmed {
+    opacity: 0.6;
+}
+
+.market-item {
+    display: flex;
+    flex-direction: row; /* Change to row to place image on the left and info on the right */
+    align-items: center;
+    text-align: left; /* Align text to the left */
+    margin-bottom: 20px;
+    background-color: white; /* Add white background */
+    padding: 10px; /* Add padding for better spacing */
+    border-radius: 10px; /* Optional: Add border radius for rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add box shadow for better visibility */
+    height: 200px; /* Set a fixed height */
+    width: 100%; /* Ensure the width is 100% */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.market-item img {
+    width: 30%; /* Adjust the width as needed */
+    height: 100%; /* Ensure the image takes the full height of the market item */
+    object-fit: cover;
+    margin-right: 20px; /* Add margin to the right of the image */
+}
+
+.market-item div {
+    flex: 1; /* Allow the div to take the remaining space */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center the content vertically */
+}
+
+.market-item h3, .market-item h4 {
+    margin-top: 0; /* Remove top margin */
+    font-size: 1.5rem;
+}
+
+.market-item p {
+    font-size: 1rem;
+    margin: 10px 0;
+}
+
+.market-item .btn {
+    margin-top: 10px;
+}
+
+.market-link {
+    color: var(--main);
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.market-link:hover {
+    color: var(--mainHover);
+    text-decoration: underline;
+}
+
+.market-image {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.market-image:hover {
+    transform: scale(1.05);
+}
+
+.outer-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Full viewport height */
+}
+
+.login-container {
+    width: 100%;
+    max-width: 500px; /* Adjust the max-width as needed */
+    padding: 20px; /* Optional: Add padding for better spacing */
+    background-color: #e3e2e2; /* Different background color */
+    border-radius: 10px; /* Optional: Add border radius for rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add box shadow for better visibility */
+}
+
+.heading-container {
+    background-color: var(--main); /* var(--main) with 80% opacity */
+    color: white;
+    text-align: center;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column; /* Ensure items are stacked vertically */
+    justify-content: center;
+    align-items: center;
+    height: auto; /* Adjust height as needed */
+}
+
+.heading-container h1 {
+    margin-bottom: 10px !important; /* Add some margin to separate it from the paragraph */
+}
+
+.heading-container p {
+    margin-top: 0; /* Remove top margin */
+}
+
+.larger-text {
+    font-size: 1.4rem; /* Adjust the font size as needed */
+    font-weight: 500;
+}
+
+@media (max-width: 1240px) {
+    .hero-categories {
+        flex-direction: column;
+        bottom: -2250px; /* Adjust as needed to fit the layout */
+    }
+
+    .category {
+        margin-bottom: 20px; /* Add margin between categories */
+    }
+
+    .category-image {
+        width: 500px;
+        height: 550px;
+    }
+}
+
+@media (max-width: 900px) {
+    .hero-categories {
+        flex-direction: column;
+        bottom: -1625px; /* Adjust as needed to fit the layout */
+    }
+
+    .category-image {
+        width: 300px;
+        height: 350px;
+    }
+
+    .hero-text h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-text p {
+        font-size: 1.2rem;
+    }
+    
+    .hero-button {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 692px) {
+    .category-image {
+        width: 300px;
+        height: 350px;
+    }
+
+    .hero-text h1 {
+        font-size: 2rem;
+    }
+
+    .hero-text p {
+        font-size: 1rem;
+    }
+    
+    .hero-button {
+        font-size: 0.9rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .market-item {
+        flex: 0 0 48%; /* Adjust the width as needed */
+        margin-right: 2%;
+    }
+
+    .market-item:nth-child(2n) {
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar-nav .nav-item .dropdown-menu {
+        width: 100%;
+        position: static;
+        float: none;
+        background-color: white;
+        border: none;
+        box-shadow: none;
+    }
+
+    .navbar-nav .nav-item .dropdown-menu a {
+        padding: 10px 20px;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .navbar-nav .nav-item .dropdown-menu a:last-child {
+        border-bottom: none;
+    }
+}

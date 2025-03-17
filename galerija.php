@@ -1,105 +1,116 @@
-
 <!DOCTYPE html>
-<html lang="lv">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galerija</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="header-banner">
-        <span class="banner-text active">Pirkumiem virs 70 eiro bezmaksas piegāde</span>
-        <span class="banner-text">Nopērc kvalitatīvus adījumus jau šodien</span>
-    </div>
-    <nav class="navigation">
-        <div class="nav-logo">
-            <img src="images/logo.png" alt="Logo">
-        </div>
-        <ul class="nav-links">
-            <li><a href="index.php">SĀKUMS</a></li>
-            <li><a href="internetveikals.php">INTERNETVEIKALS</a></li>
-            <li><a href="par-mani.php">PAR MANI</a></li>
-            <li><a href="galerija.php">GALERIJA</a></li>
-            <li><a href="tirdzini.php">TIRDZIŅI</a></li>
-        </ul>
-        <div class="nav-icons">
-            <a href="#" data-hover-text="Mans profils"><i class="fas fa-user"></i></a>
-            <a href="#" data-hover-text="Iepirkumu grozs"><i class="fas fa-shopping-cart"></i></a>
-            <a href="#" data-hover-text="Favorīti"><i class="fas fa-heart"></i></a>
-        </div>
-    </nav>
+    <!-- Announcement Bar -->
+    <div class="announcement" id="announcement"></div>
 
-    <section class="gallery">
-        <div class="gallery-grid">
-            <div class="gallery-item">
-                <img src="images/berniem.png" alt="Image 1" onclick="openModal(this)">
-                <div class="overlay">Bērnu kombinzoni</div>
+    <?php include 'files/navbar.php'; ?>
+
+    <div class="container mt-5 pt-5">
+        <div class="heading-container">
+            <h1 class="mb-2">Galerija</h1>
+            <p class="mb-0" style="font-size: 1.2rem;">Pircēju uzņemtās bildes ar produktiem</p>
+        </div>
+        <div class="gallery">
+            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="John Doe" data-product="Produkts 1">
+                <img src="images/berniem.png" alt="Gallery Image">
+                <div class="overlay">John Doe<br>Produkts 1</div>
             </div>
-            <div class="gallery-item">
-                <img src="images/sievietem.png" alt="Image 2" onclick="openModal(this)">
-                <div class="overlay">Sieviešu Šalle</div>
+            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="Jane Smith" data-product="Produkts 2">
+                <img src="images/berniem.png" alt="Gallery Image">
+                <div class="overlay">Jane Smith<br>Produkts 2</div>
             </div>
-            <div class="gallery-item">
-                <img src="images/viriesiem.png" alt="Image 3" onclick="openModal(this)">
-                <div class="overlay">Vīriešu Cepure</div>
+            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="Alice Johnson" data-product="Produkts 3">
+                <img src="images/berniem.png" alt="Gallery Image">
+                <div class="overlay">Alice Johnson<br>Produkts 3</div>
             </div>
-            <div class="gallery-item">
-                <img src="images/berniem.png" alt="Image 4" onclick="openModal(this)">
-                <div class="overlay">Bērnu kombinzoni</div>
+            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="Bob Brown" data-product="Produkts 4">
+                <img src="images/berniem.png" alt="Gallery Image">
+                <div class="overlay">Bob Brown<br>Produkts 4</div>
             </div>
-            <div class="gallery-item">
-                <img src="images/sievietem.png" alt="Image 5" onclick="openModal(this)">
-                <div class="overlay">Sieviešu Šalle</div>
+            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="Charlie Davis" data-product="Produkts 5">
+                <img src="images/berniem.png" alt="Gallery Image">
+                <div class="overlay">Charlie Davis<br>Produkts 5</div>
             </div>
-            <div class="gallery-item">
-                <img src="images/viriesiem.png" alt="Image 6" onclick="openModal(this)">
-                <div class="overlay">Vīriešu Cepure</div>
+            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="Diana Evans" data-product="Produkts 6">
+                <img src="images/berniem.png" alt="Gallery Image">
+                <div class="overlay">Diana Evans<br>Produkts 6</div>
             </div>
-            <div class="gallery-item">
-                <img src="images/berniem.png" alt="Image 7" onclick="openModal(this)">
-                <div class="overlay">Bērnu kombinzoni</div>
+            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="Eve Foster" data-product="Produkts 7">
+                <img src="images/berniem.png" alt="Gallery Image">
+                <div class="overlay">Eve Foster<br>Produkts 7</div>
             </div>
-            <div class="gallery-item">
-                <img src="images/sievietem.png" alt="Image 8" onclick="openModal(this)">
-                <div class="overlay">Sieviešu Šalle</div>
+            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="Frank Green" data-product="Produkts 8">
+                <img src="images/berniem.png" alt="Gallery Image">
+                <div class="overlay">Frank Green<br>Produkts 8</div>
             </div>
-            <div class="gallery-item">
-                <img src="images/viriesiem.png" alt="Image 9" onclick="openModal(this)">
-                <div class="overlay">Vīriešu Cepure</div>
+            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="Grace Hill" data-product="Produkts 9">
+                <img src="images/berniem.png" alt="Gallery Image">
+                <div class="overlay">Grace Hill<br>Produkts 9</div>
             </div>
-            <div class="gallery-item">
-                <img src="images/berniem.png" alt="Image 10" onclick="openModal(this)">
-                <div class="overlay">Bērnu kombinzoni</div>
+            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="Henry Irving" data-product="Produkts 10">
+                <img src="images/berniem.png" alt="Gallery Image">
+                <div class="overlay">Henry Irving<br>Produkts 10</div>
+            </div>
+            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="Ivy Jackson" data-product="Produkts 11">
+                <img src="images/berniem.png" alt="Gallery Image">
+                <div class="overlay">Ivy Jackson<br>Produkts 11</div>
+            </div>
+            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="Jack King" data-product="Produkts 12">
+                <img src="images/berniem.png" alt="Gallery Image">
+                <div class="overlay">Jack King<br>Produkts 12</div>
             </div>
         </div>
-    </section>
-
-    <div id="imageModal" class="modal">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <img class="modal-content" id="modalImage">
     </div>
 
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-logo">
-                <img src="images/logo.png" alt="Logo">
-            </div>
-            <nav class="footer-nav">
-                <ul>
-                    <li><a href="#">Sākums</a></li>
-                    <li><a href="#">Par Mums</a></li>
-                    <li><a href="#">Produkti</a></li>
-                    <li><a href="#">Kontakti</a></li>
-                </ul>
-            </nav>
-            <div class="footer-links">
-                <a href="#">Privātuma Politika</a>
-                <a href="#">Sīkdatņu Politika</a>
+    <!-- Image Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">Image Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="" id="modalImage" class="img-fluid" alt="Gallery Image">
+                    <p id="modalProduct"></p>
+                </div>
             </div>
         </div>
-    </footer>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Custom JS -->
+    <script src="scripts.js"></script>
+    <script>
+        $('#imageModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var name = button.data('name');
+            var product = button.data('product');
+            var imageSrc = button.find('img').attr('src');
+
+            var modal = $(this);
+            modal.find('.modal-title').text(name);
+            modal.find('#modalImage').attr('src', imageSrc);
+            modal.find('#modalName').text(name);
+            modal.find('#modalProduct').text(product);
+        });
+    </script>
 </body>
 </html>
