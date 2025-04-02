@@ -1,12 +1,28 @@
 :root {
-    /* --main: #816d6d; */
+   
     --main: #5b6751;
     --mainHover: #47503f;
-    --second: #f9f9f9;
+    --second: #F5F1E3;
+    --third: #3b434f;
+    --thirdLight: #4b5766;
+    --thirdDark: #2a2f38;
+    --thirdHover: #4b5766;
+    --beige: #d1bfa5;
 }
 
 body{
     background-color: var(--second);
+}
+
+.btn-third {
+    background-color: var(--third);
+    border: none;
+    color: white;
+}
+
+.btn-third:hover {
+    background-color: var(--thirdHover);
+    color: white;
 }
 
 .announcement {
@@ -19,11 +35,11 @@ body{
     max-width: 100%;
     overflow: hidden;
     position: relative;
-    height: 30px; /* Adjust height as needed */
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 10; /* Ensure the announcement bar is above other elements */
+    z-index: 10;
 }
 
 .announcement span {
@@ -41,16 +57,15 @@ body{
 
 .navbar {
     position: absolute;
-    top: 30px; /* Adjust to be below the announcement bar */
+    top: 30px;
     left: 0;
     width: 100%;
-    z-index: 5; /* Ensure the navbar is above the hero image */
-    background-color: white;
-    border-bottom: 1px solid #ccc; /* Add gray border underneath the navbar */
+    z-index: 5;
+    background-color: var(--second) !important;
+    border-bottom: 1px solid #ccc;
 }
-
 .nav-link.btn {
-    border-radius: 20px; /* Increase the border radius */
+    border-radius: 20px;
 }
 
 .nav-item .btn:hover{
@@ -59,11 +74,11 @@ body{
 }
 
 .navbar-nav.nav-links .nav-item {
-    margin-right: 1px !important; /* Adjust the margin as needed */
+    margin-right: 1px !important;
 }
 
 .navbar-nav.nav-links .nav-item:last-child {
-    margin-right: 0; /* Remove margin from the last item */
+    margin-right: 0;
 }
 
 .navbar-nav .nav-item .nav-link {
@@ -110,8 +125,14 @@ body{
 
 .btn-outline-main {
     background-color: transparent;
-    border: 2px solid var(--main);
+    border-color: var(--main);
     color: var(--main);
+}
+
+.btn-outline-main:hover {
+    background-color: transparent;
+    color: var(--main);
+    border-color: var(--main);
 }
 
 .btn-outline-main:hover {
@@ -172,9 +193,9 @@ body{
 }
 
 .hero-button:hover {
-    background-color: var(--mainHover); /* Darkened color */
-    color: white; /* Ensure text color remains white */
-    text-decoration: none; /* Remove underline */
+    background-color: var(--mainHover);
+    color: white;
+    text-decoration: none;
 }
 
 .hero-categories {
@@ -245,7 +266,7 @@ body{
     padding: 40px 10px;
     display: flex;
     justify-content: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); */
 }
 
 .carousel-container {
@@ -263,7 +284,7 @@ body{
     font-size: 1.4rem;
     margin: 0;
     color: white;
-    display: block; /* Ensure this is not set to none */
+    display: block;
     visibility: visible;
 }
 
@@ -316,7 +337,81 @@ body{
 }
 
 .filter-modal-body {
+    padding: 15px 25px;
+    max-height: 91vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.filter-modal-header {
     padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.filter-modal-body h5{
+    margin-bottom: 20px;
+    font-size: 19px;
+}
+
+.filter{
+    margin-bottom: 30px;
+}
+
+#priceRange {
+    margin: 40px 0px 10px;
+}
+
+.noUi-handle {
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    background-color: var(--primary);
+    border: 1px solid #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.noUi-target {
+    background: #e0e0e0;
+    border-radius: 10px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1);
+    height: 15px;
+}
+
+.noUi-connect {
+    background: var(--primary);
+    border-radius: 10px;
+}
+
+
+.category-heading {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1px 0;
+    font-size: 17px;
+}
+
+.category-heading:hover, .subcategories label:hover{
+    color: var(--main);
+}
+
+.category-heading .arrow {
+    color: gray;
+    background: none;
+    transition: transform 0.3s ease;
+}
+
+.subcategories {
+    display: none;
+    padding-left: 20px;
+}
+
+.subcategories label {
+    display: block;
+    margin-top: 10px;
+    cursor: pointer;
 }
 
 .gallery {
@@ -328,7 +423,7 @@ body{
     break-inside: avoid;
     margin-bottom: 1rem;
     cursor: pointer;
-    overflow: hidden; /* Ensure the overlay stays within the bounds */
+    overflow: hidden;
 }
 
 .gallery-item img {
@@ -344,7 +439,7 @@ body{
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Black overlay */
+    background-color: rgba(0, 0, 0, 0.5);
     color: white;
     text-align: center;
     opacity: 0;
@@ -358,6 +453,17 @@ body{
     opacity: 1;
 }
 
+.page-heading {
+    font-size: 1.3rem;
+    font-weight: 400;
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  
+}
+
+
+
 .dimmed {
     opacity: 0.6;
 }
@@ -368,35 +474,35 @@ body{
 
 .market-item {
     display: flex;
-    flex-direction: row; /* Change to row to place image on the left and info on the right */
+    flex-direction: row;
     align-items: center;
-    text-align: left; /* Align text to the left */
+    text-align: left;
     margin-bottom: 20px;
-    background-color: white; /* Add white background */
-    padding: 10px; /* Add padding for better spacing */
-    border-radius: 10px; /* Optional: Add border radius for rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add box shadow for better visibility */
-    height: 200px; /* Set a fixed height */
-    width: 100%; /* Ensure the width is 100% */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    height: 200px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .market-item img {
-    width: 30%; /* Adjust the width as needed */
-    height: 100%; /* Ensure the image takes the full height of the market item */
+    width: 30%;
+    height: 100%;
     object-fit: cover;
-    margin-right: 20px; /* Add margin to the right of the image */
+    margin-right: 20px;
 }
 
 .market-item div {
-    flex: 1; /* Allow the div to take the remaining space */
+    flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Center the content vertically */
+    justify-content: center;
 }
 
 .market-item h3, .market-item h4 {
-    margin-top: 0; /* Remove top margin */
+    margin-top: 0;
     font-size: 1.5rem;
 }
 
@@ -434,53 +540,320 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Full viewport height */
+    height: 100vh;
 }
 
 .login-container {
     width: 100%;
-    max-width: 500px; /* Adjust the max-width as needed */
-    padding: 20px; /* Optional: Add padding for better spacing */
-    background-color: #e3e2e2; /* Different background color */
-    border-radius: 10px; /* Optional: Add border radius for rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add box shadow for better visibility */
+    max-width: 500px;
+    padding: 20px;
+    background-color: #e3e2e2;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .heading-container {
-    background-color: var(--main); /* var(--main) with 80% opacity */
+    background-color: var(--main);
     color: white;
     text-align: center;
     padding: 20px;
     border-radius: 5px;
     margin-bottom: 20px;
     display: flex;
-    flex-direction: column; /* Ensure items are stacked vertically */
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: auto; /* Adjust height as needed */
+    height: auto;
 }
 
 .heading-container h1 {
-    margin-bottom: 10px !important; /* Add some margin to separate it from the paragraph */
+    margin-bottom: 10px !important;
 }
 
 .heading-container p {
-    margin-top: 0; /* Remove top margin */
+    margin-top: 0;
 }
 
 .larger-text {
-    font-size: 1.4rem; /* Adjust the font size as needed */
+    font-size: 1.4rem;
     font-weight: 500;
 }
+
+.card-body .btn-outline-main {
+    background-color: transparent;
+    border-color: var(--main);
+    color: var(--main);
+}
+
+.card-body .btn-outline-main:hover {
+    background-color: transparent ;
+    color: var(--main);
+    border-color: var(--main);
+}
+
+.no-margin {
+    margin-bottom: 5px;
+}
+
+.little-margin {
+    margin-bottom: 10px;
+}
+
+.quantity-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 0;
+    border: 1px solid #969696;
+    color: #000000; 
+    background-color: transparent;
+    border-radius: 5px;
+}
+
+.quantity-btn:hover {
+    border-color: #3e3e3e;
+    color: #333;
+}
+
+.quantity-input {
+    width: 60px;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-color: #969696;
+}
+
+.btn-success {
+    background-color: #4a4a4a;
+    border-color: #4a4a4a;
+    color: white;
+    padding: 7px 40px;
+}
+
+.btn-success:hover {
+    background-color: #333333;
+    border-color: #333333;
+}
+
+.heart-btn {
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    color: #4a4a4a;
+    border-radius: 5px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.heart-btn:hover {
+    background-color: #e0e0e0;
+    border-color: #999;
+}
+
+.heart-btn i {
+    font-size: 18px;
+}
+
+.heart-btn.active {
+    background-color: #f5f5f5;
+    color: #e63946;
+}
+
+.price-text, .stock-text {
+    margin-bottom: 0;
+    line-height: 1.5;
+}
+
+.toggle-heading {
+    cursor: pointer;
+    font-weight: bold;
+    color: #333;
+}
+
+.toggle-heading:hover {
+    color: #555;
+}
+
+
+.line-container {
+    position: relative;
+    width: 100%;
+    height: 2px;
+    background-color: #ccc;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+
+.line {
+    width: 100%;
+    height: 100%;
+    background-color: #ccc;
+}
+
+
+.line-highlight {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 33.33%;
+    height: 100%;
+    background-color: #333;
+    transition: left 0.3s ease;
+}
+
+
+.toggle-content {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+}
+
+.heading-with-lines {
+    display: flex;
+    align-items: center; /* Vertically align items */
+    justify-content: center; /* Center align items horizontally */
+}
+
+.heading-with-lines .line {
+    flex: 1; /* Make the lines take up equal space */
+    height: 2px; /* Line thickness */
+    background-color: var(--main); /* Light gray color for the lines */
+    margin-bottom: 15px;
+}
+
+.page-heading {
+    font-size: 1.3rem; /* Slightly larger font size */
+    font-weight: 400; /* Normal font weight */
+    text-align: center; /* Center align the text */
+    color: #333; /* Dark gray color */
+    padding: 0 10px; /* Add spacing between the lines and the text */
+    line-height: 1; /* Ensure the text is vertically centered */
+    display: inline-block; /* Ensure the text behaves like an inline element */
+}
+
+.popular-products-section h3 {
+    margin-bottom: 40px; /* Increase margin below the heading */
+    color: #333; /* Optional: Dark gray color for the heading */
+}
+
+.about-products-section {
+    background-color: var(--beige); /* Beige background color */
+    padding: 50px 0; /* Add padding to the section */
+    position: relative;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); */
+}
+
+.section-title-light {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #fff; /* Use the main color for the title */
+    margin-bottom: 20px;
+}
+
+.section-text-light {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #fff; /* Dark gray for readability */
+}
+
+.about-products-image {
+    width: 90%; /* Make the image responsive */
+    max-width: 400px; /* Limit the image size */
+    position: absolute;
+    top: -75px; /* Move the image slightly out of the section */
+    right: 0; /* Align the image to the right */
+    z-index: 1;
+}
+
+.image-text-section {
+    padding: 50px 0; /* Add vertical spacing */
+}
+
+.image-text-image {
+    width: 90%; /* Make the image responsive */
+    max-width: 500px; /* Limit the image size */
+    display: block;
+    margin: 0 auto; /* Center the image horizontally if needed */
+}
+
+.section-title-dark {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333; /* Dark gray for the title */
+    margin-bottom: 20px;
+}
+
+.section-text-dark {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #666; /* Slightly lighter gray for the text */
+}
+
+
+.site-footer {
+    background-color: var(--main); /* Beige background */
+    color: white; /* Make all text white */
+    padding: 40px 0;
+    font-size: 0.9rem;
+}
+
+.footer-logo {
+    width: 150px; /* Adjust logo size */
+    margin-bottom: 15px;
+}
+
+.footer-description {
+    font-size: 0.9rem;
+    color: white; /* Ensure description text is white */
+}
+
+.footer-heading {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: white; /* Make headings white */
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 15px;
+}
+
+.footer-links a {
+    color: white; /* Make links white */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: var(--beige); /* Highlight color on hover */
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.5); /* Semi-transparent white border */
+    padding-top: 15px;
+    font-size: 0.8rem;
+    color: white; /* Make footer bottom text white */
+}
+
+
 
 @media (max-width: 1240px) {
     .hero-categories {
         flex-direction: column;
-        bottom: -2250px; /* Adjust as needed to fit the layout */
+        bottom: -2250px;
     }
 
     .category {
-        margin-bottom: 20px; /* Add margin between categories */
+        margin-bottom: 20px;
     }
 
     .category-image {
@@ -492,7 +865,7 @@ body{
 @media (max-width: 900px) {
     .hero-categories {
         flex-direction: column;
-        bottom: -1625px; /* Adjust as needed to fit the layout */
+        bottom: -1625px;
     }
 
     .category-image {
@@ -534,7 +907,7 @@ body{
 
 @media (min-width: 768px) {
     .market-item {
-        flex: 0 0 48%; /* Adjust the width as needed */
+        flex: 0 0 48%;
         margin-right: 2%;
     }
 
@@ -562,3 +935,4 @@ body{
         border-bottom: none;
     }
 }
+

@@ -4,15 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tirdziņi</title>
-    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Announcement Bar -->
     <div class="announcement" id="announcement"></div>
 
     <?php include 'files/navbar.php'; ?>
@@ -20,9 +16,12 @@
     <div class="container mt-5 pt-5">
         <div class="heading-container">
             <h1 class="mb-2">Tirdziņi</h1>
-            <p class="mb-0" style="font-size: 1.2rem;">Tirdziņi, kuros mani satikt</p>
         </div>
-        
+        <div class="heading-with-lines">
+            <div class="line"></div>
+            <p class="page-heading">Tirdziņi, kuros mani satikt</p>
+            <div class="line"></div>
+        </div>
         <div class="row">
             <div class="col-md-6">
                 <div class="market-item">
@@ -71,7 +70,6 @@
         </div>
     </div>
 
-    <!-- Image Modal -->
     <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -88,11 +86,12 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS and dependencies -->
+    <?php include 'files/footer.php'; ?>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- Custom JS -->
+
     <script src="scripts.js"></script>
     <script>
         $('#imageModal').on('show.bs.modal', function (event) {

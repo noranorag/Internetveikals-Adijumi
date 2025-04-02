@@ -4,15 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Website</title>
-    <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Announcement Bar -->
     <div class="announcement" id="announcement"></div>
 
     <?php include 'files/navbar.php'; ?>
@@ -63,11 +59,104 @@
         </section>
     </section>
 
-    <!-- Bootstrap JS and dependencies -->
+    <section class="popular-products-section mt-5">
+    <div class="container">
+        <h3 class="mb-4 text-center">Populārākie produkti</h3>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card mb-4 text-center">
+                    <img src="images/berniem.png" class="card-img-top" alt="Product Image">
+                    <div class="card-body">
+                        <h5 class="card-title">Produkts 1</h5>
+                        <p class="card-text">Īss apraksts par produktu.</p>
+                        <p class="card-text"><strong>€20.00</strong></p>
+                        <button class="btn btn-primary" onclick="window.location.href='product-details.php'">Apskatīt</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card mb-4 text-center">
+                    <img src="images/berniem.png" class="card-img-top" alt="Product Image">
+                    <div class="card-body">
+                        <h5 class="card-title">Produkts 2</h5>
+                        <p class="card-text">Īss apraksts par produktu.</p>
+                        <p class="card-text"><strong>€25.00</strong></p>
+                        <button class="btn btn-primary" onclick="window.location.href='product-details.php'">Apskatīt</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card mb-4 text-center">
+                    <img src="images/berniem.png" class="card-img-top" alt="Product Image">
+                    <div class="card-body">
+                        <h5 class="card-title">Produkts 3</h5>
+                        <p class="card-text">Īss apraksts par produktu.</p>
+                        <p class="card-text"><strong>€30.00</strong></p>
+                        <button class="btn btn-primary" onclick="window.location.href='product-details.php'">Apskatīt</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card mb-4 text-center">
+                    <img src="images/berniem.png" class="card-img-top" alt="Product Image">
+                    <div class="card-body">
+                        <h5 class="card-title">Produkts 4</h5>
+                        <p class="card-text">Īss apraksts par produktu.</p>
+                        <p class="card-text"><strong>€35.00</strong></p>
+                        <button class="btn btn-primary" onclick="window.location.href='product-details.php'">Apskatīt</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about-products-section mt-5">
+    <div class="container position-relative">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h3 class="section-title-dark">Par produktiem</h3>
+                <p class="section-text-dark">
+                    Mūsu adījumi ir rūpīgi veidoti, izmantojot augstākās kvalitātes materiālus, lai nodrošinātu komfortu un izturību. 
+                    Katrs produkts ir darināts ar mīlestību un uzmanību pret detaļām, lai tas būtu ne tikai praktisks, bet arī estētiski pievilcīgs. 
+                    Mēs lepojamies ar mūsu plašo adījumu klāstu, kas piemērots visai ģimenei – no bērniem līdz pieaugušajiem. 
+                    Izvēloties mūsu produktus, jūs iegūstat ne tikai siltumu un komfortu, bet arī unikālu dizainu, kas izceļ jūsu stilu.
+                </p>
+            </div>
+            <div class="col-md-6 position-relative">
+                <img src="images/sievietem.png" alt="Adījumi" class="about-products-image">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="image-text-section mt-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <img src="images/berniem.png" alt="Bērniem" class="image-text-image">
+            </div>
+            <div class="col-md-6">
+                <h3 class="section-title-dark">Par bērnu adījumiem</h3>
+                <p class="section-text-dark">
+                    Mūsu bērnu adījumi ir veidoti ar īpašu rūpību, lai nodrošinātu maksimālu komfortu un siltumu. 
+                    Katrs adījums ir darināts no augstas kvalitātes materiāliem, kas ir maigi pret bērna ādu. 
+                    Mēs piedāvājam plašu klāstu ar dažādiem dizainiem un krāsām, kas piemēroti visiem vecumiem un gaumēm.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<?php include 'files/footer.php'; ?>
+
+
+
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- Custom JS -->
+
     <script src="scripts.js"></script>
 </body>
 </html>

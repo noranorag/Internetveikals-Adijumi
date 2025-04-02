@@ -67,10 +67,55 @@ function toggleFilterModal() {
     filterModal.classList.toggle('show');
 }
 
-// Close filter modal when clicking outside of it
+
 window.onclick = function(event) {
     const filterModal = document.getElementById('filterModal');
     if (event.target == filterModal) {
         filterModal.classList.remove('show');
     }
 }
+
+function toggleSubcategories(id) {
+    const subcategories = document.getElementById(id);
+    const arrow = subcategories.previousElementSibling.querySelector('.arrow');
+    if (subcategories.style.display === 'none' || subcategories.style.display === '') {
+        subcategories.style.display = 'block';
+        arrow.style.transform = 'rotate(90deg)';
+    } else {
+        subcategories.style.display = 'none';
+        arrow.style.transform = 'rotate(0deg)';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    var priceRange = document.getElementById('priceRange');
+
+    noUiSlider.create(priceRange, {
+        start: [8, 70],
+        connect: true,
+        range: {
+            'min': 8,
+            'max': 70
+        },
+        tooltips: [true, true],
+        format: {
+            to: function (value) {
+                return Math.round(value) + '€';
+            },
+            from: function (value) {
+                return Number(value.replace('€', ''));
+            }
+        }
+    });
+
+    var priceValueMin = document.getElementById('priceValueMin');
+    var priceValueMax = document.getElementById('priceValueMax');
+
+    priceRange.noUiSlider.on('update', function (values, handle) {
+        if (handle === 0) {
+            priceValueMin.innerHTML = values[handle];
+        } else {
+            priceValueMax.innerHTML = values[handle];
+        }
+    });
+});
