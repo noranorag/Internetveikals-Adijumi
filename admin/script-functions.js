@@ -145,14 +145,12 @@ $(document).ready(function () {
             ? '../database/category_edit.php' 
             : '../database/category_add.php'; 
     
-        console.log("Submitting data:", formData); 
     
         $.ajax({
             url: url,
             type: 'POST',
             data: formData,
             success: function (response) {
-                console.log("Response from server:", response); 
                 $('#categoryModal').modal('hide');
                 $('#categoryForm')[0].reset();
                 fetchCategories();
@@ -172,7 +170,6 @@ $(document).ready(function () {
     $('#confirmDelete').click(function () {
         if (deleteCategoryId) {
             $.post('../database/category_delete.php', { id: deleteCategoryId }, function (response) {
-                console.log("Response from server:", response); 
                 $('#deleteModal').modal('hide'); 
                 fetchCategories(); 
             });
@@ -231,7 +228,6 @@ $(document).ready(function () {
                 }
     
                 if (response.products.length === 0) {
-                    console.log("No products found for the search query.");
                     $('#product').html('<tr><td colspan="7">Nav atrastas preces.</td></tr>');
                     return;
                 }
@@ -314,7 +310,6 @@ $(document).ready(function () {
 
     
     $('#addProductModal').on('hidden.bs.modal', function () {
-        console.log("Resetting modal state");
         $('#productForm')[0].reset(); 
         $('#addProductModalLabel').text("Pievienot preci"); 
         $('#productId').val(""); 
@@ -327,7 +322,6 @@ $(document).ready(function () {
     $(document).on('click', '.product-edit', function (e) {
         e.preventDefault();
         isProductEditMode = true; 
-        console.log("Opening Edit Product modal");
     
         const productId = $(this).data('id'); 
     
@@ -379,7 +373,6 @@ $(document).ready(function () {
     
     $('#addProductButton').click(function () {
         isProductEditMode = false; 
-        console.log("Opening Add Product modal");
         $('#addProductModalLabel').text("Pievienot preci"); 
         $('#productForm')[0].reset(); 
         $('#productId').val(""); 
@@ -480,7 +473,6 @@ $(document).ready(function () {
         $('#confirmDelete').off('click').on('click', function () {
             if (deleteProductId) {
                 $.post('../database/product_delete.php', { id: deleteProductId }, function (response) {
-                    console.log("Response from server:", response); 
                     $('#deleteModal').modal('hide'); 
                     fetchProducts(); 
                 }).fail(function () {
@@ -495,7 +487,7 @@ $(document).ready(function () {
 
 
 
-        fetchGalleryWithPagination(); 
+    fetchGalleryWithPagination(); 
 
 
     function fetchGallery() {
@@ -522,7 +514,6 @@ $(document).ready(function () {
 
     function fetchGalleryWithPagination(page = 1) {
         const limit = 3; 
-        console.log("Fetching gallery for page:", page); 
     
         $.ajax({
             url: '../database/gallery_list.php',
@@ -530,7 +521,6 @@ $(document).ready(function () {
             data: { page: page, limit: limit }, 
             dataType: 'json', 
             success: function (response) {
-                console.log("Response from gallery_list.php:", response); 
     
                 if (!response || typeof response !== 'object') {
                     console.error("Invalid response format:", response); 
@@ -543,7 +533,6 @@ $(document).ready(function () {
                 }
     
                 if (response.gallery.length === 0) {
-                    console.log("No gallery items found."); 
                     $('#gallery').html('<tr><td colspan="5">Nav atrastas galerijas bildes.</td></tr>'); 
                     return;
                 }
@@ -551,11 +540,6 @@ $(document).ready(function () {
                 displayGallery(response.gallery);
     
                 
-                console.log("Calling updateGalleryPagination with:", {
-                    total: response.total,
-                    page: response.page,
-                    limit: response.limit,
-                });
     
                 updateGalleryPagination(response.total, response.page, response.limit); 
             },
@@ -567,10 +551,8 @@ $(document).ready(function () {
     }
 
     function updateGalleryPagination(total, currentPage, limit) {
-        console.log("Updating gallery pagination with total:", total, "currentPage:", currentPage, "limit:", limit); 
     
         const totalPages = Math.ceil(total / limit);
-        console.log("Total pages:", totalPages); 
     
         if (totalPages <= 1) {
             $('.gallery-pagination').html(''); 
@@ -597,13 +579,11 @@ $(document).ready(function () {
             </li>
         `);
     
-        console.log("Pagination HTML updated:", $('.gallery-pagination').html()); 
     }
 
     $(document).on('click', '.gallery-pagination .gallery-page-link', function (e) {
         e.preventDefault();
         const page = $(this).data('page');
-        console.log("Gallery pagination clicked. Page:", page); 
         if (page > 0) {
             fetchGalleryWithPagination(page); 
         }
@@ -714,23 +694,98 @@ $(document).ready(function () {
             const searchQuery = $(this).val().trim(); 
             fetchFairs(searchQuery); 
         });
+        
+        fetchFairsWithPagination();
         fetchFairs();
 
-        fetchFairs();
+        function fetchFairs() {
+            $.ajax({
+                url: '../database/fair_list.php',
+                type: 'GET',
+                dataType: 'json', // Automatically parses the response as JSON
+                success: function (response) {
+                    displayFairs(response.fairs); // Use the parsed response directly
+                },
+                error: function () {
+                    alert("Neizdevās ielādēt tirdziņu datus!");
+                }
+            });
+        }
 
-    function fetchFairs() {
-        $.ajax({
-            url: '../database/fair_list.php',
-            type: 'GET',
-            success: function (response) {
-                const fairs = JSON.parse(response);
-                displayFairs(fairs);
-            },
-            error: function () {
-                alert("Neizdevās ielādēt tirdziņu datus!");
-            }
-        });
+        function fetchFairsWithPagination(page = 1) {
+            const limit = 3; // 3 fairs per page
+            const searchQuery = $('#fairSearchInput').val().trim();
+        
+            $.ajax({
+                url: '../database/fair_list.php',
+                type: 'GET',
+                data: { page: page, limit: limit, search: searchQuery },
+                dataType: 'json', // Automatically parses the response as JSON
+                success: function (response) {
+                    console.log("Raw response:", response); // Log the raw response for debugging
+        
+                    if (!response || typeof response !== 'object') {
+                        console.error("Invalid response format:", response);
+                        return;
+                    }
+        
+                    if (!Array.isArray(response.fairs)) {
+                        console.error("Fairs is not an array:", response.fairs);
+                        return;
+                    }
+        
+                    if (response.fairs.length === 0) {
+                        $('#fairTableBody').html('<tr><td colspan="5">Nav atrasti tirdziņi.</td></tr>');
+                        return;
+                    }
+        
+                    displayFairs(response.fairs);
+                    updateFairPagination(response.total, response.page, response.limit);
+                },
+                error: function (xhr, status, error) {
+                    console.error("AJAX error:", status, error);
+                    console.error("Response text:", xhr.responseText); // Log the raw response for debugging
+                    alert("Neizdevās ielādēt tirdziņu datus!");
+                }
+            });
+        }
+    
+    function updateFairPagination(total, currentPage, limit) {
+        const totalPages = Math.ceil(total / limit);
+    
+        if (totalPages <= 1) {
+            $('.fair-pagination').html('');
+            return;
+        }
+    
+        let paginationTemplate = '';
+    
+        for (let i = 1; i <= totalPages; i++) {
+            paginationTemplate += `
+                <li class="page-item ${i === currentPage ? 'active' : ''}">
+                    <a class="page-link fair-page-link" href="#" data-page="${i}">${i}</a>
+                </li>
+            `;
+        }
+    
+        $('.fair-pagination').html(`
+            <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                <a class="page-link fair-page-link" href="#" data-page="${currentPage - 1}">Iepriekšējā</a>
+            </li>
+            ${paginationTemplate}
+            <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                <a class="page-link fair-page-link" href="#" data-page="${currentPage + 1}">Nākamā</a>
+            </li>
+        `);
     }
+    
+    $(document).on('click', '.fair-pagination .fair-page-link', function (e) {
+        e.preventDefault();
+        const page = $(this).data('page');
+        if (page > 0) {
+            fetchFairsWithPagination(page);
+        }
+    });
 
     function displayFairs(fairs) {
         let template = "";
@@ -808,36 +863,33 @@ $(document).ready(function () {
 
     
     $('#marketForm').submit(function (e) {
-        e.preventDefault(); 
-    
-        const formData = new FormData(this);
-        const url = isFairEditMode
-            ? '../database/fair_edit.php' 
-            : '../database/fair_add.php'; 
-    
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data: formData,
-            processData: false, 
-            contentType: false, 
-            success: function (response) {
-                const result = JSON.parse(response);
-    
-                if (result.success) {
-                    $('#addMarketModal').modal('hide');
-                    $('#marketForm')[0].reset();
-                    fetchFairs(); 
-                } else {
-                    alert(result.error || "Neizdevās saglabāt tirdziņu!");
-                }
-            },
-            error: function () {
-                alert("Neizdevās nosūtīt pieprasījumu!");
-            }
-        });
-    });
+    e.preventDefault();
 
+    const formData = new FormData(this);
+    const url = isFairEditMode
+        ? '../database/fair_edit.php'
+        : '../database/fair_add.php';
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            if (response.success) { // Use the parsed response directly
+                $('#addMarketModal').modal('hide');
+                $('#marketForm')[0].reset();
+                fetchFairs();
+            } else {
+                alert(response.error || "Neizdevās saglabāt tirdziņu!");
+            }
+        },
+        error: function () {
+            alert("Neizdevās nosūtīt pieprasījumu!");
+        }
+    });
+});
     
     fetchFairs();
 
@@ -870,13 +922,11 @@ $(document).ready(function () {
                 type: 'POST',
                 data: { id: fairId },
                 success: function (response) {
-                    const result = JSON.parse(response);
-    
-                    if (result.success) {
-                        $('#deleteModal').modal('hide'); 
-                        fetchFairs(); 
+                    if (response.success) { // Use the parsed response directly
+                        $('#deleteModal').modal('hide');
+                        fetchFairs();
                     } else {
-                        alert(result.error || "Neizdevās dzēst tirdziņu!");
+                        alert(response.error || "Neizdevās dzēst tirdziņu!");
                     }
                 },
                 error: function () {
@@ -891,10 +941,8 @@ $(document).ready(function () {
             e.preventDefault();
             const fairId = $(this).data('id'); 
         
-            
             $('#deleteModal').modal('show');
         
-            
             $('#confirmDelete').off('click').on('click', function () {
                 $.ajax({
                     url: '../database/fair_delete.php',
@@ -1190,7 +1238,6 @@ $(document).ready(function () {
         $('#confirmDelete').off('click').on('click', function () {
             if (deleteUserId) {
                 $.post('../database/user_delete.php', { id: deleteUserId }, function (response) {
-                    console.log("Response from server:", response); 
                     const result = JSON.parse(response);
     
                     if (result.success) {

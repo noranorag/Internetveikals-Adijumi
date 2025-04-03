@@ -51,10 +51,9 @@ if (!isset($_SESSION['user_id'])) {
                 </thead>
                 <tbody id="fairTableBody"></tbody>
             </table>
-            <nav aria-label="Fair page navigation">
-                <ul class="pagination justify-content-center fair-pagination">
-                    
-                </ul>
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center fair-pagination"></ul>
+            </nav>
             </nav>
             </div>
 
