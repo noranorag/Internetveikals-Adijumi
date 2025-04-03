@@ -1,5 +1,7 @@
+
+
 <?php
-require 'database/db_connection.php'; // Include your database connection
+require 'database/db_connection.php'; 
 
 $query = "
     SELECT 
@@ -25,7 +27,7 @@ if ($result) {
     while ($row = mysqli_fetch_assoc($result)) {
         $galleryItems[] = [
             'gallery_id' => htmlspecialchars($row['gallery_id']),
-            'image_path' => htmlspecialchars($row['image_path']), // Use the full path directly
+            'image_path' => htmlspecialchars($row['image_path']), 
             'posted_by' => htmlspecialchars($row['posted_by']),
             'user_name' => htmlspecialchars($row['user_name']),
             'user_surname' => htmlspecialchars($row['user_surname']),
@@ -80,6 +82,40 @@ if ($result) {
                     <img src="" id="modalImage" class="img-fluid" alt="Gallery Image">
                     <p id="modalProduct"></p>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="add-to-gallery d-flex justify-content-between align-items-center p-4">
+            <p class="mb-0">Vēlies galerijā pievienot savu bildi?</p>
+            <button class="btn btn-main d-flex align-items-center" data-toggle="modal" data-target="#addImageModal">
+                <i class="fas fa-plus mr-2"></i> Pievienot
+            </button>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addImageModal" tabindex="-1" aria-labelledby="addImageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addImageModalLabel">Pievienot Bildi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="upload_image.php" method="POST" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="imageInput">Izvēlies bildi:</label>
+                            <input type="file" class="form-control-file" id="imageInput" name="image" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Aizvērt</button>
+                        <button type="submit" class="btn btn-main">Pievienot</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
