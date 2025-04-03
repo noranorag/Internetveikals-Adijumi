@@ -1,3 +1,18 @@
+<?php
+session_start(); 
+include '../database/db_connection.php';
+
+error_log("Session data: " . print_r($_SESSION, true));
+
+if (!isset($_SESSION['user_id'])) {
+    error_log("Session user_id is not set.");
+    echo json_encode(['success' => false, 'error' => 'User is not logged in.']);
+    exit();
+}
+
+$userName = isset($_SESSION['name']) ? $_SESSION['name'] : 'Admin'; 
+?>
+
 <!DOCTYPE html>
 <html lang="lv">
 <head>
@@ -18,7 +33,7 @@
                     <img src="../images/logo.png" alt="Logo" style="max-width: 100px; border-radius: 10px;">
                 </div>
                 <div class="header-box">
-                    <h2>Sveicināti admin panelī, vārds</h2>
+                    <h2>Sveicināti admin panelī, <?php echo htmlspecialchars($userName); ?></h2>
                 </div>
                 <div class="order-box">
                     <h2>5</h2>

@@ -1,8 +1,7 @@
 <?php
-session_start(); // This must be the first line of the file
+session_start(); 
 include '../database/db_connection.php';
 
-// Debugging: Check if session is active and user_id is set
 if (!isset($_SESSION['user_id'])) {
     error_log("Session user_id is not set.");
     echo json_encode(['success' => false, 'error' => 'User is not logged in.']);
@@ -31,12 +30,12 @@ if (!isset($_SESSION['user_id'])) {
         <div class="table-container">
         <div>
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <div class="input-group" style="width: 300px;"> 
-                    <input type="text" class="form-control" placeholder="Meklēt preci..." style="margin-right: 10px;"> 
-                    <div class="input-group-append">
-                        <button class="btn btn-third" type="button">Meklēt</button>
-                    </div>
+            <div class="input-group" style="width: 300px;"> 
+                <input type="text" class="form-control" id="searchInput" placeholder="Meklēt preci..." style="margin-right: 10px;"> 
+                <div class="input-group-append">
+                    <button class="btn btn-third" type="button">Meklēt</button>
                 </div>
+            </div>
                 <button class="btn btn-third" data-toggle="modal" data-target="#addProductModal">Pievienot preci</button>
             </div>
                 <table class="table table-striped">
@@ -55,22 +54,10 @@ if (!isset($_SESSION['user_id'])) {
                 </table>
             </div>
             <div>
-                <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Iepriekšējā</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Nākamā</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </div>
+            <nav aria-label="Product page navigation">
+    <ul class="pagination justify-content-center product-pagination">
+    </ul>
+</nav>
 
     <div class="modal" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg"> 
@@ -83,7 +70,7 @@ if (!isset($_SESSION['user_id'])) {
             </div>
             <div class="modal-body">
             <form id="productForm">
-                    <input type="hidden" id="productId" name="id"> <!-- Hidden input for product ID -->
+                    <input type="hidden" id="productId" name="id">
                     <div class="form-group">
                         <label for="productName">Nosaukums</label>
                         <input type="text" class="form-control" id="productName" name="name" placeholder="Ievadiet nosaukumu">
@@ -126,12 +113,11 @@ if (!isset($_SESSION['user_id'])) {
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="image">Mainīt attēlu</label>
-                        <input type="file" class="form-control" id="image" name="image" accept="image/*">
-                        <label for="image" style="margin-top: 10px;">Attēls</label>
+                        <label for="image">Attēls</label>
                         <div id="imagePreviewContainer" style="margin-top: 5px;">
                             <img id="imagePreview" src="" alt="Pašreizējais attēls" style="max-width: 100%; height: auto; display: none;">
                         </div>
+                        <input type="file" style="margin-top: 5px;" class="form-control" id="image" name="image" accept="image/*">
                     </div>
                     
                     <button type="submit" class="btn btn-main">Saglabāt</button>

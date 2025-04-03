@@ -42,9 +42,16 @@ if (!isset($_SESSION['user_id'])) {
                         </tr>
                     </thead>
                     <tbody id="gallery"></tbody>
+                    
                 </table>
             </div>
-        </div>
+            <nav aria-label="Gallery page navigation">
+    <ul class="pagination justify-content-center gallery-pagination">
+    </ul>
+</nav>
+
+
+        
 
         <div class="modal fade" id="addImageModal" tabindex="-1" aria-labelledby="addImageModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -68,6 +75,8 @@ if (!isset($_SESSION['user_id'])) {
             </div>
         </div>
     </div>
+
+    
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

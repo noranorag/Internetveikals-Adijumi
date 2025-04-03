@@ -308,3 +308,31 @@ th, td {
 .form-group label {
     font-weight: bold;
 }
+
+.table-container th {
+    text-align: center;
+    vertical-align: middle;
+}
+
+
+.table-container td {
+    text-align: center;
+    vertical-align: middle;
+    overflow: hidden;
+}
+
+.table-container img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    display: block;
+    margin: 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+
+#gallery tr, #fairTableBody tr {
+    height: 100px;
+}
+

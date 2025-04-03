@@ -1,8 +1,7 @@
 <?php
-session_start(); // This must be the first line of the file
+session_start(); 
 include '../database/db_connection.php';
 
-// Debugging: Check if session is active and user_id is set
 if (!isset($_SESSION['user_id'])) {
     error_log("Session user_id is not set.");
     echo json_encode(['success' => false, 'error' => 'User is not logged in.']);
@@ -18,6 +17,7 @@ if (!isset($_SESSION['user_id'])) {
     <title>Preces</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.css">
+    <script src="script-functions.js" defer></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -30,12 +30,12 @@ if (!isset($_SESSION['user_id'])) {
         <div class="table-container">
         <div>
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <div class="input-group" style="width: 300px;"> 
-                    <input type="text" class="form-control" placeholder="Meklēt tirdziņu..." style="margin-right: 10px;"> 
-                    <div class="input-group-append">
-                        <button class="btn btn-third" type="button">Meklēt</button>
-                    </div>
+            <div class="input-group" style="width: 300px;"> 
+                <input type="text" class="form-control" id="fairSearchInput" placeholder="Meklēt tirdziņu..." style="margin-right: 10px;"> 
+                <div class="input-group-append">
+                    <button class="btn btn-third" type="button">Meklēt</button>
                 </div>
+            </div>
                 <button class="btn btn-third" data-toggle="modal" data-target="#addMarketModal">Pievienot tirdziņu</button>
             </div>
             <table class="table table-striped">
@@ -51,24 +51,12 @@ if (!isset($_SESSION['user_id'])) {
                 </thead>
                 <tbody id="fairTableBody"></tbody>
             </table>
+            <nav aria-label="Fair page navigation">
+                <ul class="pagination justify-content-center fair-pagination">
+                    
+                </ul>
+            </nav>
             </div>
-            <div>
-                <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Iepriekšējā</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Nākamā</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </div>
 
 
     <div class="modal fade" id="addMarketModal" tabindex="-1" aria-labelledby="addMarketModalLabel" aria-hidden="true">
@@ -82,7 +70,7 @@ if (!isset($_SESSION['user_id'])) {
             </div>
             <div class="modal-body">
                 <form id="marketForm">
-                    <input type="hidden" id="fairId" name="id"> <!-- Hidden input for fair ID -->
+                    <input type="hidden" id="fairId" name="id"> 
                     <div class="form-group">
                         <label for="marketName">Nosaukums</label>
                         <input type="text" class="form-control" id="marketName" name="name" placeholder="Ievadiet tirdziņa nosaukumu" required>

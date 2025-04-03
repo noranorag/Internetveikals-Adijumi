@@ -13,26 +13,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $price = floatval($_POST['price']);
     $stock_quantity = intval($_POST['stock_quantity']);
     $category_id = intval($_POST['category_id']);
-
-    // Handle image upload
+    
     $imagePath = null;
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        $imageName = uniqid() . '-' . basename($_FILES['image']['name']); // Generate a unique filename
+        $imageName = uniqid() . '-' . basename($_FILES['image']['name']); 
         $targetDir = '../images/';
         $targetFile = $targetDir . $imageName;
-
-        // Move the uploaded file to the target directory
+        
         if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFile)) {
-            $imagePath = '/images/' . $imageName; // Save the relative path
-            error_log("Image uploaded successfully: " . $imagePath); // Debugging log
+            $imagePath = '/images/' . $imageName; 
+            error_log("Image uploaded successfully: " . $imagePath); 
         } else {
-            error_log("Failed to upload image."); // Debugging log
+            error_log("Failed to upload image."); 
         }
     } else {
-        error_log("No image uploaded or an error occurred."); // Debugging log
+        error_log("No image uploaded or an error occurred."); 
     }
-
-    // Update query
+    
     $sql = "UPDATE product 
             SET name = ?, short_description = ?, long_description = ?, material = ?, size = ?, color = ?, care = ?, price = ?, stock_quantity = ?, ID_category = ?";
     if ($imagePath) {
@@ -74,7 +71,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
     }
 
-    // Debugging: Log the SQL query and parameters
     error_log("SQL Query: " . $sql);
     error_log("Image Path: " . ($imagePath ?? 'NULL'));
 

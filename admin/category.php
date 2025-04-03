@@ -1,3 +1,14 @@
+<?php
+session_start(); 
+include '../database/db_connection.php';
+
+if (!isset($_SESSION['user_id'])) {
+    error_log("Session user_id is not set.");
+    echo json_encode(['success' => false, 'error' => 'User is not logged in.']);
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="lv">
 <head>
@@ -34,21 +45,10 @@
                 
                 </table>
                 </div>
-            <div>
-                <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Iepriekšējā</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Nākamā</a>
-                        </li>
+                <nav aria-label="Category page navigation">
+                    <ul class="pagination justify-content-center category-pagination">
                     </ul>
                 </nav>
-            </div>
 
             <div class="modal" id="categoryModal" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -59,7 +59,7 @@
             </div>
             <div class="modal-body">
                 <form id="categoryForm">
-                    <input type="hidden" id="categoryId" name="id"> <!-- Hidden input for category ID -->
+                    <input type="hidden" id="categoryId" name="id"> 
                     <div class="form-group">
                         <label for="categoryName">Kategorijas nosaukums</label>
                         <input type="text" class="form-control" id="categoryName" name="name" placeholder="Ievadiet kategorijas nosaukumu" required>
@@ -86,16 +86,13 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="deleteModalLabel">Apstiprināt dzēšanu</h5>
-                        <!-- Add the "X" button -->
                         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         Vai tiešām vēlies dzēst šo kategoriju?
                     </div>
                     <div class="modal-footer">
-                        <!-- "Atcelt" button to close the modal -->
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Atcelt</button>
-                        <!-- "Dzēst" button to confirm deletion -->
                         <button type="button" class="btn btn-danger" id="confirmDelete">Dzēst</button>
                     </div>
                 </div>

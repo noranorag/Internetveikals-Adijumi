@@ -1,42 +1,56 @@
 <?php
 require 'db_connection.php';
 
-// Query to join user_gallery, gallery_images, and user tables
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 3; 
+$offset = ($page - 1) * $limit;
+
 $query = "
     SELECT 
-        ug.user_gallery_ID AS id,
+        u.email AS posted_by,
         gi.gallery_ID AS gallery_id,
         gi.image AS image_path,
         gi.uploaded_at,
-        gi.approved AS status,
-        u.email AS posted_by
+        gi.approved AS status
     FROM 
         user_gallery ug
     INNER JOIN 
         gallery_images gi ON ug.ID_gallery = gi.gallery_ID
     INNER JOIN 
         user u ON ug.ID_user = u.user_ID
-    WHERE 
-        gi.approved IN ('onhold', 'approved', 'declined') -- Include all relevant statuses
-    ORDER BY 
-        FIELD(gi.approved, 'onhold', 'approved', 'declined'), -- Prioritize 'onhold' first, then 'approved', then 'declined'
-        gi.uploaded_at DESC -- Sort by upload date within each status
+    LIMIT $limit OFFSET $offset
 ";
 
 $result = mysqli_query($conn, $query);
 
-$json = array();
+$countQuery = "
+    SELECT COUNT(*) AS total 
+    FROM gallery_images gi
+    WHERE gi.approved IN ('onhold', 'approved', 'declined')
+";
+$countResult = mysqli_query($conn, $countQuery);
+$totalCount = mysqli_fetch_assoc($countResult)['total'];
 
+$gallery = [];
 while ($row = $result->fetch_assoc()) {
-    $json[] = array(
-        'id' => htmlspecialchars($row['id']),
-        'gallery_id' => htmlspecialchars($row['gallery_id']),
+    $gallery[] = [
+        'id' => htmlspecialchars($row['gallery_id']),
         'image_path' => htmlspecialchars($row['image_path']),
         'uploaded_at' => htmlspecialchars($row['uploaded_at']),
         'status' => htmlspecialchars($row['status']),
         'posted_by' => htmlspecialchars($row['posted_by']),
-    );
+    ];
 }
 
-echo json_encode($json);
+$response = [
+    'gallery' => $gallery,
+    'total' => $totalCount,
+    'page' => $page,
+    'limit' => $limit
+];
+
+
+
+header('Content-Type: application/json');
+echo json_encode($response);
 ?>

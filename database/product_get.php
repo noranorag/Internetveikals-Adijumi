@@ -11,7 +11,11 @@ if (isset($_GET['id'])) {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        echo json_encode($result->fetch_assoc());
+        $product = $result->fetch_assoc();
+
+        $product['image'] = htmlspecialchars($product['image']); 
+
+        echo json_encode($product);
     } else {
         echo json_encode(['error' => 'Prece netika atrasta!']);
     }
