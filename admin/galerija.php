@@ -19,7 +19,7 @@ if (!isset($_SESSION['user_id'])) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body id="galleryPage">
     <?php include 'navbar.php'; ?>
     <div class="content">
         <div class="heading-container">
@@ -46,9 +46,9 @@ if (!isset($_SESSION['user_id'])) {
                 </table>
             </div>
             <nav aria-label="Gallery page navigation">
-    <ul class="pagination justify-content-center gallery-pagination">
-    </ul>
-</nav>
+                <ul class="pagination justify-content-center gallery-pagination">
+                </ul>
+            </nav>
 
 
         

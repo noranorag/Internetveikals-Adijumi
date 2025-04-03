@@ -20,7 +20,7 @@ if (!isset($_SESSION['user_id'])) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body id="userPage">
     <?php include 'navbar.php'; ?>
     <div class="content">
         <div class="heading-container">
@@ -57,20 +57,10 @@ if (!isset($_SESSION['user_id'])) {
             <div>
                 <nav aria-label="Page navigation">
                     <ul class="pagination justify-content-center">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Iepriekšējā</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Nākamā</a>
-                        </li>
+                        <!-- Pagination links will be dynamically generated here -->
                     </ul>
                 </nav>
             </div>
-        </div>
-    </div>
 
     <div class="modal" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">

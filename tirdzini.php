@@ -1,3 +1,36 @@
+<?php
+require 'database/db_connection.php'; // Include your database connection
+
+$query = "
+    SELECT 
+        f.fair_ID AS id,
+        f.name AS name,
+        f.description AS description,
+        f.image AS image,
+        f.link AS link
+    FROM 
+        fair f
+    WHERE 
+        f.active = 'active'
+    ORDER BY 
+        f.fair_ID DESC
+";
+
+$result = mysqli_query($conn, $query);
+
+$fairs = [];
+if ($result) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $fairs[] = [
+            'id' => htmlspecialchars($row['id']),
+            'name' => htmlspecialchars($row['name']),
+            'description' => htmlspecialchars($row['description']),
+            'image' => htmlspecialchars($row['image']),
+            'link' => htmlspecialchars($row['link']),
+        ];
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,50 +56,18 @@
             <div class="line"></div>
         </div>
         <div class="row">
-            <div class="col-md-6">
-                <div class="market-item">
-                    <img src="images/tirgus.jpg" alt="Tirgus Image" class="market-image" data-toggle="modal" data-target="#imageModal" data-src="images/tirgus.jpg">
-                    <div>
-                        <h3>Tirgus 1</h3>
-                        <p>Short description of Tirgus 1.</p>
-                        <a href="https://example.com" class="market-link">Visit Tirgus 1</a>
+            <?php foreach ($fairs as $fair): ?>
+                <div class="col-md-6">
+                    <div class="market-item">
+                        <img src="<?= $fair['image'] ?>" alt="<?= $fair['name'] ?>" class="market-image" data-toggle="modal" data-target="#imageModal" data-src="<?= $fair['image'] ?>">
+                        <div>
+                            <h3><?= $fair['name'] ?></h3>
+                            <p><?= $fair['description'] ?></p>
+                            <a href="<?= $fair['link'] ?>" class="market-link" target="_blank">Apskati <?= $fair['name'] ?></a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="market-item">
-                    <img src="images/tirgus2.jpg" alt="Tirgus Image" class="market-image" data-toggle="modal" data-target="#imageModal" data-src="images/tirgus2.jpg">
-                    <div>
-                        <h3>Tirgus 2</h3>
-                        <p>Short description of Tirgus 2.</p>
-                        <a href="https://example.com" class="market-link">Visit Tirgus 2</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <p class="mb-4 larger-text">Bijušie Tirdziņi</p>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="market-item dimmed small-market-item">
-                    <img src="images/tirgus.jpg" alt="Tirgus Image" class="market-image" data-toggle="modal" data-target="#imageModal" data-src="images/tirgus.jpg">
-                    <div>
-                        <h4>Tirgus 3</h4>
-                        <p>Short description of Tirgus 3.</p>
-                        <a href="https://example.com" class="market-link">Visit Tirgus 3</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="market-item dimmed small-market-item">
-                    <img src="images/tirgus2.jpg" alt="Tirgus Image" class="market-image" data-toggle="modal" data-target="#imageModal" data-src="images/tirgus2.jpg">
-                    <div>
-                        <h4>Tirgus 4</h4>
-                        <p>Short description of Tirgus 4.</p>
-                        <a href="https://example.com" class="market-link">Visit Tirgus 4</a>
-                    </div>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
     </div>
 
@@ -74,7 +75,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="imageModalLabel">Image</h5>
+                    <h5 class="modal-title" id="imageModalLabel">Tirgus plakāts</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

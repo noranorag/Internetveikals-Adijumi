@@ -21,7 +21,7 @@ if (!isset($_SESSION['user_id'])) {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body id="fairPage">
     <?php include 'navbar.php'; ?>
     <div class="content">
         <div class="heading-container">
@@ -51,11 +51,10 @@ if (!isset($_SESSION['user_id'])) {
                 </thead>
                 <tbody id="fairTableBody"></tbody>
             </table>
+            </div>
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center fair-pagination"></ul>
             </nav>
-            </nav>
-            </div>
 
 
     <div class="modal fade" id="addMarketModal" tabindex="-1" aria-labelledby="addMarketModalLabel" aria-hidden="true">

@@ -185,26 +185,27 @@ $(document).ready(function () {
 
     fetchProducts();
 
-    function fetchProducts(search = "") {
+    function fetchProducts(search = "", page = 1) {
+        const limit = 7;
     
         $.ajax({
             url: '../database/product_list.php',
             type: 'GET',
-            data: { search: search }, 
+            data: { search: search, page: page, limit: limit },
+            dataType: 'json', // Automatically parses the response as JSON
             success: function (response) {
-                const products = JSON.parse(response);
-    
-                if (products.error) {
-                    alert(products.error); 
+                if (response.error) {
+                    alert(response.error);
                     return;
                 }
     
-                if (products.length === 0) {
-                    $('#product').html('<tr><td colspan="7">Nav atrastas preces.</td></tr>'); 
+                if (response.products.length === 0) {
+                    $('#product').html('<tr><td colspan="7">Nav atrastas preces.</td></tr>');
                     return;
                 }
     
-                displayProducts(products);
+                displayProducts(response.products);
+                updatePagination(response.total, response.page, response.limit);
             },
             error: function () {
                 alert("Neizdevās ielādēt preces!");
@@ -688,12 +689,14 @@ $(document).ready(function () {
         
         
 
-
+        const searchQuery = $('#fairSearchInput').length ? $('#fairSearchInput').val().trim() : '';
         
-        $('#fairSearchInput').on('input', function () {
-            const searchQuery = $(this).val().trim(); 
-            fetchFairs(searchQuery); 
-        });
+        if ($('#fairSearchInput').length) {
+            $('#fairSearchInput').on('input', function () {
+                const searchQuery = $(this).val().trim();
+                fetchFairs(searchQuery);
+            });
+        }
         
         fetchFairsWithPagination();
         fetchFairs();
@@ -714,7 +717,6 @@ $(document).ready(function () {
 
         function fetchFairsWithPagination(page = 1) {
             const limit = 3; // 3 fairs per page
-            const searchQuery = $('#fairSearchInput').val().trim();
         
             $.ajax({
                 url: '../database/fair_list.php',
@@ -1045,6 +1047,109 @@ $(document).ready(function () {
             }
         });
     }
+
+    function fetchUsersWithPagination(page = 1) {
+        const limit = 7; // 7 users per page
+        const searchQuery = $('#userSearchInput').val().trim();
+    
+        $.ajax({
+            url: '../database/user_list.php',
+            type: 'GET',
+            data: { page: page, limit: limit, search: searchQuery },
+            dataType: 'json',
+            success: function (response) {
+                if (!response || typeof response !== 'object') {
+                    console.error("Invalid response format:", response);
+                    return;
+                }
+    
+                if (!Array.isArray(response.users)) {
+                    console.error("Users is not an array:", response.users);
+                    return;
+                }
+    
+                if (response.users.length === 0) {
+                    $('#userTableBody').html('<tr><td colspan="8">Nav atrasti lietotāji.</td></tr>');
+                    return;
+                }
+    
+                displayUsers(response.users);
+                updateUserPagination(response.total, response.page, response.limit);
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX error:", status, error);
+                alert("Neizdevās ielādēt lietotājus!");
+            }
+        });
+    }
+    
+    function updateUserPagination(total, currentPage, limit) {
+        const totalPages = Math.ceil(total / limit);
+    
+        if (totalPages <= 1) {
+            $('.pagination').html('');
+            return;
+        }
+    
+        let paginationTemplate = '';
+    
+        for (let i = 1; i <= totalPages; i++) {
+            paginationTemplate += `
+                <li class="page-item ${i === currentPage ? 'active' : ''}">
+                    <a class="page-link user-page-link" href="#" data-page="${i}">${i}</a>
+                </li>
+            `;
+        }
+    
+        $('.pagination').html(`
+            <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                <a class="page-link user-page-link" href="#" data-page="${currentPage - 1}">Iepriekšējā</a>
+            </li>
+            ${paginationTemplate}
+            <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                <a class="page-link user-page-link" href="#" data-page="${currentPage + 1}">Nākamā</a>
+            </li>
+        `);
+    }
+    
+    $(document).on('click', '.pagination .user-page-link', function (e) {
+        e.preventDefault();
+        const page = $(this).data('page');
+        if (page > 0) {
+            fetchUsersWithPagination(page);
+        }
+    });
+    
+    function displayUsers(users) {
+        let template = '';
+    
+        users.forEach(user => {
+            template += `
+                <tr>
+                    <td>${user.id}</td>
+                    <td>${user.address_id ? `<a href="#" class="btn btn-sm btn-info view-address" data-id="${user.address_id}">Apskatīt</a>` : ''}</td>
+                    <td>${user.name}</td>
+                    <td>${user.surname}</td>
+                    <td>${user.phone}</td>
+                    <td>${user.email}</td>
+                    <td>${user.role}</td>
+                    <td>
+                        <a href="#" class="btn btn-sm btn-warning edit-user" data-id="${user.id}">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="#" class="btn btn-sm btn-danger delete-user" data-id="${user.id}">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            `;
+        });
+    
+        $('#userTableBody').html(template);
+    }
+    
+    // Trigger initial fetch
+    fetchUsersWithPagination();
     
     function displayUsers(users) {
         let template = "";
@@ -1086,6 +1191,10 @@ $(document).ready(function () {
     $('#userSearchInput').on('input', function () {
         const searchQuery = $(this).val();
         fetchUsers(searchQuery); 
+    });
+
+    $('#userSearchInput').on('input', function () {
+        fetchUsersWithPagination(); // Fetch users with the current search query
     });
 
     $('#addUserButton').click(function () {

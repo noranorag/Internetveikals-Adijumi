@@ -336,3 +336,7 @@ th, td {
     height: 100px;
 }
 
+#productPage, #fairPage, #userPage, #galleryPage, #categoryPage{
+    overflow: hidden;
+}
+

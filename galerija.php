@@ -1,3 +1,38 @@
+<?php
+require 'database/db_connection.php'; // Include your database connection
+
+$query = "
+    SELECT 
+        gi.gallery_ID AS gallery_id,
+        gi.image AS image_path,
+        u.email AS posted_by,
+        u.name AS user_name,
+        u.surname AS user_surname
+    FROM 
+        user_gallery ug
+    INNER JOIN 
+        gallery_images gi ON ug.ID_gallery = gi.gallery_ID
+    INNER JOIN 
+        user u ON ug.ID_user = u.user_ID
+    WHERE 
+        gi.approved = 'approved'
+";
+
+$result = mysqli_query($conn, $query);
+
+$galleryItems = [];
+if ($result) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $galleryItems[] = [
+            'gallery_id' => htmlspecialchars($row['gallery_id']),
+            'image_path' => htmlspecialchars($row['image_path']), // Use the full path directly
+            'posted_by' => htmlspecialchars($row['posted_by']),
+            'user_name' => htmlspecialchars($row['user_name']),
+            'user_surname' => htmlspecialchars($row['user_surname']),
+        ];
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,54 +58,12 @@
             <div class="line"></div>
         </div>
         <div class="gallery">
-            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="John Doe" data-product="Produkts 1">
-                <img src="images/berniem.png" alt="Gallery Image">
-                <div class="overlay">John Doe<br>Produkts 1</div>
-            </div>
-            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="Jane Smith" data-product="Produkts 2">
-                <img src="images/berniem.png" alt="Gallery Image">
-                <div class="overlay">Jane Smith<br>Produkts 2</div>
-            </div>
-            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="Alice Johnson" data-product="Produkts 3">
-                <img src="images/berniem.png" alt="Gallery Image">
-                <div class="overlay">Alice Johnson<br>Produkts 3</div>
-            </div>
-            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="Bob Brown" data-product="Produkts 4">
-                <img src="images/berniem.png" alt="Gallery Image">
-                <div class="overlay">Bob Brown<br>Produkts 4</div>
-            </div>
-            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="Charlie Davis" data-product="Produkts 5">
-                <img src="images/berniem.png" alt="Gallery Image">
-                <div class="overlay">Charlie Davis<br>Produkts 5</div>
-            </div>
-            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="Diana Evans" data-product="Produkts 6">
-                <img src="images/berniem.png" alt="Gallery Image">
-                <div class="overlay">Diana Evans<br>Produkts 6</div>
-            </div>
-            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="Eve Foster" data-product="Produkts 7">
-                <img src="images/berniem.png" alt="Gallery Image">
-                <div class="overlay">Eve Foster<br>Produkts 7</div>
-            </div>
-            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="Frank Green" data-product="Produkts 8">
-                <img src="images/berniem.png" alt="Gallery Image">
-                <div class="overlay">Frank Green<br>Produkts 8</div>
-            </div>
-            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="Grace Hill" data-product="Produkts 9">
-                <img src="images/berniem.png" alt="Gallery Image">
-                <div class="overlay">Grace Hill<br>Produkts 9</div>
-            </div>
-            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="Henry Irving" data-product="Produkts 10">
-                <img src="images/berniem.png" alt="Gallery Image">
-                <div class="overlay">Henry Irving<br>Produkts 10</div>
-            </div>
-            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="Ivy Jackson" data-product="Produkts 11">
-                <img src="images/berniem.png" alt="Gallery Image">
-                <div class="overlay">Ivy Jackson<br>Produkts 11</div>
-            </div>
-            <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="Jack King" data-product="Produkts 12">
-                <img src="images/berniem.png" alt="Gallery Image">
-                <div class="overlay">Jack King<br>Produkts 12</div>
-            </div>
+            <?php foreach ($galleryItems as $item): ?>
+                <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="<?= $item['user_name'] . ' ' . $item['user_surname'] ?>" data-product="<?= $item['user_name'] . ' ' . $item['user_surname'] ?>">
+                    <img src="<?= $item['image_path'] ?>" alt="Gallery Image">
+                    <div class="overlay"><?= $item['user_name'] . ' ' . $item['user_surname'] ?><br></div>
+                </div>
+            <?php endforeach; ?>
         </div>
     </div>
 
@@ -108,7 +101,6 @@
             var modal = $(this);
             modal.find('.modal-title').text(name);
             modal.find('#modalImage').attr('src', imageSrc);
-            modal.find('#modalName').text(name);
             modal.find('#modalProduct').text(product);
         });
     </script>
