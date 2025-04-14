@@ -119,3 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
+$('#filterButton').click(function () {
+    $('#filterModal').modal('show'); 
+});

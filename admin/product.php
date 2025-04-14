@@ -20,6 +20,7 @@ if (!isset($_SESSION['user_id'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
+    <script src="../scripts.js" defer></script>
 </head>
 <body id="productPage">
     <?php include 'navbar.php'; ?>
@@ -27,16 +28,24 @@ if (!isset($_SESSION['user_id'])) {
         <div class="heading-container">
             <h1>Preces</h1>
         </div>
+        <div class="btn-group btn-group-lg d-flex mb-4" role="group" aria-label="Navigation Buttons">
+            <button type="button" class="btn flex-fill" id="productsButton">Produkti</button>
+            <button type="button" class="btn flex-fill" id="categoriesButton">Kategorijas</button>
+            <button type="button" class="btn flex-fill" id="setsButton">Komplekti</button>
+        </div>
         <div class="table-container">
         <div>
             <div class="d-flex justify-content-between align-items-center mb-4">
-            <div class="input-group" style="width: 300px;"> 
-                <input type="text" class="form-control" id="searchInput" placeholder="Meklēt preci..." style="margin-right: 10px;"> 
-                <div class="input-group-append">
-                    <button class="btn btn-third" type="button">Meklēt</button>
+                <div class="input-group" style="width: 300px;">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Meklēt preci..." style="margin-right: 10px;">
+                    <div class="input-group-append">
+                        <button class="btn btn-third" type="button">Meklēt</button>
+                    </div>
                 </div>
-            </div>
-                <button class="btn btn-third" data-toggle="modal" data-target="#addProductModal">Pievienot preci</button>
+                <div>
+                <button class="btn btn-third mr-1" id="filterButton" data-toggle="modal" data-target="#filterModal">Filtrēt produktus</button>
+                    <button class="btn btn-third" data-toggle="modal" data-target="#addProductModal">Pievienot preci</button>
+                </div>
             </div>
                 <table class="table table-striped">
                     <thead>
@@ -55,9 +64,9 @@ if (!isset($_SESSION['user_id'])) {
             </div>
             <div>
             <nav aria-label="Product page navigation">
-    <ul class="pagination justify-content-center product-pagination">
-    </ul>
-</nav>
+                <ul class="pagination justify-content-center product-pagination">
+                </ul>
+            </nav>
 
     <div class="modal" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg"> 
@@ -114,10 +123,11 @@ if (!isset($_SESSION['user_id'])) {
                     </div>
                     <div class="form-group">
                         <label for="image">Attēls</label>
-                        <div id="imagePreviewContainer" style="margin-top: 5px;">
+                        <div id="imagePreviewContainer">
                             <img id="imagePreview" src="" alt="Pašreizējais attēls" style="max-width: 100%; height: auto; display: none;">
                         </div>
                         <input type="file" style="margin-top: 5px;" class="form-control" id="image" name="image" accept="image/*">
+                        <input type="hidden" id="imagePath" name="current_image">
                     </div>
                     
                     <button type="submit" class="btn btn-main">Saglabāt</button>
@@ -141,6 +151,36 @@ if (!isset($_SESSION['user_id'])) {
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Atcelt</button>
                 <button type="button" class="btn btn-danger" id="confirmDelete">Dzēst</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="filterModalLabel">Filtrēt Preces</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Add filter options here -->
+                <form id="filterForm">
+                    <div class="form-group">
+                        <label for="filterCategory">Kategorija</label>
+                        <select class="form-control" id="filterCategory">
+                            <option value="">Visas kategorijas</option>
+                            <!-- Populate categories dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="filterPrice">Cena (līdz)</label>
+                        <input type="number" class="form-control" id="filterPrice" placeholder="Ievadiet maksimālo cenu">
+                    </div>
+                    <button type="submit" class="btn btn-main">Filtrēt</button>
+                </form>
             </div>
         </div>
     </div>

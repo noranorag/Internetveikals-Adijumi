@@ -1,75 +1,36 @@
 <?php
 require 'db_connection.php';
 
-$search = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 7;
-$offset = ($page - 1) * $limit;
-
 $query = "
     SELECT 
-        p.product_ID AS id,
-        p.name AS product_name,
-        p.short_description,
-        p.price,
-        p.stock_quantity,
-        p.color,
-        p.size,
-        c.name AS category_name
-    FROM 
-        product p
-    LEFT JOIN 
-        category c ON p.ID_category = c.category_ID
-    WHERE 
-        p.name LIKE '%$search%' OR
-        p.ID_category LIKE '%$search%' OR
-        p.stock_quantity LIKE '%$search%' OR
-        p.color LIKE '%$search%' OR
-        p.size LIKE '%$search%' OR
-        p.price LIKE '%$search%'
-    LIMIT $limit OFFSET $offset
-";
+        product.product_ID AS id,
+        product.name AS name,
+        category.big_category AS big_category, -- Include big_category
+        category.name AS category_name,
+        product.short_description AS short_description,
+        product.price AS price,
+        product.stock_quantity AS stock_quantity,
+        product.image AS product_image -- Include product image
+    FROM product
+    LEFT JOIN category ON product.ID_category = category.category_ID
+    ORDER BY product.product_ID DESC";
 
 $result = mysqli_query($conn, $query);
-
-$countQuery = "
-    SELECT COUNT(*) AS total
-    FROM product p
-    WHERE 
-        p.name LIKE '%$search%' OR
-        p.ID_category LIKE '%$search%' OR
-        p.stock_quantity LIKE '%$search%' OR
-        p.color LIKE '%$search%' OR
-        p.size LIKE '%$search%' OR
-        p.price LIKE '%$search%'
-";
-$countResult = mysqli_query($conn, $countQuery);
-$totalCount = mysqli_fetch_assoc($countResult)['total'];
 
 $json = array();
 
 while ($row = $result->fetch_assoc()) {
     $json[] = array(
         'id' => htmlspecialchars($row['id']),
-        'name' => htmlspecialchars($row['product_name']),
+        'name' => htmlspecialchars($row['name']),
+        'big_category' => htmlspecialchars($row['big_category']), // Include big_category
+        'category_name' => htmlspecialchars($row['category_name']),
         'short_description' => htmlspecialchars($row['short_description']),
         'price' => htmlspecialchars($row['price']),
         'stock_quantity' => htmlspecialchars($row['stock_quantity']),
-        'color' => htmlspecialchars($row['color']),
-        'size' => htmlspecialchars($row['size']),
-        'category_name' => htmlspecialchars($row['category_name']),
+        'product_image' => htmlspecialchars($row['product_image'] ?? 'images/default.png') // Include product image
     );
 }
 
-
-$response = [
-    'products' => $json,
-    'total' => $totalCount,
-    'page' => $page,
-    'limit' => $limit
-];
-
-
-
-echo json_encode($response);
+echo json_encode($json);
 ?>

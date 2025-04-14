@@ -28,9 +28,18 @@ if (!isset($_SESSION['user_id'])) {
         </div>
         <div class="table-container">
         <div>
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div></div>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="input-group" style="width: 300px;">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Meklēt kategorijas..." style="margin-right: 10px;">
+                    <div class="input-group-append">
+                        <button class="btn btn-third" type="button">Meklēt</button>
+                    </div>
+                </div>
+                <div>
+                <button class="btn btn-third mr-1" id="filterButton" data-toggle="modal" data-target="#filterModal">Filtrēt kategorijas</button>
                 <button class="btn btn-third" id="addCategoryButton">Pievienot kategoriju</button>
+                </div>
             </div>
             <table class="table table-striped">
                 <thead>
@@ -50,7 +59,7 @@ if (!isset($_SESSION['user_id'])) {
                     </ul>
                 </nav>
 
-            <div class="modal" id="categoryModal" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
+<div class="modal" id="categoryModal" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">

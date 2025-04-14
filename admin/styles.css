@@ -98,7 +98,7 @@ h2 {
     text-align: center;
     padding: 10px;
     border-radius: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 4px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -336,7 +336,107 @@ th, td {
     height: 100px;
 }
 
-#productPage, #fairPage, #userPage, #galleryPage, #categoryPage{
-    overflow: hidden;
+.btn-group button {
+    background-color: #8a9b78; /* Unified button color */
+    color: white;
+    border: 1px solid #788763; /* Add a border for separation */
+    border-radius: 5px; /* Rounded corners for distinction */
+    gap: 10px;;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth hover effect */
 }
 
+.btn-group button:hover {
+    color: white;
+    background-color: #788763; /* Slightly darker shade on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover */
+    transform: translateY(-2px); /* Lift the button slightly */
+}
+
+.btn-group button:active {
+    transform: translateY(0); /* Reset lift on click */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Reset shadow on click */
+}
+
+.card {
+    padding: 0; /* Remove padding from the card */
+    margin: 0; /* Remove margin from the card */
+    overflow: hidden; /* Ensure the image doesn't overflow */
+}
+
+/* Style for the card image */
+.card-img-top {
+    width: 100% !important; /* Force the image to span the full width */
+    height: 100px !important; /* Set the height to 100px */
+    object-fit: cover !important; /* Ensure the image is zoomed in and covers the area */
+    display: block !important; /* Ensure the image behaves like a block element */
+    filter: brightness(70%) !important; /* Dim the image */
+    transition: filter 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* Optional: Add hover effect to brighten the image */
+.card-img-top:hover {
+    filter: brightness(70%); /* Brighten the image slightly on hover */
+}
+
+.category-block {
+    background: #f9f9f9;
+    padding: 10px 15px;
+    border-radius: 10px;
+}
+
+.bolder{
+    font-weight: 500;
+}
+
+.gray{
+    color: rgb(92, 92, 92);
+}
+
+.product-display {
+    border: 1px solid #ddd !important;
+    border-radius: 10px !important;
+    padding: 15px !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+    background-color: #fff !important;
+    text-align: center !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.product-display:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover */
+}
+
+.product-display img {
+    width: 200px; /* Set a fixed width for the product image */
+    height: 200px; /* Set a fixed height for the product image */
+    object-fit: cover; /* Ensure the image covers the area without distortion */
+    margin-bottom: 10px; /* Add spacing below the image */
+}
+
+.product-display p {
+    margin: 5px 0; /* Add spacing between text elements */
+    font-size: 14px; /* Adjust font size for better readability */
+    color: #333; /* Darker text color for contrast */
+}
+
+.category-block {
+    margin-left: 0; /* Big categories */
+}
+
+.subcategory-block {
+    margin-left: 20px; /* Subcategories */
+}
+
+.product-list {
+    margin-left: 40px; /* Products */
+}
+
+.set-card {
+    cursor: pointer;
+}
+
+.no-sets-message {
+    margin-left: 20px; /* Adjust the value as needed */
+    text-align: left; /* Optional: Align the text to the left */
+}
