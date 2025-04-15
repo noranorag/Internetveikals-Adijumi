@@ -26,21 +26,31 @@ if (!isset($_SESSION['user_id'])) {
         <div class="heading-container">
             <h1>Kategorijas</h1>
         </div>
+        <div class="btn-group btn-group-lg d-flex" role="group">
+            <button type="button" class="btn flex-fill" id="productsButton" onclick="window.location.href='product.php'">Produkti</button>
+            <button type="button" class="btn flex-fill" id="categoriesButton" onclick="window.location.href='category.php'">Kategorijas</button>
+            <button type="button" class="btn flex-fill" id="setsButton" onclick="window.location.href='sets.php'">Komplekti</button>
+        </div>
         <div class="table-container">
         <div>
 
         <div class="d-flex justify-content-between align-items-center mb-4">
-                <div class="input-group" style="width: 300px;">
-                    <input type="text" class="form-control" id="searchInput" placeholder="Meklēt kategorijas..." style="margin-right: 10px;">
-                    <div class="input-group-append">
-                        <button class="btn btn-third" type="button">Meklēt</button>
-                    </div>
-                </div>
-                <div>
-                <button class="btn btn-third mr-1" id="filterButton" data-toggle="modal" data-target="#filterModal">Filtrēt kategorijas</button>
-                <button class="btn btn-third" id="addCategoryButton">Pievienot kategoriju</button>
+            <div class="input-group" style="width: 300px;">
+                <input type="text" class="form-control" id="searchInput" placeholder="Meklēt kategorijas..." style="margin-right: 10px;">
+                <div class="input-group-append">
+                    <button class="btn btn-third" type="button">Meklēt</button>
                 </div>
             </div>
+            <div class="d-flex align-items-center">
+                <select class="form-control mr-2" id="categoryFilter" style="width: 200px;">
+                    <option value="Visi">Visi</option>
+                    <option value="Bērniem">Bērniem</option>
+                    <option value="Sievietēm">Sievietēm</option>
+                    <option value="Vīriešiem">Vīriešiem</option>
+                </select>
+                <button class="btn btn-third" id="addCategoryButton">Pievienot kategoriju</button>
+            </div>
+        </div>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -50,7 +60,7 @@ if (!isset($_SESSION['user_id'])) {
                         <th>Darbības</th>
                     </tr>
                 </thead>
-                <tbody id="category"></tbody>
+                <tbody id="categoryTableBody">
                 
                 </table>
                 </div>
@@ -59,36 +69,36 @@ if (!isset($_SESSION['user_id'])) {
                     </ul>
                 </nav>
 
-<div class="modal" id="categoryModal" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="categoryModalLabel"></h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="categoryForm">
-                    <input type="hidden" id="categoryId" name="id"> 
-                    <div class="form-group">
-                        <label for="categoryName">Kategorijas nosaukums</label>
-                        <input type="text" class="form-control" id="categoryName" name="name" placeholder="Ievadiet kategorijas nosaukumu" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="bigCategory">Lielā kategorija</label>
-                        <select class="form-control" id="bigCategory" name="big_category" required>
-                            <option value="" disabled selected>Izvēlieties lielo kategoriju</option>
-                            <option value="Bērniem">Bērniem</option>
-                            <option value="Sievietēm">Sievietēm</option>
-                            <option value="Vīriešiem">Vīriešiem</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Saglabāt</button>
-                    
-                </form>
+    <div class="modal" id="categoryModal" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="categoryModalLabel"></h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="categoryForm">
+                        <input type="hidden" id="categoryId" name="id"> 
+                        <div class="form-group">
+                            <label for="categoryName">Kategorijas nosaukums</label>
+                            <input type="text" class="form-control" id="categoryName" name="name" placeholder="Ievadiet kategorijas nosaukumu" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bigCategory">Lielā kategorija</label>
+                            <select class="form-control" id="bigCategory" name="big_category" required>
+                                <option value="" disabled selected>Izvēlieties lielo kategoriju</option>
+                                <option value="Bērniem">Bērniem</option>
+                                <option value="Sievietēm">Sievietēm</option>
+                                <option value="Vīriešiem">Vīriešiem</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Saglabāt</button>
+                        
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">

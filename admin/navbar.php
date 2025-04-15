@@ -15,9 +15,8 @@
         </p>
     </div>
     <a href="index.php">Sākums</a>
-    <a href="preces.php">Preces</a>
-    <a href="category.php">Kategorijas</a>
-    <a href="galerija.php">Galerija</a>
+    <a href="product.php">Preces</a>
+    <a href="gallery.php">Galerija</a>
     <a href="tirdzini.php">Tirdziņi</a>
     <a href="lietotaji.php">Lietotāji</a>
     <a class="logout" href="../database/logout.php"><i class="fas fa-sign-out-alt"></i> Izlogoties</a>

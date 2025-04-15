@@ -21,15 +21,16 @@ if (!isset($_SESSION['user_id'])) {
     <link rel="stylesheet" href="styles.css">
 </head>
 <body id="setsPage">
+<div id="alertContainer" class="container mt-3"></div>
     <?php include 'navbar.php'; ?>
     <div class="content">
         <div class="heading-container">
             <h1>Komplekti</h1>
         </div>
-        <div class="btn-group btn-group-lg d-flex mb-4" role="group">
-            <button class="btn flex-fill" onclick="location.href='products.php'">Produkti</button>
-            <button class="btn flex-fill" onclick="location.href='categories.php'">Kategorijas</button>
-            <button class="btn flex-fill active">Komplekti</button>
+        <div class="btn-group btn-group-lg d-flex" role="group">
+            <button type="button" class="btn flex-fill" id="productsButton" onclick="window.location.href='product.php'">Produkti</button>
+            <button type="button" class="btn flex-fill" id="categoriesButton" onclick="window.location.href='category.php'">Kategorijas</button>
+            <button type="button" class="btn flex-fill" id="setsButton" onclick="window.location.href='sets.php'">Komplekti</button>
         </div>
 
         <div class="table-container">
@@ -89,30 +90,48 @@ if (!isset($_SESSION['user_id'])) {
     </div>
 </div>
 
-<div class="modal" id="addSetModal" tabindex="-1" aria-labelledby="addSetModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addSetModalLabel">Pievienot komplektu</h5>
-                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="setForm">
-                    <input type="hidden" id="setId" name="set_id">
-                    <div class="form-group">
-                        <label for="setName">Komplekta nosaukums</label>
-                        <input type="text" class="form-control" id="setName" name="name" placeholder="Ievadiet komplekta nosaukumu" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="setDescription">Apraksts</label>
-                        <textarea class="form-control" id="setDescription" name="description" rows="3" placeholder="Ievadiet komplekta aprakstu" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Saglabāt</button>
-                </form>
+    <div class="modal" id="addSetModal" tabindex="-1" aria-labelledby="addSetModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addSetModalLabel">Pievienot komplektu</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="setForm">
+                        <input type="hidden" id="setId" name="set_id">
+                        <div class="form-group">
+                            <label for="setName">Komplekta nosaukums</label>
+                            <input type="text" class="form-control" id="setName" name="name" placeholder="Ievadiet komplekta nosaukumu" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="setDescription">Apraksts</label>
+                            <textarea class="form-control" id="setDescription" name="description" rows="3" placeholder="Ievadiet komplekta aprakstu" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Saglabāt</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Apstiprināt dzēšanu</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Vai tiešām vēlies dzēst šo komplektu?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Atcelt</button>
+                    <button type="button" class="btn btn-danger" id="confirmDelete">Dzēst</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>

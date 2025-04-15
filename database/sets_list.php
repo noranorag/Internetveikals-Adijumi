@@ -15,14 +15,16 @@ $query = "
         s.description AS set_description,
         p.product_ID AS product_id,
         p.name AS product_name,
-        p.image AS product_image
+        p.image AS product_image,
+        ps.active AS product_active
     FROM sets s
     LEFT JOIN product_sets ps ON s.set_ID = ps.ID_set
     LEFT JOIN product p ON ps.ID_product = p.product_ID
+    WHERE s.active != 'deleted' AND (ps.active = 'active' OR ps.active IS NULL)
 ";
 
 if (!empty($search)) {
-    $query .= " WHERE s.name LIKE '%$search%'";
+    $query .= " AND s.name LIKE '%$search%'";
 }
 
 $query .= " ORDER BY s.set_ID DESC";
@@ -44,7 +46,8 @@ if ($result) {
             ];
         }
 
-        if (!empty($row['product_id'])) {
+        // Only include products where product_active = 'active'
+        if (!empty($row['product_id']) && $row['product_active'] === 'active') {
             $sets[$set_id]['products'][] = [
                 'product_id' => htmlspecialchars($row['product_id']),
                 'product_name' => htmlspecialchars($row['product_name']),

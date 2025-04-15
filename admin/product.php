@@ -28,25 +28,40 @@ if (!isset($_SESSION['user_id'])) {
         <div class="heading-container">
             <h1>Preces</h1>
         </div>
-        <div class="btn-group btn-group-lg d-flex mb-4" role="group" aria-label="Navigation Buttons">
-            <button type="button" class="btn flex-fill" id="productsButton">Produkti</button>
-            <button type="button" class="btn flex-fill" id="categoriesButton">Kategorijas</button>
-            <button type="button" class="btn flex-fill" id="setsButton">Komplekti</button>
+        <div class="btn-group btn-group-lg d-flex" role="group" aria-label="Navigation Buttons">
+            <button type="button" class="btn flex-fill" id="productsButton" onclick="window.location.href='product.php'">Produkti</button>
+            <button type="button" class="btn flex-fill" id="categoriesButton" onclick="window.location.href='category.php'">Kategorijas</button>
+            <button type="button" class="btn flex-fill" id="setsButton" onclick="window.location.href='sets.php'">Komplekti</button>
         </div>
         <div class="table-container">
         <div>
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div class="input-group" style="width: 300px;">
-                    <input type="text" class="form-control" id="searchInput" placeholder="Meklēt preci..." style="margin-right: 10px;">
-                    <div class="input-group-append">
-                        <button class="btn btn-third" type="button">Meklēt</button>
-                    </div>
-                </div>
-                <div>
-                <button class="btn btn-third mr-1" id="filterButton" data-toggle="modal" data-target="#filterModal">Filtrēt produktus</button>
-                    <button class="btn btn-third" data-toggle="modal" data-target="#addProductModal">Pievienot preci</button>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <!-- Search Bar on the Left -->
+            <div class="input-group" style="width: 300px;">
+                <input type="text" class="form-control" id="searchInput" placeholder="Meklēt preci...">
+                <div class="input-group-append">
+                    <button class="btn btn-third" type="button">Meklēt</button>
                 </div>
             </div>
+
+            <!-- Filters and Add Button on the Right -->
+            <div class="d-flex align-items-center" style="gap: 15px;">
+                <select class="form-control" id="filterCategory" style="width: 200px;">
+                    <option value="">Visas kategorijas</option>
+                    <!-- Populate categories dynamically -->
+                </select>
+                <select class="form-control" id="sortOptions" style="width: 200px;">
+                    <option value="">Sakārtot pēc...</option>
+                    <option value="quantity_asc">Daudzums (↑)</option>
+                    <option value="quantity_desc">Daudzums (↓)</option>
+                    <option value="date_asc">Datums (↑)</option>
+                    <option value="date_desc">Datums (↓)</option>
+                    <option value="price_asc">Cena (↑)</option>
+                    <option value="price_desc">Cena (↓)</option>
+                </select>
+                <button class="btn btn-third" data-toggle="modal" data-target="#addProductModal">Pievienot preci</button>
+            </div>
+        </div>
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -117,10 +132,11 @@ if (!isset($_SESSION['user_id'])) {
                         <input type="number" class="form-control" id="quantity" name="stock_quantity" placeholder="Ievadiet daudzumu">
                     </div>
                     <div class="form-group">
-                        <label for="category">Kategorija</label>
-                        <select class="form-control" id="category" name="category_id">
-                        </select>
-                    </div>
+                    <label for="category">Kategorija</label>
+                    <select class="form-control" id="category" name="category_id">
+                        <!-- Options will be dynamically populated here -->
+                    </select>
+                </div>
                     <div class="form-group">
                         <label for="image">Attēls</label>
                         <div id="imagePreviewContainer">

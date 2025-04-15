@@ -98,7 +98,7 @@ h2 {
     text-align: center;
     padding: 10px;
     border-radius: 5px;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -132,6 +132,7 @@ h2 {
     justify-content: space-between;
     align-items: stretch;
     overflow: hidden;
+    margin-top: 1.5rem;
 }
 
 .table-container-index{
@@ -350,12 +351,10 @@ th, td {
     color: white;
     background-color: #788763; /* Slightly darker shade on hover */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover */
-    transform: translateY(-2px); /* Lift the button slightly */
 }
 
 .btn-group button:active {
-    transform: translateY(0); /* Reset lift on click */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Reset shadow on click */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Reset shadow on click */
 }
 
 .card {
@@ -440,3 +439,13 @@ th, td {
     margin-left: 20px; /* Adjust the value as needed */
     text-align: left; /* Optional: Align the text to the left */
 }
+
+#alertContainer .alert {
+    z-index: 1050; /* Ensure it appears above other elements */
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    min-width: 300px;
+    max-width: 400px;
+}
+
