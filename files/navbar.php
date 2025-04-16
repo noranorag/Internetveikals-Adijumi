@@ -14,13 +14,13 @@
                     <a class="nav-link" href="index.php">Sākums</a>
                 </li>
                 <li class="nav-item mx-3">
-                    <a class="nav-link" href="internetveikals.php">Internetveikals</a>
+                    <a class="nav-link" href="eshop.php">Internetveikals</a>
                 </li>
                 <li class="nav-item mx-3">
-                    <a class="nav-link" href="galerija.php">Galerija</a>
+                    <a class="nav-link" href="gallery.php">Galerija</a>
                 </li>
                 <li class="nav-item mx-3">
-                    <a class="nav-link" href="tirdzini.php">Tirdziņi</a>
+                    <a class="nav-link" href="fair.php">Tirdziņi</a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">

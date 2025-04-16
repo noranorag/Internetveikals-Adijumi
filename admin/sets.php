@@ -48,7 +48,7 @@ if (!isset($_SESSION['user_id'])) {
                 </div>
 
                 <div class="row" id="setsContainer">
-                    <!-- Sets will be dynamically loaded here -->
+                   
                 </div>
             </div>
         </div>
@@ -70,9 +70,7 @@ if (!isset($_SESSION['user_id'])) {
                     </div>
                 </div>
 
-                <!-- Products in the Set -->
                 <div class="row" id="modalProductsContainer" style="margin-bottom: 30px;">
-                    <!-- Products will be dynamically loaded here -->
                 </div>
                 <div class="row">
                     <div class="col-md-12 text-center">
@@ -80,10 +78,8 @@ if (!isset($_SESSION['user_id'])) {
                     </div>
                 </div>
                 <div class="row" id="categoriesContainer" style="margin-top: 20px; flex-direction: column;">
-                    <!-- Categories will be dynamically loaded here -->
                 </div>
                 <div id="${subCategoryId}" class="product-list mt-2" style="display: none;" data-subcategory="${category.name}">
-                    <!-- Products will be dynamically loaded here -->
                 </div>
             </div>
         </div>

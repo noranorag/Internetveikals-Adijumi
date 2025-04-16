@@ -4,7 +4,7 @@
  if (isset($_POST['id'])) {
      $id = intval($_POST['id']);
  
-     // Update the active column to 'deleted'
+     
      $query = $conn->prepare("UPDATE fair SET active = 'deleted' WHERE fair_ID = ?");
      $query->bind_param("i", $id);
  

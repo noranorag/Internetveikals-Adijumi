@@ -37,7 +37,7 @@ if ($category) {
     $query .= " AND product.ID_category = $category";
 }
 
-// Apply sorting based on the `sort` parameter
+
 switch ($sort) {
     case 'quantity_asc':
         $query .= " ORDER BY product.stock_quantity ASC";
@@ -58,7 +58,7 @@ switch ($sort) {
         $query .= " ORDER BY product.price DESC";
         break;
     default:
-        $query .= " ORDER BY product.product_ID DESC"; // Default sorting
+        $query .= " ORDER BY product.product_ID DESC"; 
         break;
 }
 
@@ -66,7 +66,7 @@ switch ($sort) {
 $result = mysqli_query($conn, $query);
 
 if (!$result) {
-    // Handle SQL errors
+    
     echo json_encode(['error' => 'Database query failed.']);
     exit();
 }

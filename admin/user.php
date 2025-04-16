@@ -35,7 +35,15 @@ if (!isset($_SESSION['user_id'])) {
                     <button class="btn btn-third" type="button">Meklēt</button>
                 </div>
             </div>
+            <div class="d-flex align-items-center">
+                <select class="form-control mr-2" id="roleFilter" style="width: 200px;">
+                    <option value="">Filtrēt pēc lomas...</option>
+                    <option value="user">Lietotāji</option>
+                    <option value="moder">Moderatori</option>
+                    <option value="admin">Administrātori</option>
+                </select>
                 <button class="btn btn-third" data-toggle="modal" data-target="#addUserModal">Pievienot lietotāju</button>
+            </div>
             </div>
             <table class="table table-striped">
                 <thead>
@@ -57,7 +65,7 @@ if (!isset($_SESSION['user_id'])) {
             <div>
                 <nav aria-label="Page navigation">
                     <ul class="pagination justify-content-center">
-                        <!-- Pagination links will be dynamically generated here -->
+                    
                     </ul>
                 </nav>
             </div>
@@ -73,7 +81,7 @@ if (!isset($_SESSION['user_id'])) {
             </div>
             <div class="modal-body">
                 <form id="userForm">
-                    <input type="hidden" id="userId" name="id"> <!-- Hidden input for user ID -->
+                    <input type="hidden" id="userId" name="id">
                     <div class="form-group">
                         <label for="userFirstName">Vārds</label>
                         <input type="text" class="form-control" id="userFirstName" name="name" placeholder="Ievadiet vārdu" required>

@@ -10,13 +10,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $conn->real_escape_string($_POST['name']);
     $description = $conn->real_escape_string($_POST['description']);
     $link = $conn->real_escape_string($_POST['link']);
-    $date = isset($_POST['date']) ? $conn->real_escape_string($_POST['date']) : null; // Ensure the date is received
+    $date = isset($_POST['date']) ? $conn->real_escape_string($_POST['date']) : null; 
     $image = '';
 
-    // Debugging: Log the received date
-    error_log("Received Date in POST: " . $date);
-
-    // Handle image upload
+    
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         $imageName = basename($_FILES['image']['name']);
         $targetDir = "../uploads/";
@@ -30,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Update the fair in the database
+    
     if (!empty($image)) {
         $sql = "UPDATE fair SET name = ?, description = ?, link = ?, image = ?, date = ? WHERE fair_ID = ?";
         $stmt = $conn->prepare($sql);

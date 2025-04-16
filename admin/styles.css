@@ -338,44 +338,44 @@ th, td {
 }
 
 .btn-group button {
-    background-color: #8a9b78; /* Unified button color */
+    background-color: #8a9b78;
     color: white;
-    border: 1px solid #788763; /* Add a border for separation */
-    border-radius: 5px; /* Rounded corners for distinction */
+    border: 1px solid #788763;
+    border-radius: 5px;
     gap: 10px;;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth hover effect */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .btn-group button:hover {
     color: white;
-    background-color: #788763; /* Slightly darker shade on hover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover */
+    background-color: #788763;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .btn-group button:active {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Reset shadow on click */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .card {
-    padding: 0; /* Remove padding from the card */
-    margin: 0; /* Remove margin from the card */
-    overflow: hidden; /* Ensure the image doesn't overflow */
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
 }
 
-/* Style for the card image */
+
 .card-img-top {
-    width: 100% !important; /* Force the image to span the full width */
-    height: 100px !important; /* Set the height to 100px */
-    object-fit: cover !important; /* Ensure the image is zoomed in and covers the area */
-    display: block !important; /* Ensure the image behaves like a block element */
-    filter: brightness(70%) !important; /* Dim the image */
-    transition: filter 0.3s ease; /* Smooth transition for hover effect */
+    width: 100% !important;
+    height: 100px !important;
+    object-fit: cover !important;
+    display: block !important;
+    filter: brightness(70%) !important;
+    transition: filter 0.3s ease;
 }
 
-/* Optional: Add hover effect to brighten the image */
+
 .card-img-top:hover {
-    filter: brightness(70%); /* Brighten the image slightly on hover */
+    filter: brightness(70%);
 }
 
 .category-block {
@@ -403,32 +403,32 @@ th, td {
 }
 
 .product-display:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhance shadow on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .product-display img {
-    width: 200px; /* Set a fixed width for the product image */
-    height: 200px; /* Set a fixed height for the product image */
-    object-fit: cover; /* Ensure the image covers the area without distortion */
-    margin-bottom: 10px; /* Add spacing below the image */
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    margin-bottom: 10px;
 }
 
 .product-display p {
-    margin: 5px 0; /* Add spacing between text elements */
-    font-size: 14px; /* Adjust font size for better readability */
-    color: #333; /* Darker text color for contrast */
+    margin: 5px 0;
+    font-size: 14px;
+    color: #333;
 }
 
 .category-block {
-    margin-left: 0; /* Big categories */
+    margin-left: 0;
 }
 
 .subcategory-block {
-    margin-left: 20px; /* Subcategories */
+    margin-left: 20px;
 }
 
 .product-list {
-    margin-left: 40px; /* Products */
+    margin-left: 40px;
 }
 
 .set-card {
@@ -436,12 +436,12 @@ th, td {
 }
 
 .no-sets-message {
-    margin-left: 20px; /* Adjust the value as needed */
-    text-align: left; /* Optional: Align the text to the left */
+    margin-left: 20px;
+    text-align: left;
 }
 
 #alertContainer .alert {
-    z-index: 1050; /* Ensure it appears above other elements */
+    z-index: 1050;
     position: fixed;
     top: 20px;
     right: 20px;
@@ -450,11 +450,11 @@ th, td {
 }
 
 #modalImage {
-    max-width: 70vw; /* Maximum width: 90% of the viewport width */
-    max-height: 70vh; /* Maximum height: 90% of the viewport height */
-    object-fit: contain; /* Ensure the image scales proportionally */
+    max-width: 70vw;
+    max-height: 70vh;
+    object-fit: contain;
 }
 
 #gallery img {
-    cursor: pointer; /* Change cursor to pointer on hover */
+    cursor: pointer;
 }

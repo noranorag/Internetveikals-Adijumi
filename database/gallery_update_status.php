@@ -2,7 +2,7 @@
 include '../database/db_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $userGalleryId = $_POST['gallery_id'] ?? null; // This is the ID from the user_gallery table
+    $userGalleryId = $_POST['gallery_id'] ?? null; 
     $status = $_POST['status'] ?? null;
 
     if (!$userGalleryId || !$status) {
@@ -10,14 +10,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // Validate status
+    
     $validStatuses = ['approved', 'declined', 'onhold'];
     if (!in_array($status, $validStatuses)) {
         echo json_encode(['success' => false, 'error' => 'Invalid status.']);
         exit();
     }
 
-    // Update the gallery_images table using a JOIN with user_gallery
+    
     $stmt = $conn->prepare("
         UPDATE gallery_images
         INNER JOIN user_gallery ON user_gallery.ID_gallery = gallery_images.gallery_ID

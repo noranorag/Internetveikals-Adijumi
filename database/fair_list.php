@@ -1,7 +1,7 @@
 <?php
 require 'db_connection.php';
 
-// Update the status column based on the current date
+
 $currentDate = date('Y-m-d');
 $updateStatusQuery = "
     UPDATE fair
@@ -10,11 +10,11 @@ $updateStatusQuery = "
 ";
 mysqli_query($conn, $updateStatusQuery);
 
-// Get the search query and status from the request
+
 $search = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
 $status = isset($_GET['status']) ? $conn->real_escape_string($_GET['status']) : '';
 
-// Base query to fetch fairs
+
 $query = "
     SELECT 
         f.fair_ID AS id,
@@ -32,17 +32,17 @@ $query = "
         f.active = 'active'
 ";
 
-// Add search filtering if a search query is provided
+
 if (!empty($search)) {
     $query .= " AND (f.name LIKE '%$search%' OR f.description LIKE '%$search%' OR f.link LIKE '%$search%')";
 }
 
-// Add status filtering if a status is provided
+
 if (!empty($status)) {
     $query .= " AND f.status = '$status'";
 }
 
-// Add sorting to the query
+
 $query .= " ORDER BY f.fair_ID DESC";
 
 $result = mysqli_query($conn, $query);
@@ -60,7 +60,7 @@ while ($row = $result->fetch_assoc()) {
         'description' => htmlspecialchars($row['description']),
         'image' => htmlspecialchars($row['image']),
         'link' => htmlspecialchars($row['link']),
-        'status' => htmlspecialchars($row['status']), // Include the status in the response
+        'status' => htmlspecialchars($row['status']), 
         'admin_user_id' => htmlspecialchars($row['admin_user_id']),
     );
 }

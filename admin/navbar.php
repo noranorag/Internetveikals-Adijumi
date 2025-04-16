@@ -18,7 +18,7 @@
     <a href="product.php">Preces</a>
     <a href="gallery.php">Galerija</a>
     <a href="fairs.php">Tirdziņi</a>
-    <a href="lietotaji.php">Lietotāji</a>
+    <a href="user.php">Lietotāji</a>
     <a class="logout" href="../database/logout.php"><i class="fas fa-sign-out-alt"></i> Izlogoties</a>
 </div>
 <button class="btn btn-arrow toggle-btn" type="button" data-toggle="collapse" data-target="#sidebar" aria-expanded="true" aria-controls="sidebar">

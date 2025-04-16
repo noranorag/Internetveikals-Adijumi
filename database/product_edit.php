@@ -5,7 +5,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-header('Content-Type: application/json'); // Ensure the response is JSON
+header('Content-Type: application/json'); 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = intval($_POST['id'] ?? 0);
@@ -26,29 +26,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stock_quantity = intval($_POST['stock_quantity'] ?? 0);
     $category_id = intval($_POST['category_id'] ?? 0);
 
-    // Default to the current image if no new image is uploaded
+    
     $current_image = $_POST['current_image'] ?? '';
     $imagePath = $current_image;
 
-    // Check if a new image is uploaded
+    
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         $imageName = uniqid() . '-' . basename($_FILES['image']['name']);
         $targetDir = '../images/';
         $targetFile = $targetDir . $imageName;
 
-        // Attempt to move the uploaded file
+        
         if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFile)) {
-            $imagePath = 'images/' . $imageName; // Save the relative path
+            $imagePath = 'images/' . $imageName; 
         } else {
             echo json_encode(['success' => false, 'error' => 'Failed to upload image.']);
             exit();
         }
     }
 
-    // Debugging: Log the image path
-    error_log("Image Path: " . $imagePath);
-
-    // Update query
+    
     $sql = "UPDATE product 
             SET name = ?, 
                 short_description = ?, 

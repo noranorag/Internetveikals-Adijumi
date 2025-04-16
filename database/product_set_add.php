@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // Corrected table name
+    
     $query = "INSERT INTO product_sets (ID_product, ID_set) VALUES (?, ?)";
     $stmt = $conn->prepare($query);
 

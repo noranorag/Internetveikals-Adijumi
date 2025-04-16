@@ -36,7 +36,6 @@ if (!isset($_SESSION['user_id'])) {
         <div class="table-container">
         <div>
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <!-- Search Bar on the Left -->
             <div class="input-group" style="width: 300px;">
                 <input type="text" class="form-control" id="searchInput" placeholder="Meklēt preci...">
                 <div class="input-group-append">
@@ -44,11 +43,9 @@ if (!isset($_SESSION['user_id'])) {
                 </div>
             </div>
 
-            <!-- Filters and Add Button on the Right -->
             <div class="d-flex align-items-center" style="gap: 15px;">
                 <select class="form-control" id="filterCategory" style="width: 200px;">
                     <option value="">Visas kategorijas</option>
-                    <!-- Populate categories dynamically -->
                 </select>
                 <select class="form-control" id="sortOptions" style="width: 200px;">
                     <option value="">Sakārtot pēc...</option>
@@ -134,7 +131,6 @@ if (!isset($_SESSION['user_id'])) {
                     <div class="form-group">
                     <label for="category">Kategorija</label>
                     <select class="form-control" id="category" name="category_id">
-                        <!-- Options will be dynamically populated here -->
                     </select>
                 </div>
                     <div class="form-group">
@@ -182,13 +178,11 @@ if (!isset($_SESSION['user_id'])) {
                 </button>
             </div>
             <div class="modal-body">
-                <!-- Add filter options here -->
                 <form id="filterForm">
                     <div class="form-group">
                         <label for="filterCategory">Kategorija</label>
                         <select class="form-control" id="filterCategory">
                             <option value="">Visas kategorijas</option>
-                            <!-- Populate categories dynamically -->
                         </select>
                     </div>
                     <div class="form-group">

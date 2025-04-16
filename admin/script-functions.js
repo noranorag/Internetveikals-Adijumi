@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    let isEditMode = false; // Track whether the modal is in edit mode
+    let isEditMode = false; 
 
     fetchCategories();
 
@@ -21,7 +21,7 @@ $(document).ready(function () {
         let template = "";
     
         if (categories.length === 0) {
-            // Display message if no categories are found
+            
             template = '<tr><td colspan="4" class="text-left">Nav pieejamu kategoriju</td></tr>';
         } else {
             categories.forEach(category => {
@@ -43,23 +43,23 @@ $(document).ready(function () {
             });
         }
     
-        // Update the category table body
+        
         $('#categoryTableBody').html(template);
     }
 
-    // Open modal for adding a category
+    
     $('#addCategoryButton').click(function () {
-        isEditMode = false; // Set to add mode
+        isEditMode = false; 
         $('#categoryModalLabel').text("Pievienot kategoriju");
-        $('#categoryForm')[0].reset(); // Reset the form
-        $('#categoryId').val(""); // Clear the hidden ID field
+        $('#categoryForm')[0].reset(); 
+        $('#categoryId').val(""); 
         $('#categoryModal').modal('show');
     });
 
-    // Open modal for editing a category
+    
     $(document).on('click', '.category-edit', function (e) {
         e.preventDefault();
-        isEditMode = true; // Set to edit mode
+        isEditMode = true; 
 
         const row = $(e.currentTarget).closest('tr');
         const categoryId = row.attr("category_ID");
@@ -67,13 +67,13 @@ $(document).ready(function () {
         const bigCategory = row.find('td:nth-child(2)').text();
 
         $('#categoryModalLabel').text("Rediģēt kategoriju");
-        $('#categoryId').val(categoryId); // Set the hidden ID field
+        $('#categoryId').val(categoryId); 
         $('#categoryName').val(categoryName);
         $('#bigCategory').val(bigCategory);
         $('#categoryModal').modal('show');
     });
 
-    // Handle form submission for adding or editing a category
+    
     $('#categoryForm').submit(function (e) {
         e.preventDefault();
     
@@ -84,8 +84,8 @@ $(document).ready(function () {
         };
     
         const url = isEditMode
-            ? '../database/category_edit.php' // URL for editing
-            : '../database/category_add.php'; // URL for adding
+            ? '../database/category_edit.php' 
+            : '../database/category_add.php'; 
     
         $.ajax({
             url: url,
@@ -104,34 +104,34 @@ $(document).ready(function () {
 
     $(document).on('click', '.category-delete', function (e) {
         e.preventDefault();
-        deleteCategoryId = $(e.currentTarget).closest('tr').attr("category_ID"); // Get the category ID
-        $('#deleteModal').modal('show'); // Show the Bootstrap modal
+        deleteCategoryId = $(e.currentTarget).closest('tr').attr("category_ID"); 
+        $('#deleteModal').modal('show'); 
     });
 
     $('#confirmDelete').click(function () {
         if (deleteCategoryId) {
             $.post('../database/category_delete.php', { id: deleteCategoryId }, function (response) {
-                $('#deleteModal').modal('hide'); // Hide the modal after deletion
-                fetchCategories(); // Refresh the category list after deletion
+                $('#deleteModal').modal('hide'); 
+                fetchCategories(); 
             });
         }
     });
 
     function searchCategories() {
-        const searchQuery = $('#searchInput').val().trim(); // Get the search input value
-        const selectedFilter = $('#categoryFilter').val(); // Get the selected filter value
+        const searchQuery = $('#searchInput').val().trim(); 
+        const selectedFilter = $('#categoryFilter').val(); 
     
         $.ajax({
             url: '../database/category_list.php',
             type: 'GET',
             data: {
                 search: searchQuery,
-                filter: selectedFilter === 'Visi' ? '' : selectedFilter // Send the filter value only if it's not "Visi"
+                filter: selectedFilter === 'Visi' ? '' : selectedFilter 
             },
             success: function (response) {
                 try {
                     const categories = JSON.parse(response);
-                    displayCategories(categories); // Update the category table
+                    displayCategories(categories); 
                 } catch (e) {
                     alert("Neizdevās apstrādāt kategoriju datus!");
                 }
@@ -142,22 +142,22 @@ $(document).ready(function () {
         });
     }
     
-    // Trigger search on input
+    
     $('#searchInput').on('input', function () {
         searchCategories();
     });
 
     $('#categoryFilter').on('change', function () {
-        const selectedFilter = $(this).val(); // Get the selected filter value
+        const selectedFilter = $(this).val(); 
     
         $.ajax({
             url: '../database/category_list.php',
             type: 'GET',
-            data: { filter: selectedFilter === 'Visi' ? '' : selectedFilter }, // Send the filter value to the server
+            data: { filter: selectedFilter === 'Visi' ? '' : selectedFilter }, 
             success: function (response) {
                 try {
                     const categories = JSON.parse(response);
-                    displayCategories(categories); // Update the category table
+                    displayCategories(categories); 
                 } catch (e) {
                     alert("Neizdevās apstrādāt kategoriju datus!");
                 }
@@ -168,7 +168,7 @@ $(document).ready(function () {
         });
     });
 
-    // Trigger search when the filter changes
+    
     $('#categoryFilter').on('change', function () {
         searchCategories();
     });
@@ -226,9 +226,9 @@ $(document).ready(function () {
     }
 
     function searchProducts() {
-        const searchQuery = $('#searchInput').val().trim(); // Get the search input value
-        const selectedCategory = $('#filterCategory').val(); // Get the selected category value
-        const selectedSort = $('#sortOptions').val(); // Get the selected sorting option
+        const searchQuery = $('#searchInput').val().trim(); 
+        const selectedCategory = $('#filterCategory').val(); 
+        const selectedSort = $('#sortOptions').val(); 
     
         $.ajax({
             url: '../database/product_list.php',
@@ -241,7 +241,7 @@ $(document).ready(function () {
             success: function (response) {
                 try {
                     const products = JSON.parse(response);
-                    displayProducts(products); // Update the product table
+                    displayProducts(products); 
                 } catch (e) {
                     alert("Neizdevās apstrādāt preču datus!");
                 }
@@ -252,7 +252,7 @@ $(document).ready(function () {
         });
     }
     
-    // Trigger search on input
+    
     $('#searchInput').on('input', function () {
         searchProducts();
     });
@@ -260,9 +260,9 @@ $(document).ready(function () {
     function populateCategoryDropdown(selectedCategoryId = null, dropdownId = 'category') {
         return new Promise((resolve, reject) => {
             const categoryDropdown = $(`#${dropdownId}`);
-            categoryDropdown.empty(); // Clear existing options
+            categoryDropdown.empty(); 
     
-            // Add the default "Visas kategorijas" option for filters
+            
             if (dropdownId === 'filterCategory') {
                 categoryDropdown.append('<option value="">Visas kategorijas</option>');
             } else {
@@ -276,15 +276,15 @@ $(document).ready(function () {
                     try {
                         const categories = JSON.parse(response);
     
-                        // Populate the dropdown with category names
+                        
                         categories.forEach(category => {
-                            const isSelected = selectedCategoryId == category.id ? 'selected' : ''; // Check if this is the selected category
+                            const isSelected = selectedCategoryId == category.id ? 'selected' : ''; 
                             categoryDropdown.append(
                                 `<option value="${category.id}" ${isSelected}>${category.name}</option>`
                             );
                         });
     
-                        resolve(); // Resolve the promise after the dropdown is populated
+                        resolve(); 
                     } catch (e) {
                         reject();
                     }
@@ -297,9 +297,9 @@ $(document).ready(function () {
     }
 
     $('#filterCategory').on('change', function () {
-        const selectedCategory = $(this).val(); // Get the selected category ID
+        const selectedCategory = $(this).val(); 
     
-        // Fetch filtered products
+        
         $.ajax({
             url: '../database/product_list.php',
             type: 'GET',
@@ -307,7 +307,7 @@ $(document).ready(function () {
             success: function (response) {
                 try {
                     const products = JSON.parse(response);
-                    displayProducts(products); // Update the product table
+                    displayProducts(products); 
                 } catch (e) {
                     alert("Neizdevās apstrādāt preču datus!");
                 }
@@ -321,9 +321,9 @@ $(document).ready(function () {
     function populateCategoryDropdownWithBigCategory(dropdownId = 'filterCategory') {
         return new Promise((resolve, reject) => {
             const categoryDropdown = $(`#${dropdownId}`);
-            categoryDropdown.empty(); // Clear existing options
+            categoryDropdown.empty(); 
     
-            // Add the default "Visas kategorijas" option
+            
             categoryDropdown.append('<option value="">Visas kategorijas</option>');
     
             $.ajax({
@@ -333,13 +333,13 @@ $(document).ready(function () {
                     try {
                         const categories = JSON.parse(response);
     
-                        // Populate the dropdown with category names and big categories
+                        
                         categories.forEach(category => {
                             categoryDropdown.append(
                                 `<option value="${category.id}">${category.name} ${category.big_category}</option>`
                             );
                         });
-                        resolve(); // Resolve the promise after the dropdown is populated
+                        resolve(); 
                     } catch (e) {
                         reject();
                     }
@@ -357,9 +357,9 @@ $(document).ready(function () {
     });
 
     $('#sortOptions').on('change', function () {
-        const selectedSort = $(this).val(); // Get the selected sorting option
+        const selectedSort = $(this).val(); 
     
-        // Fetch sorted products
+        
         $.ajax({
             url: '../database/product_list.php',
             type: 'GET',
@@ -367,7 +367,7 @@ $(document).ready(function () {
             success: function (response) {
                 try {
                     const products = JSON.parse(response);
-                    displayProducts(products); // Update the product table
+                    displayProducts(products); 
                 } catch (e) {
                     alert("Neizdevās apstrādāt preču datus!");
                 }
@@ -378,12 +378,12 @@ $(document).ready(function () {
         });
     });
 
-    // Function to fetch and display filtered and sorted products
+    
     function fetchFilteredAndSortedProducts() {
-        const selectedCategory = $('#filterCategory').val(); // Get the selected category ID
-        const selectedSort = $('#sortOptions').val(); // Get the selected sorting option
+        const selectedCategory = $('#filterCategory').val(); 
+        const selectedSort = $('#sortOptions').val(); 
 
-        // Fetch filtered and sorted products
+        
         $.ajax({
             url: '../database/product_list.php',
             type: 'GET',
@@ -394,7 +394,7 @@ $(document).ready(function () {
             success: function (response) {
                 try {
                     const products = JSON.parse(response);
-                    displayProducts(products); // Update the product table
+                    displayProducts(products); 
                 } catch (e) {
                     alert("Neizdevās apstrādāt preču datus!");
                 }
@@ -405,12 +405,12 @@ $(document).ready(function () {
         });
     }
 
-    // Trigger filtering and sorting when the category dropdown changes
+    
     $('#filterCategory').on('change', function () {
         fetchFilteredAndSortedProducts();
     });
 
-    // Trigger filtering and sorting when the sort options dropdown changes
+    
     $('#sortOptions').on('change', function () {
         fetchFilteredAndSortedProducts();
     });
@@ -418,71 +418,71 @@ $(document).ready(function () {
     
 
     $('#image').on('change', function () {
-        const file = this.files[0]; // Get the selected file
+        const file = this.files[0]; 
         if (file) {
-            const reader = new FileReader(); // Create a FileReader to read the file
+            const reader = new FileReader(); 
             reader.onload = function (e) {
-                $('#imagePreview') // Update the src of the image preview
-                    .attr('src', e.target.result) // Set the preview to the file content
-                    .show(); // Make the preview visible
-                $('#imagePath').val(''); // Clear the current image path only if a new file is selected
+                $('#imagePreview') 
+                    .attr('src', e.target.result) 
+                    .show(); 
+                $('#imagePath').val(''); 
             };
-            reader.readAsDataURL(file); // Read the file as a data URL
+            reader.readAsDataURL(file); 
         } else {
-            $('#imagePreview') // If no file is selected, hide the preview
+            $('#imagePreview') 
                 .attr('src', '')
                 .hide();
-            // Do not clear the current image path here
+            
         }
     });
 
     
 
-    let isProductEditMode = false; // Track whether the modal is in edit mode
+    let isProductEditMode = false; 
 
-    // Open modal for adding a product
+    
     $('#addProductButton').click(function () {
-        isProductEditMode = false; // Ensure the modal is in add mode
+        isProductEditMode = false; 
     
-        // Reset the form and clear all fields
-        $('#productForm')[0].reset(); // Reset the form
-        $('#productId').val(""); // Clear the hidden product ID field
-        $('#imagePreview').hide(); // Hide the image preview
-        $('#imagePreview').attr('src', ''); // Clear the image preview source
+        
+        $('#productForm')[0].reset(); 
+        $('#productId').val(""); 
+        $('#imagePreview').hide(); 
+        $('#imagePreview').attr('src', ''); 
     
-        // Set the modal title to "Pievienot preci"
+        
         $('#addProductModalLabel').text("Pievienot preci");
     
-        // Populate the category dropdown and show the modal only after it's populated
+        
         populateCategoryDropdown().then(() => {
-            $('#addProductModal').modal('show'); // Show the modal
+            $('#addProductModal').modal('show'); 
         }).catch(() => {
-            alert("Neizdevās ielādēt kategorijas!"); // Handle errors
+            alert("Neizdevās ielādēt kategorijas!"); 
         });
     });
 
     $('#addProductModal').on('hidden.bs.modal', function () {
-        isProductEditMode = false; // Reset the edit mode flag
-        $('#productForm')[0].reset(); // Reset the form
-        $('#productId').val(""); // Clear the hidden product ID field
-        $('#imagePreview').hide(); // Hide the image preview
-        $('#imagePreview').attr('src', ''); // Clear the image preview source
+        isProductEditMode = false; 
+        $('#productForm')[0].reset(); 
+        $('#productId').val(""); 
+        $('#imagePreview').hide(); 
+        $('#imagePreview').attr('src', ''); 
     
-        // Reset the modal title to the default "Pievienot preci"
+        
         $('#addProductModalLabel').text("Pievienot preci");
     
-        // Remove focus from any element inside the modal
+        
         $('#addProductModal').find(':focus').blur();
     });
 
 
-    // Open modal for editing a product
+    
     $(document).on('click', '.product-edit', function (e) {
         e.preventDefault();
-        isProductEditMode = true; // Set edit mode to true
-        const productId = $(this).data('id'); // Get the product ID from the button's data attribute
+        isProductEditMode = true; 
+        const productId = $(this).data('id'); 
     
-        // Fetch product details using product_get.php
+        
         $.ajax({
             url: '../database/product_get.php',
             type: 'GET',
@@ -491,12 +491,12 @@ $(document).ready(function () {
                 const product = JSON.parse(response);
     
                 if (product.error) {
-                    alert(product.error); // Show error if product not found
+                    alert(product.error); 
                     return;
                 }
     
-                // Populate the modal fields with the product details
-                $('#productId').val(product.product_ID); // Hidden input for product ID
+                
+                $('#productId').val(product.product_ID); 
                 $('#productName').val(product.name);
                 $('#shortDescription').val(product.short_description);
                 $('#longDescription').val(product.long_description || '');
@@ -506,12 +506,12 @@ $(document).ready(function () {
                 $('#care').val(product.care || '');
                 $('#price').val(product.price);
                 $('#quantity').val(product.stock_quantity);
-                $('#imagePath').val(product.image || ''); // Set the current image path in a hidden input
+                $('#imagePath').val(product.image || ''); 
     
-                // Populate the category dropdown and set the selected value
+                
                 populateCategoryDropdown(product.ID_category).then(() => {
-                    $('#addProductModalLabel').text("Rediģēt preci"); // Set the modal title
-                    $('#addProductModal').modal('show'); // Show the modal
+                    $('#addProductModalLabel').text("Rediģēt preci"); 
+                    $('#addProductModal').modal('show'); 
                 });
     
                 if (product.image) {
@@ -547,7 +547,7 @@ $(document).ready(function () {
         if (imageFile) {
             formData.append('image', imageFile);
         } else {
-            formData.append('current_image', $('#imagePath').val()); // Append the current image path
+            formData.append('current_image', $('#imagePath').val()); 
         }
     
         const url = isProductEditMode
@@ -565,9 +565,9 @@ $(document).ready(function () {
                     const result = typeof response === 'string' ? JSON.parse(response) : response;
     
                     if (result.success) {
-                        $('#addProductModal').modal('hide'); // Hide the modal
-                        $('#productForm')[0].reset(); // Reset the form
-                        fetchProducts(); // Refresh the product list
+                        $('#addProductModal').modal('hide'); 
+                        $('#productForm')[0].reset(); 
+                        fetchProducts(); 
                     } else {
                         alert(result.error || "Neizdevās saglabāt preci!");
                     }
@@ -585,17 +585,17 @@ $(document).ready(function () {
 
     $(document).on('click', '.product-delete', function (e) {
         e.preventDefault();
-        const deleteProductId = $(e.currentTarget).closest('tr').find('.product-edit').data('id'); // Get the product ID
-        $('#deleteModal').modal('show'); // Show the Bootstrap modal
+        const deleteProductId = $(e.currentTarget).closest('tr').find('.product-edit').data('id'); 
+        $('#deleteModal').modal('show'); 
     
-        // Confirm delete action
+        
         $('#confirmDelete').off('click').on('click', function () {
             if (deleteProductId) {
                 $.post('../database/product_delete.php', { id: deleteProductId }, function (response) {
-                    $('#deleteModal').modal('hide'); // Hide the modal after deletion
-                    fetchProducts(); // Refresh the product list after deletion
+                    $('#deleteModal').modal('hide'); 
+                    fetchProducts(); 
                 }).fail(function () {
-                    alert("Neizdevās dzēst preci!"); // Show error if the request fails
+                    alert("Neizdevās dzēst preci!"); 
                 });
             }
         });
@@ -645,7 +645,7 @@ $(document).ready(function () {
                         statusText = 'Nezināms';
                 }
     
-                // Construct the action buttons based on the status
+                
                 let actionButtons = "";
                 if (item.status === 'onhold') {
                     actionButtons = `
@@ -669,29 +669,29 @@ $(document).ready(function () {
                 `;
             });
     
-            $('#gallery').html(template); // Update the table body
+            $('#gallery').html(template); 
         }
     
         
 
         $(document).on('submit', '#addImageForm', function (e) {
-            e.preventDefault(); // Prevent the default form submission
+            e.preventDefault(); 
         
-            const formData = new FormData(this); // Create a FormData object with the form data
+            const formData = new FormData(this); 
         
             $.ajax({
-                url: '../database/gallery_add.php', // Backend script to handle the image upload
+                url: '../database/gallery_add.php', 
                 type: 'POST',
                 data: formData,
-                processData: false, // Prevent jQuery from automatically transforming the data
-                contentType: false, // Prevent jQuery from setting the content type
+                processData: false, 
+                contentType: false, 
                 success: function (response) {
                     try {
                         const result = JSON.parse(response);
                         if (result.success) {
-                            $('#addImageModal').modal('hide'); // Hide the modal
-                            $('#addImageForm')[0].reset(); // Reset the form
-                            fetchGallery(); // Refresh the gallery
+                            $('#addImageModal').modal('hide'); 
+                            $('#addImageForm')[0].reset(); 
+                            fetchGallery(); 
                             alert('Bilde veiksmīgi pievienota!');
                         } else {
                             alert(result.error || 'Neizdevās pievienot bildi.');
@@ -714,19 +714,16 @@ $(document).ready(function () {
             const galleryId = button.data('id');
             const status = button.hasClass('approve-image') ? 'approved' : 'declined';
         
-            console.log('Gallery ID:', galleryId, 'Status:', status); // Debugging
-        
             $.ajax({
                 url: '../database/gallery_update_status.php',
                 type: 'POST',
                 data: { gallery_id: galleryId, status: status },
                 success: function (response) {
-                    console.log('Response:', response); // Debugging
                     try {
                         const result = JSON.parse(response);
                         if (result.success) {
                             alert('Status updated successfully!');
-                            fetchGallery(); // Refresh the gallery
+                            fetchGallery(); 
                         } else {
                             alert(result.error || 'Failed to update status.');
                         }
@@ -742,17 +739,17 @@ $(document).ready(function () {
         });
 
         $('#statusFilter').on('change', function () {
-            const selectedStatus = $(this).val(); // Get the selected status value
+            const selectedStatus = $(this).val(); 
         
-            // Fetch filtered gallery images
+            
             $.ajax({
-                url: '../database/gallery_list.php', // Backend script to fetch gallery images
+                url: '../database/gallery_list.php', 
                 type: 'GET',
-                data: { status: selectedStatus }, // Send the selected status as a query parameter
+                data: { status: selectedStatus }, 
                 success: function (response) {
                     try {
                         const gallery = JSON.parse(response);
-                        displayGallery(gallery); // Update the gallery table
+                        displayGallery(gallery); 
                     } catch (e) {
                         alert("Neizdevās apstrādāt galerijas datus!");
                     }
@@ -764,9 +761,9 @@ $(document).ready(function () {
         });
 
         $(document).on('click', '#gallery img', function () {
-            const imageUrl = $(this).attr('src'); // Get the image URL
-            $('#modalImage').attr('src', imageUrl); // Set the modal image source
-            $('#imagePreviewModal').modal('show'); // Show the modal
+            const imageUrl = $(this).attr('src'); 
+            $('#modalImage').attr('src', imageUrl); 
+            $('#imagePreviewModal').modal('show'); 
         });
 
 
@@ -795,7 +792,7 @@ $(document).ready(function () {
         let template = "";
     
         fairs.forEach(fair => {
-            // Map the status to the appropriate text
+            
             let statusText = "";
             switch (fair.status) {
                 case "upcoming":
@@ -833,18 +830,18 @@ $(document).ready(function () {
         $('#fairTableBody').html(template);
     }
 
-    let isFairEditMode = false; // Track whether the modal is in edit mode
+    let isFairEditMode = false; 
 
-    // Open modal for adding a fair
+    
     $(document).on('click', '[data-target="#addMarketModal"]', function (e) {
-        const triggerElement = $(e.currentTarget); // Get the element that triggered the modal
-        const isEditTrigger = triggerElement.hasClass('edit-fair'); // Check if it's the edit button
+        const triggerElement = $(e.currentTarget); 
+        const isEditTrigger = triggerElement.hasClass('edit-fair'); 
     
         if (isEditTrigger) {
-            isFairEditMode = true; // Set to edit mode
-            const fairId = triggerElement.data('id'); // Get the fair ID from the button
+            isFairEditMode = true; 
+            const fairId = triggerElement.data('id'); 
     
-            // Fetch fair details for editing
+            
             $.ajax({
                 url: '../database/fair_get.php',
                 type: 'GET',
@@ -857,19 +854,19 @@ $(document).ready(function () {
                         return;
                     }
     
-                    // Populate the modal fields with the fair details
+                    
                     $('#addMarketModalLabel').text("Rediģēt Tirdziņu");
-                    $('#fairId').val(fair.id); // Set the ID in the hidden input field
+                    $('#fairId').val(fair.id); 
                     $('#marketName').val(fair.name);
                     $('#marketDescription').val(fair.description);
                     $('#marketLink').val(fair.link);
     
-                    // Convert the date to Latvian format (DD/MM/YYYY)
-                    const dateParts = fair.date.split('-'); // Assuming the date is in YYYY-MM-DD format
+                    
+                    const dateParts = fair.date.split('-'); 
                     const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
                     $('#marketDate').val(formattedDate);
     
-                    // Show the modal
+                    
                     $('#addMarketModal').modal('show');
                 },
                 error: function () {
@@ -877,17 +874,16 @@ $(document).ready(function () {
                 }
             });
         } else {
-            isFairEditMode = false; // Set to add mode
+            isFairEditMode = false; 
             $('#addMarketModalLabel').text("Pievienot Tirdziņu");
-            $('#marketForm')[0].reset(); // Reset the form
-            $('#fairId').val(""); // Clear the hidden ID field
+            $('#marketForm')[0].reset(); 
+            $('#fairId').val(""); 
         }
     });
 
-    // Open modal for editing a fair
+    
 $(document).on('click', '.edit-fair', function (e) {
-    const fairId = $(this).data('id'); // Get the fair ID from the button
-    console.log('Fair ID for editing:', fairId); // Debugging
+    const fairId = $(this).data('id'); 
 
     $.ajax({
         url: '../database/fair_get.php',
@@ -901,12 +897,11 @@ $(document).on('click', '.edit-fair', function (e) {
                 return;
             }
 
-            // Populate the modal fields
-            $('#fairId').val(fair.fair_ID); // Set the ID in the hidden input field
+            
+            $('#fairId').val(fair.fair_ID); 
             $('#marketName').val(fair.name);
             $('#marketDescription').val(fair.description);
             $('#marketLink').val(fair.link);
-            console.log('Fair ID in modal:', $('#fairId').val()); // Debugging
         },
         error: function () {
             alert("Neizdevās ielādēt tirdziņa datus!");
@@ -914,15 +909,15 @@ $(document).on('click', '.edit-fair', function (e) {
     });
 });
 
-// Handle form submission
+
 $('#marketForm').off('submit').on('submit', function (e) {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault(); 
 
     const formData = new FormData(this);
 
-    // Convert the date to YYYY-MM-DD format
-    const dateInput = $('#marketDate').val(); // Get the date input
-    const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/; // Regex for DD/MM/YYYY format
+    
+    const dateInput = $('#marketDate').val(); 
+    const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/; 
 
     if (!dateRegex.test(dateInput)) {
         alert('Lūdzu ievadiet datumu formātā DD/MM/YYYY!');
@@ -930,26 +925,24 @@ $('#marketForm').off('submit').on('submit', function (e) {
     }
 
     const dateParts = dateInput.split('/');
-    const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`; // Convert to YYYY-MM-DD
-    formData.set('date', formattedDate); // Set the formatted date in the FormData
+    const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`; 
+    formData.set('date', formattedDate); 
 
-    formData.set('id', $('#fairId').val()); // Ensure the ID is included
-    console.log('Fair ID being submitted:', formData.get('id')); // Debugging
-    console.log('Formatted Date being submitted:', formData.get('date')); // Debugging
+    formData.set('id', $('#fairId').val()); 
 
     $.ajax({
         url: isFairEditMode ? '../database/fair_edit.php' : '../database/fair_add.php',
         type: 'POST',
         data: formData,
-        processData: false, // Prevent jQuery from automatically transforming the data
-        contentType: false, // Prevent jQuery from setting the content type
+        processData: false, 
+        contentType: false, 
         success: function (response) {
             const result = JSON.parse(response);
 
             if (result.success) {
-                $('#addMarketModal').modal('hide'); // Hide the modal
-                $('#marketForm')[0].reset(); // Reset the form
-                fetchFairs(); // Refresh the fair list
+                $('#addMarketModal').modal('hide'); 
+                $('#marketForm')[0].reset(); 
+                fetchFairs(); 
             } else {
                 alert(result.error || "Neizdevās saglabāt tirdziņu!");
             }
@@ -963,12 +956,12 @@ $('#marketForm').off('submit').on('submit', function (e) {
     
     $(document).on('click', '.delete-fair', function (e) {
         e.preventDefault();
-        const fairId = $(this).data('id'); // Get the fair ID from the button's data attribute
+        const fairId = $(this).data('id'); 
     
-        // Show the delete modal
+        
         $('#deleteModal').modal('show');
     
-        // Set the confirm delete button to handle the deletion
+        
         $('#confirmDelete').off('click').on('click', function () {
             $.ajax({
                 url: '../database/fair_delete.php',
@@ -978,8 +971,8 @@ $('#marketForm').off('submit').on('submit', function (e) {
                     const result = JSON.parse(response);
     
                     if (result.success) {
-                        $('#deleteModal').modal('hide'); // Hide the modal after deletion
-                        fetchFairs(); // Refresh the fair list
+                        $('#deleteModal').modal('hide'); 
+                        fetchFairs(); 
                     } else {
                         alert(result.error || "Neizdevās dzēst tirdziņu!");
                     }
@@ -992,17 +985,17 @@ $('#marketForm').off('submit').on('submit', function (e) {
     });
 
     $('#fairSearchInput').on('input', function () {
-        const searchQuery = $(this).val().trim(); // Get the search input value
+        const searchQuery = $(this).val().trim(); 
     
-        // Fetch filtered fairs
+        
         $.ajax({
             url: '../database/fair_list.php',
             type: 'GET',
-            data: { search: searchQuery }, // Send the search query as a parameter
+            data: { search: searchQuery }, 
             success: function (response) {
                 try {
                     const fairs = JSON.parse(response);
-                    displayFairs(fairs); // Update the fair table
+                    displayFairs(fairs); 
                 } catch (e) {
                     alert("Neizdevās apstrādāt tirdziņu datus!");
                 }
@@ -1014,18 +1007,17 @@ $('#marketForm').off('submit').on('submit', function (e) {
     });
 
     $('#FairStatusFilter').on('change', function () {
-        const selectedStatus = $(this).val(); // Get the selected status value
-        console.log('Selected Status:', selectedStatus); // Debugging
+        const selectedStatus = $(this).val(); 
     
-        // Fetch filtered fairs
+        
         $.ajax({
-            url: '../database/fair_list.php', // Backend script to fetch fairs
+            url: '../database/fair_list.php', 
             type: 'GET',
-            data: { status: selectedStatus }, // Send the selected status as a parameter
+            data: { status: selectedStatus }, 
             success: function (response) {
                 try {
                     const fairs = JSON.parse(response);
-                    displayFairs(fairs); // Update the fair table with filtered data
+                    displayFairs(fairs); 
                 } catch (e) {
                     console.error('Error parsing response:', e);
                     alert("Neizdevās apstrādāt tirdziņu datus!");
@@ -1039,6 +1031,257 @@ $('#marketForm').off('submit').on('submit', function (e) {
 
 
 
+
+
+    
+
+    let isUserEditMode = false; 
+    let editingUserId = null; 
+
+    fetchUsers();
+
+    
+    function fetchUsers(searchQuery = '') {
+        $.ajax({
+            url: '../database/user_list.php',
+            type: 'GET',
+            data: { search: searchQuery }, 
+            dataType: 'json', 
+            success: function (response) {
+                displayUsers(response.users);
+            },
+            error: function (xhr, status, error) {
+                console.error('AJAX error:', status, error); 
+                alert('Neizdevās ielādēt lietotāju datus!');
+            }
+        });
+    }
+
+    
+    function displayUsers(users) {
+        let template = '';
+    
+        if (users.length === 0) {
+            template = '<tr><td colspan="8" class="text-center">Nav pieejamu lietotāju</td></tr>';
+        } else {
+            users.forEach(user => {
+                const addressButton = user.address_id
+                    ? `<button class="btn btn-sm btn-info view-address" data-id="${user.address_id}" title="Apskatīt">
+                            Apskatīt
+                       </button>`
+                    : 'Nav norādīts';
+    
+                template += `
+                    <tr>
+                        <td>${user.id}</td>
+                        <td>${addressButton}</td>
+                        <td>${user.name}</td>
+                        <td>${user.surname}</td>
+                        <td>${user.phone}</td>
+                        <td>${user.email}</td>
+                        <td>${user.role}</td>
+                        <td>
+                            <button class="btn btn-sm btn-warning edit-user" data-id="${user.id}" title="Rediģēt">
+                                <i class="fas fa-edit"></i> <!-- Edit icon -->
+                            </button>
+                            <button class="btn btn-sm btn-danger delete-user" data-id="${user.id}" title="Dzēst">
+                                <i class="fas fa-trash"></i> <!-- Delete icon -->
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+    
+        $('#userTableBody').html(template);
+    
+        
+        $('.view-address').off('click').on('click', function () {
+            const addressId = $(this).data('id');
+            fetchAddressDetails(addressId);
+        });
+    }
+    
+    
+    function fetchAddressDetails(addressId) {
+        $.ajax({
+            url: '../database/address_get.php',
+            type: 'GET',
+            data: { id: addressId },
+            success: function (response) {
+                try {
+                    const address = JSON.parse(response);
+                    if (address.error) {
+                        alert(address.error);
+                    } else {
+                        const addressDetails = `
+                            <p><strong>Valsts:</strong> ${address.country}</p>
+                            <p><strong>Pilsēta:</strong> ${address.city}</p>
+                            <p><strong>Iela:</strong> ${address.street}</p>
+                            <p><strong>Mājas numurs:</strong> ${address.house}</p>
+                            <p><strong>Dzīvokļa numurs:</strong> ${address.apartment || 'Nav norādīts'}</p>
+                            <p><strong>Pasta indekss:</strong> ${address.postal_code}</p>
+                        `;
+                        $('#addressDetails').html(addressDetails);
+                        $('#addressModal').modal('show');
+                    }
+                } catch (e) {
+                    console.error('Invalid JSON response:', response);
+                    alert('Neizdevās apstrādāt servera atbildi!');
+                }
+            },
+            error: function () {
+                alert('Neizdevās ielādēt adreses datus!');
+            }
+        });
+    }
+
+    $('#roleFilter').on('change', function () {
+        const selectedRole = $(this).val(); 
+    
+        
+        fetchUsersByRole(selectedRole);
+    });
+    
+    
+    function fetchUsersByRole(role) {
+        $.ajax({
+            url: '../database/user_list.php',
+            type: 'GET',
+            data: { role: role }, 
+            dataType: 'json', 
+            success: function (response) { 
+                displayUsers(response.users); 
+            },
+            error: function (xhr, status, error) {
+                console.error('AJAX error:', status, error); 
+                alert('Neizdevās ielādēt lietotāju datus!');
+            }
+        });
+    }
+
+    
+    $('#addUserButton').click(function () {
+        isUserEditMode = false; 
+        editingUserId = null; 
+        $('#addUserModalLabel').text("Pievienot Lietotāju");
+        $('#userForm')[0].reset(); 
+        $('#userPassword').prop('required', true); 
+        $('#addUserModal').modal('show');
+    });
+
+    
+    $(document).on('click', '.edit-user', function () {
+        isUserEditMode = true; 
+        editingUserId = $(this).data('id'); 
+
+        
+        $.ajax({
+            url: '../database/user_get.php',
+            type: 'GET',
+            data: { id: editingUserId },
+            success: function (response) {
+                const user = JSON.parse(response);
+                if (user.error) {
+                    alert(user.error);
+                } else {
+                    $('#addUserModalLabel').text("Rediģēt Lietotāju");
+                    $('#userId').val(user.user_ID);
+                    $('#userFirstName').val(user.name);
+                    $('#userLastName').val(user.surname);
+                    $('#userPhone').val(user.phone);
+                    $('#userEmail').val(user.email);
+                    $('#userRole').val(user.role);
+                    $('#userPassword').prop('required', false); 
+                    $('#addUserModal').modal('show');
+                }
+            },
+            error: function () {
+                alert("Neizdevās ielādēt lietotāja datus!");
+            }
+        });
+    });
+
+    
+    $('#userForm').submit(function (e) {
+        e.preventDefault();
+
+        const formData = {
+            id: editingUserId,
+            name: $('#userFirstName').val(),
+            surname: $('#userLastName').val(),
+            phone: $('#userPhone').val(),
+            email: $('#userEmail').val(),
+            role: $('#userRole').val(),
+            password: $('#userPassword').val() 
+        };
+
+        const url = isUserEditMode
+            ? '../database/user_edit.php' 
+            : '../database/user_add.php'; 
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                const result = JSON.parse(response);
+                if (result.success) {
+                    $('#addUserModal').modal('hide');
+                    $('#userForm')[0].reset();
+                    fetchUsers(); 
+                } else {
+                    alert(result.error || "Neizdevās saglabāt lietotāju!");
+                }
+            },
+            error: function () {
+                alert("Neizdevās nosūtīt pieprasījumu!");
+            }
+        });
+    });
+
+    let deleteUserId = null; 
+
+    
+    $(document).on('click', '.delete-user', function (e) {
+        e.preventDefault();
+        deleteUserId = $(this).data('id'); 
+        $('#deleteModal').modal('show'); 
+    });
+
+    
+    $('#confirmDelete').off('click').on('click', function () {
+        if (deleteUserId) {
+            $.ajax({
+                url: '../database/user_delete.php',
+                type: 'POST',
+                data: { id: deleteUserId },
+                success: function (response) {
+                    try {
+                        const result = JSON.parse(response);
+                        if (result.success) {
+                            $('#deleteModal').modal('hide'); 
+                            fetchUsers(); 
+                        } else {
+                            alert(result.error || "Neizdevās dzēst lietotāju!");
+                        }
+                    } catch (e) {
+                        console.error('Invalid JSON response:', response);
+                        alert("Neizdevās apstrādāt servera atbildi!");
+                    }
+                },
+                error: function () {
+                    alert("Neizdevās nosūtīt pieprasījumu!");
+                }
+            });
+        }
+    });
+
+    
+    $('#userSearchInput').on('input', function () {
+        const searchQuery = $(this).val().trim();
+        fetchUsers(searchQuery);
+    });
 
 
 
@@ -1063,10 +1306,10 @@ $('#marketForm').off('submit').on('submit', function (e) {
 });
 
 function showAlert(message, type = 'success', duration = 5000) {
-    // Create a unique ID for the alert
+    
     const alertId = `alert-${Date.now()}`;
 
-    // Define the alert HTML
+    
     const alertHTML = `
         <div id="${alertId}" class="alert alert-${type} alert-dismissible fade show" role="alert">
             ${message}
@@ -1074,10 +1317,10 @@ function showAlert(message, type = 'success', duration = 5000) {
         </div>
     `;
 
-    // Append the alert to the alert container
+    
     $('#alertContainer').append(alertHTML);
 
-    // Automatically remove the alert after the specified duration
+    
     setTimeout(() => {
         $(`#${alertId}`).alert('close');
     }, duration);
@@ -1092,7 +1335,7 @@ function fetchSets() {
         success: function (response) {
             try {
                 const sets = JSON.parse(response);
-                displaySets(sets); // Update the UI with the fetched sets
+                displaySets(sets); 
             } catch (e) {
                 console.error("Invalid JSON response:", response);
             }
@@ -1152,7 +1395,7 @@ $('#setForm').submit(function (e) {
                     showAlert('Komplekts veiksmīgi pievienots!', 'success');
                     $('#addSetModal').modal('hide');
                     $('#setForm')[0].reset();
-                    fetchSets(); // Refresh the sets list
+                    fetchSets(); 
                 } else {
                     showAlert(result.error || 'Neizdevās pievienot komplektu.', 'danger');
                 }
@@ -1168,7 +1411,7 @@ $('#setForm').submit(function (e) {
 
 
 function searchSets() {
-    const searchQuery = $('#searchInput').val().trim(); // Get the search input value
+    const searchQuery = $('#searchInput').val().trim(); 
 
     $.ajax({
         url: `../database/sets_list.php?search=${encodeURIComponent(searchQuery)}`,
@@ -1176,7 +1419,7 @@ function searchSets() {
         success: function (response) {
             try {
                 const sets = JSON.parse(response);
-                displaySets(sets); // Update the sets display
+                displaySets(sets); 
             } catch (e) {
             }
         },
@@ -1193,7 +1436,7 @@ $('#searchInput').on('input', function () {
 
 
 function showSetDetails(setId) {
-    $('#setDetailsModal').data('set-id', setId); // Store the set ID in the modal
+    $('#setDetailsModal').data('set-id', setId); 
     $.ajax({
         url: '../database/sets_list.php',
         type: 'GET',
@@ -1206,12 +1449,12 @@ function showSetDetails(setId) {
                 return;
             }
 
-            // Populate modal title, name, and description
+            
             $('#modalSetName').text(set.set_name);
             $('#modalSetTitle').text(set.set_name);
             $('#modalSetDescription').text(set.set_description);
 
-            // Populate products in the set
+            
             let productTemplate = '';
             set.products.forEach(product => {
                 productTemplate += `
@@ -1230,17 +1473,17 @@ function showSetDetails(setId) {
                 `;
             });
 
-            // Only show the message if the set exists but has no products
+            
             if (productTemplate === '' && set.products.length === 0) {
                 productTemplate = '<p class="text-center no-sets-message">Šim komplektam nav pievienotu produktu.</p>';
             }
 
             $('#modalProductsContainer').html(productTemplate);
 
-            // Fetch and display categories
+            
             fetchCategories();
 
-            // Show the modal
+            
             $('#setDetailsModal').modal('show');
         },
         error: function () {
@@ -1252,14 +1495,14 @@ function showSetDetails(setId) {
 function deleteProductFromSet(productId, setId) {
 
     $.ajax({
-        url: '../database/product_set_delete.php', // Backend script to handle deletion
+        url: '../database/product_set_delete.php', 
         type: 'POST',
         data: { id_product: productId, id_set: setId },
         success: function (response) {
             try {
                 const result = JSON.parse(response);
                 if (result.success) {
-                    // Refresh the modal products container
+                    
                     showSetDetails(setId);
                 } else {
                 }
@@ -1295,7 +1538,7 @@ function displayCategories(categories) {
         "Vīriešiem": []
     };
 
-    // Group categories by big_category
+    
     categories.forEach(category => {
         if (groupedCategories[category.big_category]) {
             groupedCategories[category.big_category].push(category);
@@ -1306,7 +1549,7 @@ function displayCategories(categories) {
 
     Object.keys(groupedCategories).forEach(bigCategory => {
         const categories = groupedCategories[bigCategory];
-        const categoryId = bigCategory.replace(/\s+/g, '-').toLowerCase(); // Create a unique ID
+        const categoryId = bigCategory.replace(/\s+/g, '-').toLowerCase(); 
 
         template += `
             <div class="category-block mb-3">
@@ -1347,7 +1590,7 @@ function addProductToSet(productId, setId) {
                 const result = JSON.parse(response);
                 if (result.success) {
                     alert('Produkts veiksmīgi pievienots komplektam!');
-                    updateModalProductsContainer(productId); // Ensure this is called
+                    updateModalProductsContainer(productId); 
                 } else {
                     alert('Neizdevās pievienot produktu komplektam: ' + result.error);
                 }
@@ -1371,7 +1614,7 @@ function updateModalProductsContainer(productId) {
                 const product = products.find(p => p.id == productId);
                 if (product) {
 
-                    // Remove the "no products" message if it exists
+                    
                     $('#modalProductsContainer p.text-center').remove();
 
                     const productHTML = `
@@ -1432,10 +1675,10 @@ function fetchProductsByCategory(bigCategory, subCategory) {
             const sanitizedId = `${bigCategory.replace(/\s+/g, '-').toLowerCase()}-${subCategory.replace(/\s+/g, '-').toLowerCase()}`;
             $(`#${sanitizedId}`).html(productTemplate).show();
 
-            // Add click event listener for the + button
+            
             $(`#${sanitizedId} .add-to-set`).off('click').on('click', function () {
                 const productId = $(this).data('product-id');
-                const setId = $('#setDetailsModal').data('set-id'); // Assuming the modal has the set ID stored in a data attribute
+                const setId = $('#setDetailsModal').data('set-id'); 
                 addProductToSet(productId, setId);
             });
         },
@@ -1457,14 +1700,14 @@ function toggleSubCategory(bigCategory, subCategoryId) {
 }
 
 function deleteSet(setId, event) {
-    event.stopPropagation(); // Prevent triggering the card click event
+    event.stopPropagation(); 
 
-    // Show the delete modal
+    
     $('#deleteModal').modal('show');
 
-    // Set the confirm delete button to handle the deletion
+    
     $('#confirmDelete').off('click').on('click', function () {
-        $(this).blur(); // Remove focus from the button
+        $(this).blur(); 
         $.ajax({
             url: '../database/set_delete.php',
             type: 'POST',
@@ -1473,8 +1716,8 @@ function deleteSet(setId, event) {
                 const result = JSON.parse(response);
                 if (result.success) {
                     showAlert("Komplekts veiksmīgi dzēsts!", "success");
-                    $('#deleteModal').modal('hide'); // Hide the modal after deletion
-                    fetchSets(); // Refresh the sets list
+                    $('#deleteModal').modal('hide'); 
+                    fetchSets(); 
                 } else {
                     showAlert(result.error || "Neizdevās dzēst komplektu.", "danger");
                 }

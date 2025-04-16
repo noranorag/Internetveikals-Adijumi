@@ -1,10 +1,10 @@
 <?php
 require 'db_connection.php';
 
-// Get the status filter from the query parameters
+
 $status = $_GET['status'] ?? null;
 
-// Base query to join user_gallery, gallery_images, and user tables
+
 $query = "
     SELECT 
         ug.user_gallery_ID AS id,
@@ -21,17 +21,17 @@ $query = "
         user u ON ug.ID_user = u.user_ID
 ";
 
-// Add a WHERE clause if a status filter is provided
+
 if (!empty($status) && in_array($status, ['approved', 'onhold'])) {
     $query .= " WHERE gi.approved = ?";
 }
 
-// Add sorting to the query
+
 $query .= " ORDER BY FIELD(gi.approved, 'onhold', 'approved', 'declined'), gi.uploaded_at DESC";
 
 $stmt = $conn->prepare($query);
 
-// Bind the status parameter if provided
+
 if (!empty($status) && in_array($status, ['approved', 'onhold'])) {
     $stmt->bind_param("s", $status);
 }

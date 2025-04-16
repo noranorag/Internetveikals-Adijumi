@@ -56,7 +56,7 @@ if ($result) {
         }
     }
 } else {
-    error_log("Database query failed: " . mysqli_error($conn));
+
 }
 
 echo json_encode(array_values($sets));
