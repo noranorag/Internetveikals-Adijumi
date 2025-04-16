@@ -36,19 +36,27 @@ if (!isset($_SESSION['user_id'])) {
                     <button class="btn btn-third" type="button">Meklēt</button>
                 </div>
             </div>
+            <div class="d-flex align-items-center" style="gap: 15px;">
+                <select class="form-control" id="FairStatusFilter" style="width: 200px;">
+                            <option value="">Filtrēt pēc statusa...</option>
+                            <option value="late">Bijis</option>
+                            <option value="upcoming">Gaidāms</option>
+                </select>
                 <button class="btn btn-third" data-toggle="modal" data-target="#addMarketModal">Pievienot tirdziņu</button>
+            </div>   
             </div>
             <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nosaukums</th>
-                        <th>Apraksts</th>
-                        <th>Links uz Tirdziņu</th>
-                        <th>Bilde</th>
-                        <th>Darbības</th>
-                    </tr>
-                </thead>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nosaukums</th>
+                    <th>Apraksts</th>
+                    <th>Links uz Tirdziņu</th>
+                    <th>Statuss</th> <!-- Add this column -->
+                    <th>Bilde</th>
+                    <th>Darbības</th>
+                </tr>
+            </thead>
                 <tbody id="fairTableBody"></tbody>
             </table>
             </div>
@@ -84,6 +92,10 @@ if (!isset($_SESSION['user_id'])) {
                     <div class="form-group">
                         <label for="marketLink">Links uz Tirdziņu</label>
                         <input type="url" class="form-control" id="marketLink" name="link" placeholder="Ievadiet saiti uz tirdziņu" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="marketDate">Datums</label>
+                        <input type="text" class="form-control" id="marketDate" name="date" placeholder="DD/MM/YYYY" required>
                     </div>
                     <button type="submit" class="btn btn-main">Saglabāt</button>
                 </form>

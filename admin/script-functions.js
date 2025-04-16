@@ -775,7 +775,7 @@ $(document).ready(function () {
 
 
 
-        fetchFairs();
+    fetchFairs();
 
     function fetchFairs() {
         $.ajax({
@@ -795,12 +795,26 @@ $(document).ready(function () {
         let template = "";
     
         fairs.forEach(fair => {
+            // Map the status to the appropriate text
+            let statusText = "";
+            switch (fair.status) {
+                case "upcoming":
+                    statusText = "Gaidāms";
+                    break;
+                case "late":
+                    statusText = "Bijis";
+                    break;
+                default:
+                    statusText = "Nezināms";
+            }
+    
             template += `
                 <tr>
                     <td>${fair.id}</td>
                     <td>${fair.name}</td>
                     <td>${fair.description}</td>
                     <td><a href="${fair.link}" target="_blank">${fair.link}</a></td>
+                    <td>${statusText}</td>
                     <td>
                         <img src="../${fair.image}" alt="${fair.name}" style="max-width: 100px; height: auto;">
                     </td>
@@ -825,11 +839,11 @@ $(document).ready(function () {
     $(document).on('click', '[data-target="#addMarketModal"]', function (e) {
         const triggerElement = $(e.currentTarget); // Get the element that triggered the modal
         const isEditTrigger = triggerElement.hasClass('edit-fair'); // Check if it's the edit button
-
+    
         if (isEditTrigger) {
             isFairEditMode = true; // Set to edit mode
             const fairId = triggerElement.data('id'); // Get the fair ID from the button
-
+    
             // Fetch fair details for editing
             $.ajax({
                 url: '../database/fair_get.php',
@@ -837,19 +851,24 @@ $(document).ready(function () {
                 data: { id: fairId },
                 success: function (response) {
                     const fair = JSON.parse(response);
-
+    
                     if (fair.error) {
                         alert(fair.error);
                         return;
                     }
-
+    
                     // Populate the modal fields with the fair details
                     $('#addMarketModalLabel').text("Rediģēt Tirdziņu");
-                    $('#fairId').val(fair.fair_ID);
+                    $('#fairId').val(fair.id); // Set the ID in the hidden input field
                     $('#marketName').val(fair.name);
                     $('#marketDescription').val(fair.description);
                     $('#marketLink').val(fair.link);
-
+    
+                    // Convert the date to Latvian format (DD/MM/YYYY)
+                    const dateParts = fair.date.split('-'); // Assuming the date is in YYYY-MM-DD format
+                    const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+                    $('#marketDate').val(formattedDate);
+    
                     // Show the modal
                     $('#addMarketModal').modal('show');
                 },
@@ -865,51 +884,81 @@ $(document).ready(function () {
         }
     });
 
-    // Handle form submission for adding or editing a fair
-    $('#marketForm').off('submit').on('submit', function (e) {
-        e.preventDefault(); // Prevent default form submission
-    
-        const formData = new FormData(this);
-        const url = isFairEditMode
-            ? '../database/fair_edit.php' // URL for editing
-            : '../database/fair_add.php'; // URL for adding
-    
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data: formData,
-            processData: false, // Prevent jQuery from automatically transforming the data
-            contentType: false, // Prevent jQuery from setting the content type
-            success: function (response) {
-                const result = JSON.parse(response);
-    
-                if (result.success) {
-                    $('#addMarketModal').modal('hide'); // Hide the modal
-                    $('#marketForm')[0].reset(); // Reset the form
-                    fetchFairs(); // Refresh the fair list
-                } else {
-                    alert(result.error || "Neizdevās saglabāt tirdziņu!");
-                }
-            },
-            error: function () {
-                alert("Neizdevās nosūtīt pieprasījumu!");
-            }
-        });
-    });
+    // Open modal for editing a fair
+$(document).on('click', '.edit-fair', function (e) {
+    const fairId = $(this).data('id'); // Get the fair ID from the button
+    console.log('Fair ID for editing:', fairId); // Debugging
 
-    function fetchFairs() {
-        $.ajax({
-            url: '../database/fair_list.php',
-            type: 'GET',
-            success: function (response) {
-                const fairs = JSON.parse(response);
-                displayFairs(fairs);
-            },
-            error: function () {
-                alert("Neizdevās ielādēt tirdziņu datus!");
+    $.ajax({
+        url: '../database/fair_get.php',
+        type: 'GET',
+        data: { id: fairId },
+        success: function (response) {
+            const fair = JSON.parse(response);
+
+            if (fair.error) {
+                alert(fair.error);
+                return;
             }
-        });
+
+            // Populate the modal fields
+            $('#fairId').val(fair.fair_ID); // Set the ID in the hidden input field
+            $('#marketName').val(fair.name);
+            $('#marketDescription').val(fair.description);
+            $('#marketLink').val(fair.link);
+            console.log('Fair ID in modal:', $('#fairId').val()); // Debugging
+        },
+        error: function () {
+            alert("Neizdevās ielādēt tirdziņa datus!");
+        }
+    });
+});
+
+// Handle form submission
+$('#marketForm').off('submit').on('submit', function (e) {
+    e.preventDefault(); // Prevent default form submission
+
+    const formData = new FormData(this);
+
+    // Convert the date to YYYY-MM-DD format
+    const dateInput = $('#marketDate').val(); // Get the date input
+    const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/; // Regex for DD/MM/YYYY format
+
+    if (!dateRegex.test(dateInput)) {
+        alert('Lūdzu ievadiet datumu formātā DD/MM/YYYY!');
+        return;
     }
+
+    const dateParts = dateInput.split('/');
+    const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`; // Convert to YYYY-MM-DD
+    formData.set('date', formattedDate); // Set the formatted date in the FormData
+
+    formData.set('id', $('#fairId').val()); // Ensure the ID is included
+    console.log('Fair ID being submitted:', formData.get('id')); // Debugging
+    console.log('Formatted Date being submitted:', formData.get('date')); // Debugging
+
+    $.ajax({
+        url: isFairEditMode ? '../database/fair_edit.php' : '../database/fair_add.php',
+        type: 'POST',
+        data: formData,
+        processData: false, // Prevent jQuery from automatically transforming the data
+        contentType: false, // Prevent jQuery from setting the content type
+        success: function (response) {
+            const result = JSON.parse(response);
+
+            if (result.success) {
+                $('#addMarketModal').modal('hide'); // Hide the modal
+                $('#marketForm')[0].reset(); // Reset the form
+                fetchFairs(); // Refresh the fair list
+            } else {
+                alert(result.error || "Neizdevās saglabāt tirdziņu!");
+            }
+        },
+        error: function () {
+            alert("Neizdevās nosūtīt pieprasījumu!");
+        }
+    });
+});
 
     
     $(document).on('click', '.delete-fair', function (e) {
@@ -955,6 +1004,30 @@ $(document).ready(function () {
                     const fairs = JSON.parse(response);
                     displayFairs(fairs); // Update the fair table
                 } catch (e) {
+                    alert("Neizdevās apstrādāt tirdziņu datus!");
+                }
+            },
+            error: function () {
+                alert("Neizdevās ielādēt tirdziņu datus!");
+            }
+        });
+    });
+
+    $('#FairStatusFilter').on('change', function () {
+        const selectedStatus = $(this).val(); // Get the selected status value
+        console.log('Selected Status:', selectedStatus); // Debugging
+    
+        // Fetch filtered fairs
+        $.ajax({
+            url: '../database/fair_list.php', // Backend script to fetch fairs
+            type: 'GET',
+            data: { status: selectedStatus }, // Send the selected status as a parameter
+            success: function (response) {
+                try {
+                    const fairs = JSON.parse(response);
+                    displayFairs(fairs); // Update the fair table with filtered data
+                } catch (e) {
+                    console.error('Error parsing response:', e);
                     alert("Neizdevās apstrādāt tirdziņu datus!");
                 }
             },

@@ -1,8 +1,18 @@
 <?php
 require 'db_connection.php';
 
-// Get the search query from the request
+// Update the status column based on the current date
+$currentDate = date('Y-m-d');
+$updateStatusQuery = "
+    UPDATE fair
+    SET status = 'late'
+    WHERE status = 'upcoming' AND DATE_ADD(date, INTERVAL 1 DAY) <= '$currentDate'
+";
+mysqli_query($conn, $updateStatusQuery);
+
+// Get the search query and status from the request
 $search = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
+$status = isset($_GET['status']) ? $conn->real_escape_string($_GET['status']) : '';
 
 // Base query to fetch fairs
 $query = "
@@ -12,6 +22,7 @@ $query = "
         f.description AS description,
         f.image AS image,
         f.link AS link,
+        f.status AS status, -- Include the status column
         af.ID_user AS admin_user_id
     FROM 
         fair f
@@ -24,6 +35,11 @@ $query = "
 // Add search filtering if a search query is provided
 if (!empty($search)) {
     $query .= " AND (f.name LIKE '%$search%' OR f.description LIKE '%$search%' OR f.link LIKE '%$search%')";
+}
+
+// Add status filtering if a status is provided
+if (!empty($status)) {
+    $query .= " AND f.status = '$status'";
 }
 
 // Add sorting to the query
@@ -44,6 +60,7 @@ while ($row = $result->fetch_assoc()) {
         'description' => htmlspecialchars($row['description']),
         'image' => htmlspecialchars($row['image']),
         'link' => htmlspecialchars($row['link']),
+        'status' => htmlspecialchars($row['status']), // Include the status in the response
         'admin_user_id' => htmlspecialchars($row['admin_user_id']),
     );
 }

@@ -1,13 +1,24 @@
 <?php
-require 'database/db_connection.php'; // Include your database connection
+require 'database/db_connection.php';
 
+// Update the status column based on the current date
+$currentDate = date('Y-m-d');
+$updateStatusQuery = "
+    UPDATE fair
+    SET status = 'late'
+    WHERE status = 'upcoming' AND DATE_ADD(date, INTERVAL 1 DAY) <= '$currentDate'
+";
+mysqli_query($conn, $updateStatusQuery);
+
+// Fetch fairs for users
 $query = "
     SELECT 
         f.fair_ID AS id,
         f.name AS name,
         f.description AS description,
         f.image AS image,
-        f.link AS link
+        f.link AS link,
+        f.status AS status -- Include the status column
     FROM 
         fair f
     WHERE 
@@ -27,10 +38,12 @@ if ($result) {
             'description' => htmlspecialchars($row['description']),
             'image' => htmlspecialchars($row['image']),
             'link' => htmlspecialchars($row['link']),
+            'status' => htmlspecialchars($row['status']), // Include the status
         ];
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -43,7 +43,7 @@ if (!isset($_SESSION['user_id'])) {
             </div>
             <div class="d-flex align-items-center">
                 <select class="form-control mr-2" id="categoryFilter" style="width: 200px;">
-                    <option value="Visi">Visi</option>
+                    <option value="Visi">Filtrēt pēc kategorijas...</option>
                     <option value="Bērniem">Bērniem</option>
                     <option value="Sievietēm">Sievietēm</option>
                     <option value="Vīriešiem">Vīriešiem</option>
