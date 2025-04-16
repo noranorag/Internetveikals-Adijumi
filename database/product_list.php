@@ -5,11 +5,6 @@ $category = isset($_GET['category']) ? intval($_GET['category']) : null;
 $sort = isset($_GET['sort']) ? $_GET['sort'] : null;
 $search = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
 
-// Debugging: Log the received parameters
-error_log("Category: " . $category);
-error_log("Sort: " . $sort);
-error_log("Search: " . $search);
-
 $query = "
     SELECT 
         product.product_ID AS id,
@@ -67,14 +62,11 @@ switch ($sort) {
         break;
 }
 
-// Debugging: Log the generated SQL query
-error_log("SQL Query: " . $query);
 
 $result = mysqli_query($conn, $query);
 
 if (!$result) {
     // Handle SQL errors
-    error_log("SQL Error: " . mysqli_error($conn));
     echo json_encode(['error' => 'Database query failed.']);
     exit();
 }
@@ -97,8 +89,7 @@ while ($row = $result->fetch_assoc()) {
     );
 }
 
-// Debugging: Log the JSON response
-error_log("JSON Response: " . json_encode($json));
+
 
 echo json_encode($json);
 ?>

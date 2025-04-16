@@ -449,3 +449,12 @@ th, td {
     max-width: 400px;
 }
 
+#modalImage {
+    max-width: 70vw; /* Maximum width: 90% of the viewport width */
+    max-height: 70vh; /* Maximum height: 90% of the viewport height */
+    object-fit: contain; /* Ensure the image scales proportionally */
+}
+
+#gallery img {
+    cursor: pointer; /* Change cursor to pointer on hover */
+}

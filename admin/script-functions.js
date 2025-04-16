@@ -87,14 +87,11 @@ $(document).ready(function () {
             ? '../database/category_edit.php' // URL for editing
             : '../database/category_add.php'; // URL for adding
     
-        console.log("Submitting data:", formData); // Debug: Log the data being sent
-    
         $.ajax({
             url: url,
             type: 'POST',
             data: formData,
             success: function (response) {
-                console.log("Response from server:", response); // Debug: Log the server response
                 $('#categoryModal').modal('hide');
                 $('#categoryForm')[0].reset();
                 fetchCategories();
@@ -114,7 +111,6 @@ $(document).ready(function () {
     $('#confirmDelete').click(function () {
         if (deleteCategoryId) {
             $.post('../database/category_delete.php', { id: deleteCategoryId }, function (response) {
-                console.log("Response from server:", response); // Debug: Log the server response
                 $('#deleteModal').modal('hide'); // Hide the modal after deletion
                 fetchCategories(); // Refresh the category list after deletion
             });
@@ -124,7 +120,6 @@ $(document).ready(function () {
     function searchCategories() {
         const searchQuery = $('#searchInput').val().trim(); // Get the search input value
         const selectedFilter = $('#categoryFilter').val(); // Get the selected filter value
-        console.log(`Searching categories with query: ${searchQuery} and filter: ${selectedFilter}`); // Debug log
     
         $.ajax({
             url: '../database/category_list.php',
@@ -136,15 +131,12 @@ $(document).ready(function () {
             success: function (response) {
                 try {
                     const categories = JSON.parse(response);
-                    console.log("Search results:", categories); // Debug log
                     displayCategories(categories); // Update the category table
                 } catch (e) {
-                    console.error("Invalid JSON response:", response); // Debug log
                     alert("Neizdevās apstrādāt kategoriju datus!");
                 }
             },
             error: function (xhr, status, error) {
-                console.error("AJAX Error:", xhr.responseText); // Debug log
                 alert("Neizdevās ielādēt kategorijas!");
             }
         });
@@ -157,7 +149,6 @@ $(document).ready(function () {
 
     $('#categoryFilter').on('change', function () {
         const selectedFilter = $(this).val(); // Get the selected filter value
-        console.log(`Filtering categories by: ${selectedFilter}`); // Debug log
     
         $.ajax({
             url: '../database/category_list.php',
@@ -166,15 +157,12 @@ $(document).ready(function () {
             success: function (response) {
                 try {
                     const categories = JSON.parse(response);
-                    console.log("Filtered categories:", categories); // Debug log
                     displayCategories(categories); // Update the category table
                 } catch (e) {
-                    console.error("Invalid JSON response:", response); // Debug log
                     alert("Neizdevās apstrādāt kategoriju datus!");
                 }
             },
             error: function (xhr, status, error) {
-                console.error("AJAX Error:", xhr.responseText); // Debug log
                 alert("Neizdevās ielādēt kategorijas!");
             }
         });
@@ -242,8 +230,6 @@ $(document).ready(function () {
         const selectedCategory = $('#filterCategory').val(); // Get the selected category value
         const selectedSort = $('#sortOptions').val(); // Get the selected sorting option
     
-        console.log(`Searching products with query: ${searchQuery}, category: ${selectedCategory}, and sort: ${selectedSort}`); // Debug log
-    
         $.ajax({
             url: '../database/product_list.php',
             type: 'GET',
@@ -255,15 +241,12 @@ $(document).ready(function () {
             success: function (response) {
                 try {
                     const products = JSON.parse(response);
-                    console.log("Search results:", products); // Debug log
                     displayProducts(products); // Update the product table
                 } catch (e) {
-                    console.error("Invalid JSON response:", response); // Debug log
                     alert("Neizdevās apstrādāt preču datus!");
                 }
             },
             error: function (xhr, status, error) {
-                console.error("AJAX Error:", xhr.responseText); // Debug log
                 alert("Neizdevās ielādēt preces!");
             }
         });
@@ -276,7 +259,6 @@ $(document).ready(function () {
    
     function populateCategoryDropdown(selectedCategoryId = null, dropdownId = 'category') {
         return new Promise((resolve, reject) => {
-            console.log("Fetching categories..."); // Debug log
             const categoryDropdown = $(`#${dropdownId}`);
             categoryDropdown.empty(); // Clear existing options
     
@@ -291,7 +273,6 @@ $(document).ready(function () {
                 url: '../database/category_list.php',
                 type: 'GET',
                 success: function (response) {
-                    console.log("Server response for categories:", response); // Debug log
                     try {
                         const categories = JSON.parse(response);
     
@@ -303,15 +284,12 @@ $(document).ready(function () {
                             );
                         });
     
-                        console.log("Dropdown content after population:", categoryDropdown.html()); // Debug log
                         resolve(); // Resolve the promise after the dropdown is populated
                     } catch (e) {
-                        console.error("Error parsing category data:", e); // Debug log
                         reject();
                     }
                 },
                 error: function (xhr, status, error) {
-                    console.error("Error fetching categories:", xhr.responseText); // Debug log
                     reject();
                 }
             });
@@ -320,7 +298,6 @@ $(document).ready(function () {
 
     $('#filterCategory').on('change', function () {
         const selectedCategory = $(this).val(); // Get the selected category ID
-        console.log(`Filtering products by category: ${selectedCategory}`); // Debug log
     
         // Fetch filtered products
         $.ajax({
@@ -330,15 +307,12 @@ $(document).ready(function () {
             success: function (response) {
                 try {
                     const products = JSON.parse(response);
-                    console.log("Filtered products:", products); // Debug log
                     displayProducts(products); // Update the product table
                 } catch (e) {
-                    console.error("Error parsing product data:", e); // Debug log
                     alert("Neizdevās apstrādāt preču datus!");
                 }
             },
             error: function (xhr, status, error) {
-                console.error("Error fetching filtered products:", xhr.responseText); // Debug log
                 alert("Neizdevās ielādēt preces!");
             }
         });
@@ -346,7 +320,6 @@ $(document).ready(function () {
 
     function populateCategoryDropdownWithBigCategory(dropdownId = 'filterCategory') {
         return new Promise((resolve, reject) => {
-            console.log("Fetching categories with big_category..."); // Debug log
             const categoryDropdown = $(`#${dropdownId}`);
             categoryDropdown.empty(); // Clear existing options
     
@@ -357,7 +330,6 @@ $(document).ready(function () {
                 url: '../database/category_list.php',
                 type: 'GET',
                 success: function (response) {
-                    console.log("Server response for categories:", response); // Debug log
                     try {
                         const categories = JSON.parse(response);
     
@@ -367,16 +339,12 @@ $(document).ready(function () {
                                 `<option value="${category.id}">${category.name} ${category.big_category}</option>`
                             );
                         });
-    
-                        console.log("Dropdown content after population:", categoryDropdown.html()); // Debug log
                         resolve(); // Resolve the promise after the dropdown is populated
                     } catch (e) {
-                        console.error("Error parsing category data:", e); // Debug log
                         reject();
                     }
                 },
                 error: function (xhr, status, error) {
-                    console.error("Error fetching categories:", xhr.responseText); // Debug log
                     reject();
                 }
             });
@@ -384,14 +352,12 @@ $(document).ready(function () {
     }
 
     populateCategoryDropdownWithBigCategory('filterCategory').then(() => {
-        console.log("Filter category dropdown with big_category populated successfully.");
     }).catch(() => {
         alert("Neizdevās ielādēt kategorijas filtram!");
     });
 
     $('#sortOptions').on('change', function () {
         const selectedSort = $(this).val(); // Get the selected sorting option
-        console.log(`Sorting products by: ${selectedSort}`); // Debug log
     
         // Fetch sorted products
         $.ajax({
@@ -401,15 +367,12 @@ $(document).ready(function () {
             success: function (response) {
                 try {
                     const products = JSON.parse(response);
-                    console.log("Sorted products:", products); // Debug log
                     displayProducts(products); // Update the product table
                 } catch (e) {
-                    console.error("Error parsing product data:", e); // Debug log
                     alert("Neizdevās apstrādāt preču datus!");
                 }
             },
             error: function (xhr, status, error) {
-                console.error("Error fetching sorted products:", xhr.responseText); // Debug log
                 alert("Neizdevās ielādēt preces!");
             }
         });
@@ -419,8 +382,6 @@ $(document).ready(function () {
     function fetchFilteredAndSortedProducts() {
         const selectedCategory = $('#filterCategory').val(); // Get the selected category ID
         const selectedSort = $('#sortOptions').val(); // Get the selected sorting option
-
-        console.log(`Filtering by category: ${selectedCategory}, Sorting by: ${selectedSort}`); // Debug log
 
         // Fetch filtered and sorted products
         $.ajax({
@@ -433,15 +394,12 @@ $(document).ready(function () {
             success: function (response) {
                 try {
                     const products = JSON.parse(response);
-                    console.log("Filtered and sorted products:", products); // Debug log
                     displayProducts(products); // Update the product table
                 } catch (e) {
-                    console.error("Error parsing product data:", e); // Debug log
                     alert("Neizdevās apstrādāt preču datus!");
                 }
             },
             error: function (xhr, status, error) {
-                console.error("Error fetching filtered and sorted products:", xhr.responseText); // Debug log
                 alert("Neizdevās ielādēt preces!");
             }
         });
@@ -485,7 +443,6 @@ $(document).ready(function () {
     // Open modal for adding a product
     $('#addProductButton').click(function () {
         isProductEditMode = false; // Ensure the modal is in add mode
-        console.log("Opening Add Product modal");
     
         // Reset the form and clear all fields
         $('#productForm')[0].reset(); // Reset the form
@@ -498,7 +455,6 @@ $(document).ready(function () {
     
         // Populate the category dropdown and show the modal only after it's populated
         populateCategoryDropdown().then(() => {
-            console.log("Category dropdown populated successfully for Add Product.");
             $('#addProductModal').modal('show'); // Show the modal
         }).catch(() => {
             alert("Neizdevās ielādēt kategorijas!"); // Handle errors
@@ -506,7 +462,6 @@ $(document).ready(function () {
     });
 
     $('#addProductModal').on('hidden.bs.modal', function () {
-        console.log("Resetting modal state");
         isProductEditMode = false; // Reset the edit mode flag
         $('#productForm')[0].reset(); // Reset the form
         $('#productId').val(""); // Clear the hidden product ID field
@@ -555,7 +510,6 @@ $(document).ready(function () {
     
                 // Populate the category dropdown and set the selected value
                 populateCategoryDropdown(product.ID_category).then(() => {
-                    console.log("Category dropdown populated successfully for Edit Product.");
                     $('#addProductModalLabel').text("Rediģēt preci"); // Set the modal title
                     $('#addProductModal').modal('show'); // Show the modal
                 });
@@ -638,7 +592,6 @@ $(document).ready(function () {
         $('#confirmDelete').off('click').on('click', function () {
             if (deleteProductId) {
                 $.post('../database/product_delete.php', { id: deleteProductId }, function (response) {
-                    console.log("Response from server:", response); // Debug: Log the server response
                     $('#deleteModal').modal('hide'); // Hide the modal after deletion
                     fetchProducts(); // Refresh the product list after deletion
                 }).fail(function () {
@@ -657,7 +610,7 @@ $(document).ready(function () {
 
 
 
-
+        fetchGallery();
 
         function fetchGallery() {
             $.ajax({
@@ -719,57 +672,102 @@ $(document).ready(function () {
             $('#gallery').html(template); // Update the table body
         }
     
-        // Fetch the gallery on page load
-        fetchGallery();
-    
-        // Approve image
-        $(document).on('click', '.approve-image', function (e) {
-            e.preventDefault();
-            const imageId = $(this).data('id');
-    
+        
+
+        $(document).on('submit', '#addImageForm', function (e) {
+            e.preventDefault(); // Prevent the default form submission
+        
+            const formData = new FormData(this); // Create a FormData object with the form data
+        
             $.ajax({
-                url: '../database/gallery_update_status.php',
+                url: '../database/gallery_add.php', // Backend script to handle the image upload
                 type: 'POST',
-                data: { id: imageId, status: 'approved' },
+                data: formData,
+                processData: false, // Prevent jQuery from automatically transforming the data
+                contentType: false, // Prevent jQuery from setting the content type
                 success: function (response) {
-                    const result = JSON.parse(response);
-                    if (result.success) {
-                        fetchGallery(); // Refresh the gallery
-                    } else {
-                        alert(result.error);
+                    try {
+                        const result = JSON.parse(response);
+                        if (result.success) {
+                            $('#addImageModal').modal('hide'); // Hide the modal
+                            $('#addImageForm')[0].reset(); // Reset the form
+                            fetchGallery(); // Refresh the gallery
+                            alert('Bilde veiksmīgi pievienota!');
+                        } else {
+                            alert(result.error || 'Neizdevās pievienot bildi.');
+                        }
+                    } catch (e) {
+                        console.error('Invalid JSON response:', response);
+                        alert('Neizdevās apstrādāt servera atbildi!');
                     }
                 },
                 error: function () {
-                    alert("Neizdevās apstiprināt bildi!");
-                }
-            });
-        });
-    
-        // Decline image
-        $(document).on('click', '.decline-image', function (e) {
-            e.preventDefault();
-            const imageId = $(this).data('id');
-    
-            $.ajax({
-                url: '../database/gallery_update_status.php',
-                type: 'POST',
-                data: { id: imageId, status: 'declined' },
-                success: function (response) {
-                    const result = JSON.parse(response);
-                    if (result.success) {
-                        fetchGallery(); // Refresh the gallery
-                    } else {
-                        alert(result.error);
-                    }
-                },
-                error: function () {
-                    alert("Neizdevās noraidīt bildi!");
+                    alert('Neizdevās nosūtīt pieprasījumu!');
                 }
             });
         });
 
+        $(document).on('click', '.approve-image, .decline-image', function (e) {
+            e.preventDefault();
+        
+            const button = $(this);
+            const galleryId = button.data('id');
+            const status = button.hasClass('approve-image') ? 'approved' : 'declined';
+        
+            console.log('Gallery ID:', galleryId, 'Status:', status); // Debugging
+        
+            $.ajax({
+                url: '../database/gallery_update_status.php',
+                type: 'POST',
+                data: { gallery_id: galleryId, status: status },
+                success: function (response) {
+                    console.log('Response:', response); // Debugging
+                    try {
+                        const result = JSON.parse(response);
+                        if (result.success) {
+                            alert('Status updated successfully!');
+                            fetchGallery(); // Refresh the gallery
+                        } else {
+                            alert(result.error || 'Failed to update status.');
+                        }
+                    } catch (e) {
+                        console.error('Invalid JSON response:', response);
+                        alert('Failed to process server response.');
+                    }
+                },
+                error: function () {
+                    alert('Failed to send request.');
+                }
+            });
+        });
 
+        $('#statusFilter').on('change', function () {
+            const selectedStatus = $(this).val(); // Get the selected status value
+        
+            // Fetch filtered gallery images
+            $.ajax({
+                url: '../database/gallery_list.php', // Backend script to fetch gallery images
+                type: 'GET',
+                data: { status: selectedStatus }, // Send the selected status as a query parameter
+                success: function (response) {
+                    try {
+                        const gallery = JSON.parse(response);
+                        displayGallery(gallery); // Update the gallery table
+                    } catch (e) {
+                        alert("Neizdevās apstrādāt galerijas datus!");
+                    }
+                },
+                error: function () {
+                    alert("Neizdevās ielādēt galerijas datus!");
+                }
+            });
+        });
 
+        $(document).on('click', '#gallery img', function () {
+            const imageUrl = $(this).attr('src'); // Get the image URL
+            $('#modalImage').attr('src', imageUrl); // Set the modal image source
+            $('#imagePreviewModal').modal('show'); // Show the modal
+        });
 
 
 
@@ -868,7 +866,7 @@ $(document).ready(function () {
     });
 
     // Handle form submission for adding or editing a fair
-    $('#marketForm').submit(function (e) {
+    $('#marketForm').off('submit').on('submit', function (e) {
         e.preventDefault(); // Prevent default form submission
     
         const formData = new FormData(this);
@@ -886,8 +884,8 @@ $(document).ready(function () {
                 const result = JSON.parse(response);
     
                 if (result.success) {
-                    $('#addMarketModal').modal('hide');
-                    $('#marketForm')[0].reset();
+                    $('#addMarketModal').modal('hide'); // Hide the modal
+                    $('#marketForm')[0].reset(); // Reset the form
                     fetchFairs(); // Refresh the fair list
                 } else {
                     alert(result.error || "Neizdevās saglabāt tirdziņu!");
@@ -898,9 +896,6 @@ $(document).ready(function () {
             }
         });
     });
-
-    // Fetch and display fairs on page load
-    fetchFairs();
 
     function fetchFairs() {
         $.ajax({
@@ -944,6 +939,28 @@ $(document).ready(function () {
                     alert("Neizdevās nosūtīt pieprasījumu!");
                 }
             });
+        });
+    });
+
+    $('#fairSearchInput').on('input', function () {
+        const searchQuery = $(this).val().trim(); // Get the search input value
+    
+        // Fetch filtered fairs
+        $.ajax({
+            url: '../database/fair_list.php',
+            type: 'GET',
+            data: { search: searchQuery }, // Send the search query as a parameter
+            success: function (response) {
+                try {
+                    const fairs = JSON.parse(response);
+                    displayFairs(fairs); // Update the fair table
+                } catch (e) {
+                    alert("Neizdevās apstrādāt tirdziņu datus!");
+                }
+            },
+            error: function () {
+                alert("Neizdevās ielādēt tirdziņu datus!");
+            }
         });
     });
 
@@ -996,14 +1013,12 @@ function showAlert(message, type = 'success', duration = 5000) {
 fetchSets();
 
 function fetchSets() {
-    console.log("Fetching sets..."); // Debug: Check if this function is called
     $.ajax({
         url: '../database/sets_list.php',
         type: 'GET',
         success: function (response) {
             try {
                 const sets = JSON.parse(response);
-                console.log("Sets fetched:", sets); // Debug: Log the fetched sets
                 displaySets(sets); // Update the UI with the fetched sets
             } catch (e) {
                 console.error("Invalid JSON response:", response);
@@ -1041,7 +1056,6 @@ function displaySets(sets) {
         template = '<p class="text-center no-sets-message">Nav pieejamu komplektu.</p>';
     }
 
-    console.log("Updating sets container..."); // Debug log
     $('#setsContainer').html(template);
 }
 
@@ -1053,7 +1067,6 @@ $('#setForm').submit(function (e) {
         description: $('#setDescription').val()
     };
 
-    console.log("Submitting set data:", formData); // Debug log
 
     $.ajax({
         url: '../database/set_add.php',
@@ -1071,7 +1084,6 @@ $('#setForm').submit(function (e) {
                     showAlert(result.error || 'Neizdevās pievienot komplektu.', 'danger');
                 }
             } catch (e) {
-                console.error("Invalid JSON response:", response); // Debug log
                 showAlert("Neizdevās apstrādāt servera atbildi!", "danger");
             }
         },
@@ -1084,7 +1096,6 @@ $('#setForm').submit(function (e) {
 
 function searchSets() {
     const searchQuery = $('#searchInput').val().trim(); // Get the search input value
-    console.log(`Searching sets with query: ${searchQuery}`); // Debug log
 
     $.ajax({
         url: `../database/sets_list.php?search=${encodeURIComponent(searchQuery)}`,
@@ -1092,14 +1103,11 @@ function searchSets() {
         success: function (response) {
             try {
                 const sets = JSON.parse(response);
-                console.log("Search results:", sets); // Debug log
                 displaySets(sets); // Update the sets display
             } catch (e) {
-                console.error("Invalid JSON response:", response); // Debug log
             }
         },
         error: function (xhr, status, error) {
-            console.error("AJAX Error:", xhr.responseText); // Debug log
         }
     });
 }
@@ -1169,7 +1177,6 @@ function showSetDetails(setId) {
 }
 
 function deleteProductFromSet(productId, setId) {
-    console.log(`Deleting product ${productId} from set ${setId}`); // Debug log
 
     $.ajax({
         url: '../database/product_set_delete.php', // Backend script to handle deletion
@@ -1258,7 +1265,6 @@ function displayCategories(categories) {
 }
 
 function addProductToSet(productId, setId) {
-    console.log(`Adding product ${productId} to set ${setId}`); // Debug log
     $.ajax({
         url: '../database/product_set_add.php',
         type: 'POST',
@@ -1273,19 +1279,16 @@ function addProductToSet(productId, setId) {
                     alert('Neizdevās pievienot produktu komplektam: ' + result.error);
                 }
             } catch (e) {
-                console.error("Invalid JSON response:", response); // Debug log
                 alert("Neizdevās apstrādāt servera atbildi!");
             }
         },
         error: function (xhr, status, error) {
-            console.error("AJAX Error:", xhr.responseText); // Debug log
             alert("Neizdevās pievienot produktu komplektam!");
         }
     });
 }
 
 function updateModalProductsContainer(productId) {
-    console.log(`Updating modal with product ID: ${productId}`); // Debug log
     $.ajax({
         url: '../database/product_list.php',
         type: 'GET',
@@ -1294,7 +1297,6 @@ function updateModalProductsContainer(productId) {
                 const products = JSON.parse(response);
                 const product = products.find(p => p.id == productId);
                 if (product) {
-                    console.log("Product found:", product); // Debug log
 
                     // Remove the "no products" message if it exists
                     $('#modalProductsContainer p.text-center').remove();
@@ -1310,15 +1312,12 @@ function updateModalProductsContainer(productId) {
                     `;
                     $('#modalProductsContainer').append(productHTML);
                 } else {
-                    console.error("Product not found in response:", response); // Debug log
                 }
             } catch (e) {
-                console.error("Invalid JSON response:", response); // Debug log
                 alert("Neizdevās apstrādāt servera atbildi!");
             }
         },
         error: function (xhr, status, error) {
-            console.error("AJAX Error:", xhr.responseText); // Debug log
             alert("Neizdevās ielādēt produktu!");
         }
     });
@@ -1330,18 +1329,15 @@ function toggleCategory(id) {
 }
 
 function fetchProductsByCategory(bigCategory, subCategory) {
-    console.log(`Fetching products for Big Category: ${bigCategory}, Subcategory: ${subCategory}`); // Debug log
     $.ajax({
         url: '../database/product_list.php',
         type: 'GET',
         success: function (response) {
-            console.log("Response from server:", response); // Debug log
             const products = JSON.parse(response);
             const filteredProducts = products.filter(product => 
                 product.big_category === bigCategory && product.category_name === subCategory
             );
 
-            console.log("Filtered Products:", filteredProducts); // Debug log
 
             let productTemplate = '';
             filteredProducts.forEach(product => {
@@ -1371,14 +1367,12 @@ function fetchProductsByCategory(bigCategory, subCategory) {
             });
         },
         error: function (xhr, status, error) {
-            console.error("AJAX Error:", xhr.responseText); // Debug log
             alert("Neizdevās ielādēt produktus!");
         }
     });
 }
 
 function toggleSubCategory(bigCategory, subCategoryId) {
-    console.log(`Toggling Subcategory: ${subCategoryId} under Big Category: ${bigCategory}`); // Debug log
     const elem = document.getElementById(subCategoryId);
     if (elem.style.display === 'none') {
         elem.style.display = 'block';
@@ -1407,7 +1401,6 @@ function deleteSet(setId, event) {
                 if (result.success) {
                     showAlert("Komplekts veiksmīgi dzēsts!", "success");
                     $('#deleteModal').modal('hide'); // Hide the modal after deletion
-                    console.log("Fetching sets after deletion..."); // Debug log
                     fetchSets(); // Refresh the sets list
                 } else {
                     showAlert(result.error || "Neizdevās dzēst komplektu.", "danger");

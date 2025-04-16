@@ -29,7 +29,14 @@ if (!isset($_SESSION['user_id'])) {
             <div>
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div></div>
+                    <div class="d-flex align-items-center" style="gap: 15px;">
+                    <select class="form-control" id="statusFilter" style="width: 200px;">
+                        <option value="">Filtrēt pēc statusa...</option>
+                        <option value="approved">Apstiprināts</option>
+                        <option value="onhold">Gaida apstiprinājumu</option>
+                    </select>
                     <button class="btn btn-third" data-toggle="modal" data-target="#addImageModal">Pievienot bildi</button>
+                </div>
                 </div>
                 <table class="table table-striped">
                     <thead>
@@ -75,6 +82,22 @@ if (!isset($_SESSION['user_id'])) {
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-labelledby="imagePreviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imagePreviewModalLabel">Attēla priekšskatījums</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" alt="Preview" style="max-width: 100%; height: auto;">
+            </div>
+        </div>
+    </div>
+</div>
 
     
 
