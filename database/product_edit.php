@@ -28,15 +28,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     
     $current_image = $_POST['current_image'] ?? '';
-    $imagePath = $current_image;
+    $imagePath = $current_image; // Default to the current image
 
-    
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         $imageName = uniqid() . '-' . basename($_FILES['image']['name']);
         $targetDir = '../images/';
         $targetFile = $targetDir . $imageName;
 
-        
         if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFile)) {
             $imagePath = 'images/' . $imageName; 
         } else {
@@ -44,6 +42,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
     }
+
+    
+
+    error_log('Current image: ' . $current_image);
+    error_log('Image path before SQL execution: ' . $imagePath);
 
     
     $sql = "UPDATE product 
@@ -67,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $stmt->bind_param(
-        'ssssssssiiis',
+        'ssssssssiiss',
         $name,
         $short_description,
         $long_description,
@@ -87,6 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo json_encode(['success' => false, 'error' => $stmt->error]);
     }
+
 
     $stmt->close();
 }

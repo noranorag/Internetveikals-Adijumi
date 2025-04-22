@@ -76,7 +76,7 @@ if (!isset($_SESSION['user_id'])) {
             </div>
             <div class="modal-body">
                 <form id="marketForm">
-                    <input type="hidden" id="fairId" name="id"> 
+                    <input type="hidden" id="fairId" name="id" value="">
                     <div class="form-group">
                         <label for="marketName">Nosaukums</label>
                         <input type="text" class="form-control" id="marketName" name="name" placeholder="Ievadiet tirdziņa nosaukumu" required>
@@ -87,7 +87,11 @@ if (!isset($_SESSION['user_id'])) {
                     </div>
                     <div class="form-group">
                         <label for="marketImage">Bilde</label>
-                        <input type="file" class="form-control-file" id="marketImage" name="image">
+                        <div id="imagePreviewContainer">
+                            <img id="imagePreview" src="" alt="Pašreizējais attēls" style="max-width: 100%; height: auto; display: none;">
+                        </div>
+                        <input type="file" class="form-control-file" id="marketImage" name="image" accept="image/*">
+                        <input type="hidden" id="currentImagePath" name="current_image" value="">
                     </div>
                     <div class="form-group">
                         <label for="marketLink">Links uz Tirdziņu</label>

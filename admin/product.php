@@ -56,7 +56,7 @@ if (!isset($_SESSION['user_id'])) {
                     <option value="price_asc">Cena (↑)</option>
                     <option value="price_desc">Cena (↓)</option>
                 </select>
-                <button class="btn btn-third" data-toggle="modal" data-target="#addProductModal">Pievienot preci</button>
+                <button class="btn btn-third" id="addProductButton" data-toggle="modal" data-target="#addProductModal">Pievienot preci</button>
             </div>
         </div>
                 <table class="table table-striped">
@@ -90,60 +90,59 @@ if (!isset($_SESSION['user_id'])) {
                 </button>
             </div>
             <div class="modal-body">
-            <form id="productForm">
-                    <input type="hidden" id="productId" name="id">
-                    <div class="form-group">
-                        <label for="productName">Nosaukums</label>
-                        <input type="text" class="form-control" id="productName" name="name" placeholder="Ievadiet nosaukumu">
-                    </div>
-                    <div class="form-group">
-                        <label for="shortDescription">Īss Apraksts</label>
-                        <textarea class="form-control" id="shortDescription" name="short_description" rows="2" placeholder="Ievadiet īsu aprakstu"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="longDescription">Garš Apraksts</label>
-                        <textarea class="form-control" id="longDescription" name="long_description" rows="4" placeholder="Ievadiet garu aprakstu"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="material">Materiāls</label>
-                        <input type="text" class="form-control" id="material" name="material" placeholder="Ievadiet materiālu">
-                    </div>
-                    <div class="form-group">
-                        <label for="size">Izmērs</label>
-                        <input type="text" class="form-control" id="size" name="size" placeholder="Ievadiet izmēru">
-                    </div>
-                    <div class="form-group">
-                        <label for="color">Krāsa</label>
-                        <input type="text" class="form-control" id="color" name="color" placeholder="Ievadiet krāsu">
-                    </div>
-                    <div class="form-group">
-                        <label for="care">Rūpēšanās</label>
-                        <textarea class="form-control" id="care" name="care" rows="2" placeholder="Ievadiet rūpēšanās instrukcijas"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="price">Cena</label>
-                        <input type="number" class="form-control" id="price" name="price" placeholder="Ievadiet cenu" step="0.01">
-                    </div>
-                    <div class="form-group">
-                        <label for="quantity">Preces Daudzums</label>
-                        <input type="number" class="form-control" id="quantity" name="stock_quantity" placeholder="Ievadiet daudzumu">
-                    </div>
-                    <div class="form-group">
+            <form id="productForm" enctype="multipart/form-data" method="post">
+                <input type="hidden" id="productId" name="id">
+                <div class="form-group">
+                    <label for="productName">Nosaukums</label>
+                    <input type="text" class="form-control" id="productName" name="name" placeholder="Ievadiet nosaukumu">
+                </div>
+                <div class="form-group">
+                    <label for="shortDescription">Īss Apraksts</label>
+                    <textarea class="form-control" id="shortDescription" name="short_description" rows="2" placeholder="Ievadiet īsu aprakstu"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="longDescription">Garš Apraksts</label>
+                    <textarea class="form-control" id="longDescription" name="long_description" rows="4" placeholder="Ievadiet garu aprakstu"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="material">Materiāls</label>
+                    <input type="text" class="form-control" id="material" name="material" placeholder="Ievadiet materiālu">
+                </div>
+                <div class="form-group">
+                    <label for="size">Izmērs</label>
+                    <input type="text" class="form-control" id="size" name="size" placeholder="Ievadiet izmēru">
+                </div>
+                <div class="form-group">
+                    <label for="color">Krāsa</label>
+                    <input type="text" class="form-control" id="color" name="color" placeholder="Ievadiet krāsu">
+                </div>
+                <div class="form-group">
+                    <label for="care">Rūpēšanās</label>
+                    <textarea class="form-control" id="care" name="care" rows="2" placeholder="Ievadiet rūpēšanās instrukcijas"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="price">Cena</label>
+                    <input type="number" class="form-control" id="price" name="price" placeholder="Ievadiet cenu" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="quantity">Preces Daudzums</label>
+                    <input type="number" class="form-control" id="quantity" name="stock_quantity" placeholder="Ievadiet daudzumu">
+                </div>
+                <div class="form-group">
                     <label for="category">Kategorija</label>
                     <select class="form-control" id="category" name="category_id">
                     </select>
                 </div>
-                    <div class="form-group">
-                        <label for="image">Attēls</label>
-                        <div id="imagePreviewContainer">
-                            <img id="imagePreview" src="" alt="Pašreizējais attēls" style="max-width: 100%; height: auto; display: none;">
-                        </div>
-                        <input type="file" style="margin-top: 5px;" class="form-control" id="image" name="image" accept="image/*">
-                        <input type="hidden" id="imagePath" name="current_image">
+                <div class="form-group">
+                    <label for="image">Attēls</label>
+                    <div id="imagePreviewContainer">
+                        <img id="imagePreview" src="" alt="Pašreizējais attēls" style="max-width: 100%; height: auto; display: none;">
                     </div>
-                    
-                    <button type="submit" class="btn btn-main">Saglabāt</button>
-                </form>
+                    <input type="file" style="margin-top: 5px;" class="form-control" id="image" name="image" accept="image/*">
+                    <input type="hidden" id="imagePath" name="current_image" value="">
+                </div>
+                <button type="submit" class="btn btn-main">Saglabāt</button>
+            </form>
             </div>
         </div>
     </div>
