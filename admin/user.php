@@ -82,6 +82,10 @@ if (!isset($_SESSION['user_id'])) {
             <div class="modal-body">
                 <form id="userForm">
                     <input type="hidden" id="userId" name="id">
+                    <div class="form-group d-flex justify-content-between">
+                        <small class="text-muted" id="userCreatedAtText" style="display: none;">Izveidots: </small>
+                        <small class="text-muted" id="userEditedAtText" style="display: none;">Pēdējo reizi rediģēts: </small>
+                    </div>
                     <div class="form-group">
                         <label for="userFirstName">Vārds</label>
                         <input type="text" class="form-control" id="userFirstName" name="name" placeholder="Ievadiet vārdu" required>

@@ -19,8 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $category_id = intval($_POST['category_id']);
     $user_id = $_SESSION['user_id'];
 
-    // Debugging: Log the care field value
-    error_log('Care field value (received): ' . $care);
 
     $imagePath = null;
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
@@ -56,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $material,
         $size,
         $color,
-        $care, // Ensure this is bound as a string
+        $care, 
         $price,
         $stock_quantity,
         $imagePath

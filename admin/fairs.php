@@ -77,6 +77,10 @@ if (!isset($_SESSION['user_id'])) {
             <div class="modal-body">
                 <form id="marketForm">
                     <input type="hidden" id="fairId" name="id" value="">
+                    <div class="form-group d-flex justify-content-between">
+                        <small class="text-muted" id="fairCreatedAtText" style="display: none;">Izveidots: </small>
+                        <small class="text-muted" id="fairEditedAtText" style="display: none;">Pēdējo reizi rediģēts: </small>
+                    </div>
                     <div class="form-group">
                         <label for="marketName">Nosaukums</label>
                         <input type="text" class="form-control" id="marketName" name="name" placeholder="Ievadiet tirdziņa nosaukumu" required>

@@ -458,3 +458,12 @@ th, td {
 #gallery img {
     cursor: pointer;
 }
+
+#createdAtText {
+    margin-right: auto; /* Aligns to the left */
+}
+
+#editedAtText {
+    margin-left: auto; /* Aligns to the right */
+    text-align: right; /* Ensures text is aligned to the right */
+}

@@ -4,7 +4,7 @@ require 'db_connection.php';
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
 
-    $sql = "SELECT user_ID, ID_address, name, surname, phone, email, role FROM user WHERE user_ID = ?";
+    $sql = "SELECT * FROM user WHERE user_ID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $id);
     $stmt->execute();

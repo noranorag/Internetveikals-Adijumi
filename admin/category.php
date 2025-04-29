@@ -79,6 +79,10 @@ if (!isset($_SESSION['user_id'])) {
                 <div class="modal-body">
                     <form id="categoryForm">
                         <input type="hidden" id="categoryId" name="id"> 
+                        <div class="form-group d-flex justify-content-between">
+                            <small class="text-muted" id="categoryCreatedAtText" style="display: none;">Izveidots: </small>
+                            <small class="text-muted" id="categoryEditedAtText" style="display: none;">Pēdējo reizi rediģēts: </small>
+                        </div>
                         <div class="form-group">
                             <label for="categoryName">Kategorijas nosaukums</label>
                             <input type="text" class="form-control" id="categoryName" name="name" placeholder="Ievadiet kategorijas nosaukumu" required>

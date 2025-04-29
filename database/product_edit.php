@@ -50,18 +50,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     
     $sql = "UPDATE product 
-            SET name = ?, 
-                short_description = ?, 
-                long_description = ?, 
-                material = ?, 
-                size = ?, 
-                color = ?, 
-                care = ?, 
-                price = ?, 
-                stock_quantity = ?, 
-                ID_category = ?, 
-                image = ? 
-            WHERE product_ID = ?";
+        SET name = ?, 
+            short_description = ?, 
+            long_description = ?, 
+            material = ?, 
+            size = ?, 
+            color = ?, 
+            care = ?, 
+            price = ?, 
+            stock_quantity = ?, 
+            ID_category = ?, 
+            image = ?, 
+            edited = NOW() 
+        WHERE product_ID = ?";
     $stmt = $conn->prepare($sql);
 
     if (!$stmt) {

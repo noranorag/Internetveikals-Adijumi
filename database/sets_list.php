@@ -46,7 +46,7 @@ if ($result) {
             ];
         }
 
-        // Only include products where product_active = 'active'
+        
         if (!empty($row['product_id']) && $row['product_active'] === 'active') {
             $sets[$set_id]['products'][] = [
                 'product_id' => htmlspecialchars($row['product_id']),

@@ -8,7 +8,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $phone = $conn->real_escape_string($_POST['phone']);
     $email = $conn->real_escape_string($_POST['email']);
     $role = $conn->real_escape_string($_POST['role']);
-    $address_id = null; 
     $password = isset($_POST['password']) && !empty($_POST['password'])
         ? password_hash($conn->real_escape_string($_POST['password']), PASSWORD_DEFAULT)
         : null;
@@ -24,21 +23,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if ($password) {
-        $sql = "UPDATE user SET ID_address = ?, name = ?, surname = ?, phone = ?, email = ?, role = ?, password = ? WHERE user_ID = ?";
+        $sql = "UPDATE user 
+                SET name = ?, surname = ?, phone = ?, email = ?, role = ?, password = ?, edited = NOW() 
+                WHERE user_ID = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('issssssi', $address_id, $name, $surname, $phone, $email, $role, $password, $id);
+        $stmt->bind_param('ssssssi', $name, $surname, $phone, $email, $role, $password, $id);
     } else {
-        $sql = "UPDATE user SET ID_address = ?, name = ?, surname = ?, phone = ?, email = ?, role = ? WHERE user_ID = ?";
+        $sql = "UPDATE user 
+                SET name = ?, surname = ?, phone = ?, email = ?, role = ?, edited = NOW() 
+                WHERE user_ID = ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('isssssi', $address_id, $name, $surname, $phone, $email, $role, $id);
+        $stmt->bind_param('sssssi', $name, $surname, $phone, $email, $role, $id);
     }
 
     if ($stmt->execute()) {
-        if ($stmt->affected_rows > 0) {
-            echo json_encode(['success' => true]);
-        } else {
-            echo json_encode(['success' => false, 'error' => 'No rows affected.']);
-        }
+        echo json_encode(['success' => true]);
     } else {
         echo json_encode(['success' => false, 'error' => $stmt->error]);
     }

@@ -92,6 +92,10 @@ if (!isset($_SESSION['user_id'])) {
             <div class="modal-body">
             <form id="productForm" enctype="multipart/form-data" method="post">
                 <input type="hidden" id="productId" name="id">
+                <div class="form-group d-flex justify-content-between">
+                    <small class="text-muted" id="createdAtText" style="display: none;">Izveidots: </small>
+                    <small class="text-muted" id="editedAtText" style="display: none;">Pēdējo reizi rediģēts: </small>
+                </div>
                 <div class="form-group">
                     <label for="productName">Nosaukums</label>
                     <input type="text" class="form-control" id="productName" name="name" placeholder="Ievadiet nosaukumu">
