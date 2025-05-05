@@ -5,7 +5,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
         <a class="navbar-brand" href="index.php">
-            <img src="images/logo.png" alt="Logo" style="height: 40px;">
+            <img src="/Internetveikals-Adijumi2/images/logo.png" alt="Logo" style="height: 40px;">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -27,7 +27,9 @@
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="favourites.php"><i class="fas fa-heart"></i></a>
+                <a href="#" class="nav-link" onclick="checkLoginForHeart(event)">
+                    <i class="fas fa-heart"></i>
+                </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#"><i class="fas fa-shopping-cart"></i></a>
@@ -41,7 +43,7 @@
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
                         <?php if (isset($_SESSION['user_email'])): ?>
-                            <a class="dropdown-item" href="profile.php">Mans profils</a>
+                            <a class="dropdown-item" href="profile-editing/profile-edit.php">Mans profils</a>
                             <a class="dropdown-item" href="profile_settings.php">Profila iestatījumi</a>
                             <a class="dropdown-item" href="database/logout.php">Izlogoties</a>
                         <?php else: ?>
@@ -54,3 +56,21 @@
         </div>
     </div>
 </nav>
+
+<div id="loginModal" class="modal login-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tu neesi ielogojies</h5>
+                <button type="button" class="close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Vai ielogoties?</p>
+            </div>
+            <div class="modal-footer">
+                <a href="login.php" class="btn btn-primary">Ielogoties</a>
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Aizvērt</button>
+            </div>
+        </div>
+    </div>
+</div>

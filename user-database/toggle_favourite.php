@@ -2,13 +2,13 @@
 include '../database/db_connection.php';
 session_start();
 
-if (!isset($_SESSION['user_ID'])) {
+if (!isset($_SESSION['user_id'])) { // Updated to match login_process.php
     error_log('User is not logged in.');
     echo json_encode(['success' => false, 'message' => 'Lūdzu, piesakieties, lai pievienotu favorītiem.']);
     exit;
 }
 
-$userID = $_SESSION['user_ID'];
+$userID = $_SESSION['user_id']; // Updated to match login_process.php
 $data = json_decode(file_get_contents('php://input'), true);
 
 if (!isset($data['product_ID'])) {
@@ -20,7 +20,7 @@ if (!isset($data['product_ID'])) {
 $productID = $data['product_ID'];
 
 // Debugging
-error_log("toggle_favourite.php called for user_ID: $userID, product_ID: $productID");
+error_log("toggle_favourite.php called for user_id: $userID, product_ID: $productID");
 
 // Check if the product is already in the user's favourites
 $query = "SELECT * FROM favourites WHERE user_ID = ? AND product_ID = ?";

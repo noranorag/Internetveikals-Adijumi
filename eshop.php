@@ -15,8 +15,8 @@ if ($result->num_rows > 0) {
 }
 
 $favorites = [];
-if (isset($_SESSION['user_ID'])) {
-    $userID = $_SESSION['user_ID'];
+if (isset($_SESSION['user_id'])) { // Updated to match login_process.php
+    $userID = $_SESSION['user_id']; // Updated to match login_process.php
     $stmt = $conn->prepare("SELECT product_ID FROM favourites WHERE user_ID = ?");
     $stmt->bind_param("i", $userID);
     $stmt->execute();

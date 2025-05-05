@@ -7,6 +7,11 @@ if (!isset($_SESSION['user_id'])) {
     echo json_encode(['success' => false, 'error' => 'User is not logged in.']);
     exit();
 }
+
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'moder'])) {
+    header('Location: ../index.php'); // Redirect to the main page
+    exit();
+}
 ?>
 
 <!DOCTYPE html>

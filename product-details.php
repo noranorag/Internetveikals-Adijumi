@@ -25,8 +25,8 @@ if (isset($_GET['product_ID'])) {
 }
 
 $favorites = [];
-if (isset($_SESSION['user_ID'])) {
-    $userID = $_SESSION['user_ID'];
+if (isset($_SESSION['user_id'])) { // Updated to match login_process.php
+    $userID = $_SESSION['user_id']; // Updated to match login_process.php
     $stmt = $conn->prepare("SELECT product_ID FROM favourites WHERE user_ID = ?");
     $stmt->bind_param("i", $userID);
     $stmt->execute();
@@ -37,14 +37,14 @@ if (isset($_SESSION['user_ID'])) {
 }
 
 $isFavorite = false;
-if (isset($_SESSION['user_ID'])) {
+if (isset($_SESSION['user_id'])) { // Updated to match login_process.php
     $stmt = $conn->prepare("SELECT * FROM favourites WHERE user_ID = ? AND product_ID = ?");
     $stmt->bind_param("ii", $userID, $product_ID);
     $stmt->execute();
     $result = $stmt->get_result();
     $isFavorite = $result->num_rows > 0;
 
-    error_log("Checking favorites for user_ID: $userID, product_ID: $product_ID");
+    error_log("Checking favorites for user_id: $userID, product_ID: $product_ID");
     error_log("Query result: " . ($isFavorite ? "Favorite" : "Not Favorite"));
 }
 ?>

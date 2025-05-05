@@ -960,6 +960,150 @@ body{
     padding-left: 15px;
 }
 
+
+.profile-form-container {
+    max-width: 600px; /* Set a maximum width for the form */
+    margin: 0 auto; /* Center the form horizontally */
+    padding: 20px; /* Add some padding for spacing */
+    background-color: white; /* Optional: Add a background color */
+    border-radius: 10px; /* Optional: Add rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+}
+
+.profile-container {
+    display: flex;
+    padding-top: 70px; /* Adjust for navbar height */
+}
+
+.profile-sidebar {
+    width: 275px;
+    background-color: var(--second);
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    height: calc(100vh - 70px);
+    position: sticky;
+    top: 70px;
+    color: var(--thirdDark);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sidebar-heading {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--thirdDark);
+    margin-bottom: 10px;
+    padding: 10px 15px;
+}
+
+.sidebar-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sidebar-links li {
+    margin: 0;
+}
+
+.sidebar-links a {
+    text-decoration: none;
+    color: var(--thirdDark);
+    font-size: 1.1rem;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+
+
+
+.profile-content {
+    padding: 20px;
+    flex: 1;
+}
+
+
+
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Space between the icon and text */
+}
+
+.user-icon {
+    font-size: 100px; /* Adjust size of the user icon */
+    color: rgb(70, 70, 70); /* Use the main color */
+}
+
+.user-details h2 {
+    margin: 0;
+    font-size: 1.7rem;
+    color: var(--thirdDark); /* Adjust text color */
+}
+
+.user-details p {
+    margin: 5px 0 0;
+    font-size: 1.1rem;
+    color: var(--third); /* Adjust text color */
+}
+
+.profile-form {
+    margin-top: 20px;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 1000px; /* Limit the form width */
+}
+
+.form-group-row {
+    display: flex;
+    gap: 15px;
+}
+
+.form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--thirdDark);
+}
+
+.form-group input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: var(--thirdDark);
+    max-width: 1000px; /* Limit the input field width */
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--main);
+    box-shadow: 0 0 5px rgba(91, 103, 81, 0.5);
+}
+
+
+
+
+
+.no-outline {
+    border: none; /* Remove border */
+    outline: none; /* Remove focus outline */
+    background: none; /* Ensure no background is applied */
+    color: inherit; /* Keep the text color consistent */
+    cursor: pointer; /* Ensure it looks clickable */
+}
+
 @media (max-width: 1240px) {
     .hero-categories {
         flex-direction: column;

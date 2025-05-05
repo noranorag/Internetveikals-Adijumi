@@ -267,3 +267,35 @@ function closeModal() {
         modal.classList.remove('show');
     }
 }
+
+
+function checkLoginForHeart(event) {
+    event.preventDefault(); // Prevent the default link behavior
+
+    fetch('/Internetveikals-Adijumi2/check_login.php', { // Use absolute path for the fetch request
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.loggedIn) {
+            console.log('User is not logged in. Showing login modal.');
+            const loginModal = document.getElementById('loginModal');
+            if (loginModal) {
+                loginModal.classList.add('show'); // Show the modal
+
+                // Update the redirect URL in the login form
+                const loginButton = loginModal.querySelector('.btn-primary');
+                if (loginButton) {
+                    loginButton.href = `/Internetveikals-Adijumi2/login.php?redirect=/Internetveikals-Adijumi2/favourites.php`; // Use absolute path
+                }
+            }
+        } else {
+            console.log('User is logged in. Redirecting to favourites.');
+            window.location.href = '/Internetveikals-Adijumi2/favourites.php'; // Use absolute path
+        }
+    })
+    .catch(error => console.error('Error during login check:', error));
+}

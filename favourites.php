@@ -1,22 +1,19 @@
-<!-- filepath: c:\Users\user\Desktop\xxamp\htdocs\Internetveikals-Adijumi2\favourites.php -->
+
 <?php
-session_start(); // Ensure the session is started
+session_start();
 
 include 'database/db_connection.php';
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Get the logged-in user's ID from the session
-if (!isset($_SESSION['user_ID'])) {
+if (!isset($_SESSION['user_id'])) { // Updated to match login_process.php
     die("User not logged in.");
 }
 
-$userID = $_SESSION['user_ID']; // Use the logged-in user's ID
+$userID = $_SESSION['user_id']; // Updated to match login_process.php
 
-// Fetch favourite products
 $query = "
     SELECT p.* 
     FROM product p
@@ -28,7 +25,7 @@ $stmt->bind_param('i', $userID);
 $stmt->execute();
 $result = $stmt->get_result();
 
-error_log("Executing query for user_ID: $userID");
+error_log("Executing query for user_id: $userID");
 error_log("Query: SELECT p.* FROM product p INNER JOIN favourites f ON p.product_ID = f.product_ID WHERE f.user_ID = $userID");
 
 if ($result->num_rows > 0) {
@@ -36,7 +33,7 @@ if ($result->num_rows > 0) {
     error_log("Number of favourite products fetched: " . count($favouriteProducts));
 } else {
     $favouriteProducts = [];
-    error_log("No favourite products found for user_ID: $userID");
+    error_log("No favourite products found for user_id: $userID");
 }
 ?>
 
@@ -56,19 +53,16 @@ if ($result->num_rows > 0) {
     <?php include 'files/navbar.php'; ?>
 
     <div class="container" style="margin-top: 90px;">
-        <!-- Smaller header -->
         <div style="margin-bottom: 20px;">
             <h2 class="mb-2">Tavi favorīti</h2>
             <h5 class="text-muted"><?= count($favouriteProducts) ?> produkti</h5>
         </div>
 
-        <!-- Favourite products -->
         <div class="row">
             <?php if (!empty($favouriteProducts)): ?>
                 <?php foreach ($favouriteProducts as $product): ?>
                     <div class="col-md-3">
                         <div class="card mb-4 text-center">
-                            <!-- Display the product image -->
                             <img src="<?= htmlspecialchars($product['image']) ?>" class="card-img-top" alt="<?= htmlspecialchars($product['name']) ?>">
                             <div class="card-body">
                                 <h5 class="card-title"><?= htmlspecialchars($product['name']) ?></h5>

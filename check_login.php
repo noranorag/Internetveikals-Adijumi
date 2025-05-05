@@ -8,7 +8,8 @@ session_start();
 // Ensure no output before JSON
 header('Content-Type: application/json');
 
-if (isset($_SESSION['user_ID'])) {
+// Check for the correct session variable
+if (isset($_SESSION['user_id'])) { // Updated to match login_process.php
     echo json_encode(['loggedIn' => true]);
 } else {
     echo json_encode(['loggedIn' => false]);

@@ -10,6 +10,11 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'moder'])) {
+    header('Location: ../index.php'); // Redirect to the main page
+    exit();
+}
+
 $userName = isset($_SESSION['name']) ? $_SESSION['name'] : 'Admin'; 
 ?>
 
