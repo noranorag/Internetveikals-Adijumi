@@ -253,6 +253,8 @@ function toggleFavourite(productID, button) {
 }
 
 
+
+
 function openModal() {
     const modal = document.getElementById('loginModal');
     if (modal) {
@@ -266,7 +268,12 @@ function closeModal() {
     if (modal) {
         modal.classList.remove('show');
     }
+
+    
 }
+
+
+
 
 
 function checkLoginForHeart(event) {
@@ -298,4 +305,25 @@ function checkLoginForHeart(event) {
         }
     })
     .catch(error => console.error('Error during login check:', error));
+}
+
+function checkLoginBeforeAdding(event) {
+    event.preventDefault();
+    fetch('check_login.php')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.loggedIn) {
+                $('#addImageModal').modal('show');
+            } else {
+                $('#loginModal').modal('show');
+            }
+        })
+        .catch(error => {
+            console.error('Error checking login status:', error);
+        });
 }

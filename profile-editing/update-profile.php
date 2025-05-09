@@ -3,25 +3,21 @@ session_start();
 require '../database/db_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get the user ID from the session
-    if (!isset($_SESSION['user_id'])) { // Updated to match login_process.php
+    if (!isset($_SESSION['user_id'])) { 
         die("User ID not found in session.");
     }
-    $userId = $_SESSION['user_id']; // Updated to match login_process.php
+    $userId = $_SESSION['user_id']; 
 
-    // Get the form data
     $name = trim($_POST['name']);
     $surname = trim($_POST['surname']);
     $phone = trim($_POST['phone']);
     $email = trim($_POST['email']);
 
-    // Validate the input
     if (empty($name) || empty($surname) || empty($phone) || empty($email)) {
         header('Location: profile-edit.php?error=Visi lauki ir obligāti!');
         exit;
     }
 
-    // Check if the email is unique
     $sql = "SELECT user_ID FROM user WHERE email = ? AND user_ID != ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('si', $email, $userId);
@@ -33,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Update the user in the database
     $sql = "UPDATE user SET name = ?, surname = ?, phone = ?, email = ? WHERE user_ID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('ssssi', $name, $surname, $phone, $email, $userId);

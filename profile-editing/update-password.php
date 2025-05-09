@@ -12,13 +12,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $newPassword = $_POST['new_password'];
     $confirmPassword = $_POST['confirm_password'];
 
-    // Check if the new password matches the confirmation
     if ($newPassword !== $confirmPassword) {
         header('Location: password-change.php?error=Jaunā parole un apstiprinājums nesakrīt!');
         exit;
     }
 
-    // Fetch the current password hash from the database
     $sql = "SELECT password FROM user WHERE user_ID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $userId);
@@ -31,16 +29,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Verify the current password
     if (!password_verify($currentPassword, $user['password'])) {
         header('Location: password-change.php?error=Esošā parole ir nepareiza!');
         exit;
     }
 
-    // Hash the new password
     $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
 
-    // Update the password in the database
     $sql = "UPDATE user SET password = ? WHERE user_ID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('si', $newPasswordHash, $userId);

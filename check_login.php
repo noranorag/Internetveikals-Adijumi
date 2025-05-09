@@ -5,11 +5,11 @@ error_reporting(E_ALL);
 
 session_start();
 
-// Ensure no output before JSON
+
 header('Content-Type: application/json');
 
-// Check for the correct session variable
-if (isset($_SESSION['user_id'])) { // Updated to match login_process.php
+
+if (isset($_SESSION['user_id'])) { 
     echo json_encode(['loggedIn' => true]);
 } else {
     echo json_encode(['loggedIn' => false]);

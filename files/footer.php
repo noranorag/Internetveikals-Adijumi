@@ -1,13 +1,11 @@
 <footer class="site-footer mt-5">
     <div class="container">
         <div class="row">
-            <!-- Logo Section -->
             <div class="col-md-3">
                 <img src="images/logo.png" alt="Logo" class="footer-logo">
              
             </div>
 
-            <!-- Navigation Links -->
             <div class="col-md-3">
                 <h5 class="footer-heading">Navigācija</h5>
                 <ul class="footer-links">
@@ -18,7 +16,6 @@
                 </ul>
             </div>
 
-            <!-- Contact Information -->
             <div class="col-md-3">
                 <h5 class="footer-heading">Kontakti</h5>
                 <ul class="footer-links">
@@ -28,7 +25,6 @@
                 </ul>
             </div>
 
-            <!-- Policies -->
             <div class="col-md-3">
                 <h5 class="footer-heading">Politikas</h5>
                 <ul class="footer-links">

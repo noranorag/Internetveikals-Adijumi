@@ -1,5 +1,3 @@
-
-
 <?php
 require 'database/db_connection.php'; 
 
@@ -44,6 +42,7 @@ if ($result) {
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
+    <script src="scripts.js" defer></script>
 </head>
 <body>
     <div class="announcement" id="announcement"></div>
@@ -53,11 +52,6 @@ if ($result) {
     <div class="container mt-5 pt-5">
         <div class="heading-container">
             <h1 class="mb-2">Galerija</h1>
-        </div>
-        <div class="heading-with-lines">
-            <div class="line"></div>
-            <p class="page-heading">Pircēju uzņemtās bildes ar produktiem</p>
-            <div class="line"></div>
         </div>
         <div class="gallery">
             <?php foreach ($galleryItems as $item): ?>
@@ -69,32 +63,36 @@ if ($result) {
         </div>
     </div>
 
+    <!-- Image Modal -->
     <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="imageModalLabel">Image Details</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body text-center">
                     <img src="" id="modalImage" class="img-fluid" alt="Gallery Image">
-                    <p id="modalProduct"></p>
+                </div>
+                <div class="modal-footer d-flex justify-content-center align-items-center">
+                    <p class="mb-0 text-center">Pievienoja lietotājs: <span id="modalProduct"></span></p>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Add to Gallery Section -->
     <div class="container mt-5">
         <div class="add-to-gallery d-flex justify-content-between align-items-center p-4">
             <p class="mb-0">Vēlies galerijā pievienot savu bildi?</p>
-            <button class="btn btn-main d-flex align-items-center" data-toggle="modal" data-target="#addImageModal">
+            <button class="btn btn-main d-flex align-items-center" onclick="checkLoginBeforeAdding(event)">
                 <i class="fas fa-plus mr-2"></i> Pievienot
             </button>
         </div>
     </div>
 
+    <!-- Add Image Modal -->
     <div class="modal fade" id="addImageModal" tabindex="-1" aria-labelledby="addImageModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -120,25 +118,44 @@ if ($result) {
         </div>
     </div>
 
-    <?php include 'files/footer.php'; ?>
+    <div id="loginModal" class="modal login-modal" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tu neesi ielogojies</h5>
+                <button type="button" class="close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Vai ielogoties?</p>
+            </div>
+            <div class="modal-footer">
+                <a href="login.php" class="btn btn-primary">Ielogoties</a>
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Aizvērt</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  
-    <script src="scripts.js"></script>
+
+<?php include 'files/footer.php'; ?>
+
     <script>
         $('#imageModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget);
             var name = button.data('name');
-            var product = button.data('product');
             var imageSrc = button.find('img').attr('src');
 
             var modal = $(this);
-            modal.find('.modal-title').text(name);
             modal.find('#modalImage').attr('src', imageSrc);
-            modal.find('#modalProduct').text(product);
+            modal.find('#modalProduct').text(name);
         });
+
     </script>
 </body>
 </html>

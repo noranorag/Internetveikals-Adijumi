@@ -2,13 +2,11 @@
 session_start();
 require '../database/db_connection.php';
 
-// Get the user ID from the session
-if (!isset($_SESSION['user_id'])) { // Updated to match login_process.php
+if (!isset($_SESSION['user_id'])) { 
     die("User ID not found in session.");
 }
-$userId = $_SESSION['user_id']; // Updated to match login_process.php
+$userId = $_SESSION['user_id']; 
 
-// Fetch the user data
 $sql = "SELECT name, surname, phone, email FROM user WHERE user_ID = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('i', $userId);
@@ -96,13 +94,12 @@ if (!$user) {
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        // Automatically dismiss alerts after 3 seconds
         setTimeout(() => {
             const alerts = document.querySelectorAll('.alert');
             alerts.forEach(alert => {
                 alert.classList.remove('show');
                 alert.classList.add('fade');
-                setTimeout(() => alert.remove(), 150); // Remove the alert from the DOM after fade-out
+                setTimeout(() => alert.remove(), 150); 
             });
         }, 3000);
     </script>

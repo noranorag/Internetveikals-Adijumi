@@ -15,8 +15,8 @@ if ($result->num_rows > 0) {
 }
 
 $favorites = [];
-if (isset($_SESSION['user_id'])) { // Updated to match login_process.php
-    $userID = $_SESSION['user_id']; // Updated to match login_process.php
+if (isset($_SESSION['user_id'])) { 
+    $userID = $_SESSION['user_id']; 
     $stmt = $conn->prepare("SELECT product_ID FROM favourites WHERE user_ID = ?");
     $stmt->bind_param("i", $userID);
     $stmt->execute();
@@ -281,7 +281,7 @@ if ($result->num_rows > 0) {
                 subCheckbox.checked = false; 
             });
         } else {
-            bigCategoryInput.value = ''; // 
+            bigCategoryInput.value = '';  
         }
     }
 

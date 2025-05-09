@@ -494,8 +494,8 @@ body{
     opacity: 0.6;
 }
 
-.dimmed {
-    opacity: 0.6;
+.market-item.dimmed {
+    opacity: 0.7;
 }
 
 .market-item {
@@ -930,7 +930,7 @@ body{
     padding-left: 0px !important;
 }
 
-#loginModal {
+#loginModal, #registerModal {
     visibility: hidden;
     opacity: 0;
     position: fixed;
@@ -947,7 +947,7 @@ body{
     transition: visibility 0s, opacity 0.3s ease;
 }
 
-#loginModal.show {
+#loginModal.show, #registerModal.show {
     visibility: visible;
     opacity: 1;
 }
@@ -1091,10 +1091,6 @@ body{
     border-color: var(--main);
     box-shadow: 0 0 5px rgba(91, 103, 81, 0.5);
 }
-
-
-
-
 
 .no-outline {
     border: none; /* Remove border */

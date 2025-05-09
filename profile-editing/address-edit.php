@@ -2,13 +2,12 @@
 session_start();
 require '../database/db_connection.php';
 
-if (!isset($_SESSION['user_id'])) { // Check if the user is logged in
+if (!isset($_SESSION['user_id'])) { 
     die("User ID not found in session.");
 }
 
-$userId = $_SESSION['user_id']; // Get the user ID from the session
+$userId = $_SESSION['user_id']; 
 
-// Fetch the user's details, including name, surname, email, and ID_address
 $sql = "SELECT name, surname, email, ID_address FROM user WHERE user_ID = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param('i', $userId);
@@ -16,14 +15,13 @@ $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 
-if (!$user) { // Check if the user exists
+if (!$user) {
     die("User not found.");
 }
 
 $addressId = $user['ID_address'];
 
 if ($addressId) {
-    // Fetch the address details if the user has an address
     $sql = "SELECT * FROM address WHERE address_ID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $addressId);
@@ -35,7 +33,6 @@ if ($addressId) {
         die("Address not found.");
     }
 } else {
-    // Initialize empty address fields if the user has no address
     $address = [
         'country' => '',
         'city' => '',
@@ -145,13 +142,12 @@ if ($addressId) {
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-        // Automatically dismiss alerts after 3 seconds
         setTimeout(() => {
             const alerts = document.querySelectorAll('.alert');
             alerts.forEach(alert => {
                 alert.classList.remove('show');
                 alert.classList.add('fade');
-                setTimeout(() => alert.remove(), 150); // Remove the alert from the DOM after fade-out
+                setTimeout(() => alert.remove(), 150); 
             });
         }, 3000);
     </script>

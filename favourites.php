@@ -8,11 +8,11 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-if (!isset($_SESSION['user_id'])) { // Updated to match login_process.php
+if (!isset($_SESSION['user_id'])) { 
     die("User not logged in.");
 }
 
-$userID = $_SESSION['user_id']; // Updated to match login_process.php
+$userID = $_SESSION['user_id']; 
 
 $query = "
     SELECT p.* 
