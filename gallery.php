@@ -1,6 +1,34 @@
 <?php
 require 'database/db_connection.php'; 
 
+// Number of images per page
+$imagesPerPage = 21;
+
+// Get the current page from URL (default to 1)
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+
+// Calculate the offset for SQL LIMIT clause
+$offset = ($page - 1) * $imagesPerPage;
+
+// First, get total number of approved images to calculate total pages
+$countQuery = "
+    SELECT COUNT(*) AS total 
+    FROM user_gallery ug
+    INNER JOIN gallery_images gi ON ug.ID_gallery = gi.gallery_ID
+    WHERE gi.approved = 'approved'
+";
+
+$countResult = mysqli_query($conn, $countQuery);
+$totalImages = 0;
+if ($countResult) {
+    $row = mysqli_fetch_assoc($countResult);
+    $totalImages = (int)$row['total'];
+}
+
+// Calculate total pages
+$totalPages = ceil($totalImages / $imagesPerPage);
+
+// Now, get the images for the current page only
 $query = "
     SELECT 
         gi.gallery_ID AS gallery_id,
@@ -16,6 +44,7 @@ $query = "
         user u ON ug.ID_user = u.user_ID
     WHERE 
         gi.approved = 'approved'
+    LIMIT $imagesPerPage OFFSET $offset
 ";
 
 $result = mysqli_query($conn, $query);
@@ -33,6 +62,7 @@ if ($result) {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -81,18 +111,60 @@ if ($result) {
             </div>
         </div>
     </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center mt-4">
+            <!-- Previous Page Link -->
+            <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
+            <a class="page-link" href="?page=<?= $page - 1 ?>" tabindex="-1">&laquo;</a>
+            </li>
 
-    <!-- Add to Gallery Section -->
+            <!-- Page Number Links -->
+            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+            <li class="page-item <?= ($page == $i) ? 'active' : '' ?>">
+                <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+            </li>
+            <?php endfor; ?>
+
+            <!-- Next Page Link -->
+            <li class="page-item <?= ($page >= $totalPages) ? 'disabled' : '' ?>">
+            <a class="page-link" href="?page=<?= $page + 1 ?>">&raquo;</a>
+            </li>
+        </ul>
+    </nav>
+
     <div class="container mt-5">
         <div class="add-to-gallery d-flex justify-content-between align-items-center p-4">
             <p class="mb-0">Vēlies galerijā pievienot savu bildi?</p>
-            <button class="btn btn-main d-flex align-items-center" onclick="checkLoginBeforeAdding(event)">
+            <button id="addToGalleryBtn" class="btn btn-main d-flex align-items-center">
                 <i class="fas fa-plus mr-2"></i> Pievienot
             </button>
         </div>
     </div>
 
-    <!-- Add Image Modal -->
+   <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginModalLabel">Tu neesi ielogojies</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Aizvērt">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <p>Vai ielogoties?</p>
+      </div>
+
+      <div class="modal-footer">
+        <a href="<?= $basePath ?>login.php" class="btn btn-primary">Ielogoties</a>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Aizvērt</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
     <div class="modal fade" id="addImageModal" tabindex="-1" aria-labelledby="addImageModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -118,30 +190,12 @@ if ($result) {
         </div>
     </div>
 
-    <div id="loginModal" class="modal login-modal" data-backdrop="false">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Tu neesi ielogojies</h5>
-                <button type="button" class="close" onclick="closeModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p>Vai ielogoties?</p>
-            </div>
-            <div class="modal-footer">
-                <a href="login.php" class="btn btn-primary">Ielogoties</a>
-                <button type="button" class="btn btn-secondary" onclick="closeModal()">Aizvērt</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <?php include 'files/footer.php'; ?>
 

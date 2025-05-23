@@ -47,6 +47,23 @@ if (isset($_SESSION['user_id'])) {
     error_log("Checking favorites for user_id: $userID, product_ID: $product_ID");
     error_log("Query result: " . ($isFavorite ? "Favorite" : "Not Favorite"));
 }
+
+// Check if the product is already in the cart
+$isInCart = false;
+if (isset($_SESSION['user_id']) || session_id()) {
+    $userID = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
+    $sessionID = session_id();
+
+    $stmt = $conn->prepare("
+        SELECT * FROM cart 
+        WHERE ((ID_user = ? AND ID_user != 0) OR (session_ID = ? AND ID_user = 0)) 
+        AND ID_product = ?
+    ");
+    $stmt->bind_param("isi", $userID, $sessionID, $product_ID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $isInCart = $result->num_rows > 0;
+}
 ?>
 
 <!DOCTYPE html>
@@ -94,7 +111,13 @@ if (isset($_SESSION['user_id'])) {
                 <button class="btn quantity-btn" onclick="decreaseQuantity()">-</button>
                 <input type="text" id="quantity" class="form-control quantity-input text-center" value="1" readonly>
                 <button class="btn quantity-btn" onclick="increaseQuantity()">+</button>
-                <button class="btn btn-success ml-3">Ielikt grozā</button>
+                <button 
+                    class="btn btn-success ml-3" 
+                    id="addToCartButton" 
+                    onclick="addToCart(<?= $product_ID ?>)" 
+                    <?= $isInCart ? 'disabled' : '' ?>>
+                    <?= $isInCart ? '<i class="fas fa-check"></i> Jau grozā' : 'Ielikt grozā' ?>
+                </button>
                 <button class="btn heart-btn ml-3" data-product-id="<?= $product['product_ID'] ?>" onclick="toggleFavourite(<?= $product['product_ID'] ?>, this)">
                     <i class="<?= $isFavorite ? 'fas' : 'far' ?> fa-heart"></i>
                 </button>

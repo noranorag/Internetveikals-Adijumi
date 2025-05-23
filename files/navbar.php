@@ -47,7 +47,7 @@ $basePath = str_repeat('../', $depth);
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-shopping-cart"></i></a>
+                    <a class="nav-link" href="cart.php"><i class="fas fa-shopping-cart"></i></a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
@@ -60,7 +60,6 @@ $basePath = str_repeat('../', $depth);
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
                         <?php if (isset($_SESSION['user_email'])): ?>
                             <a class="dropdown-item" href="<?= $basePath ?>profile-editing/profile-edit.php">Mans profils</a>
-                            <a class="dropdown-item" href="<?= $basePath ?>profile_settings.php">Profila iestatījumi</a>
                             <a class="dropdown-item" href="<?= $basePath ?>database/logout.php">Izlogoties</a>
                         <?php else: ?>
                             <a class="dropdown-item" href="<?= $basePath ?>login.php">Ielogoties</a>

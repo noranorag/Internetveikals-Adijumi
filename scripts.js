@@ -1,5 +1,5 @@
 const messages = [
-    "Pirkumiem virs 70 eiro bezmaksas piegāde",
+    "Pirkumiem virs 55 eiro bezmaksas piegāde",
     "Nopērc kvalitatīvus adījumus jau šodien"
 ];
 let currentMessageIndex = 0;
@@ -62,10 +62,7 @@ function toggleFilterModal() {
     filterModal.classList.toggle('show');
 }
 
-function toggleFilterModal() {
-    const filterModal = document.getElementById('filterModal');
-    filterModal.classList.toggle('show');
-}
+
 
 
 window.onclick = function(event) {
@@ -307,23 +304,42 @@ function checkLoginForHeart(event) {
     .catch(error => console.error('Error during login check:', error));
 }
 
-function checkLoginBeforeAdding(event) {
-    event.preventDefault();
+document.getElementById("addToGalleryBtn").addEventListener("click", function () {
     fetch('check_login.php')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
             if (data.loggedIn) {
+                // Ja ielogojies, atver attēla pievienošanas modāli
                 $('#addImageModal').modal('show');
             } else {
+                // Ja nav ielogojies, atver login modāli
                 $('#loginModal').modal('show');
             }
         })
         .catch(error => {
-            console.error('Error checking login status:', error);
+            console.error('Kļūda pārbaudot ielogošanos:', error);
         });
+});
+
+function addToCart(productID) {
+    const quantity = document.getElementById('quantity').value;
+
+    fetch('add_to_cart.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ product_ID: productID, quantity: quantity }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const button = document.getElementById('addToCartButton');
+            button.innerHTML = '<i class="fas fa-check"></i> Jau grozā';
+            button.disabled = true;
+        } else {
+            alert('Kļūda pievienojot grozam.');
+        }
+    })
+    .catch(error => console.error('Error:', error));
 }

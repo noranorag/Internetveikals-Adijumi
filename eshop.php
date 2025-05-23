@@ -86,10 +86,6 @@ $query = "
     WHERE $whereSQL
 ";
 
-error_log("SQL Query: $query");
-error_log("Bind Params: " . print_r($bindParams, true));
-error_log("Types: $types");
-
 $stmt = $conn->prepare($query);
 if (!empty($bindParams)) {
     $stmt->bind_param($types, ...$bindParams);
@@ -102,6 +98,51 @@ if ($result->num_rows > 0) {
 } else {
     $products = [];
 }
+
+$limit = 20;
+$page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+$offset = ($page - 1) * $limit;
+
+// --- MAIN QUERY with LIMIT ---
+$query = "
+    SELECT p.* 
+    FROM product p
+    INNER JOIN category c ON p.ID_category = c.category_ID
+    WHERE $whereSQL
+    LIMIT ? OFFSET ?
+";
+$stmt = $conn->prepare($query);
+
+if (!empty($bindParams)) {
+    $types .= 'ii';
+    $bindParams[] = $limit;
+    $bindParams[] = $offset;
+    $stmt->bind_param($types, ...$bindParams);
+} else {
+    $stmt->bind_param('ii', $limit, $offset);
+}
+
+$stmt->execute();
+$result = $stmt->get_result();
+$products = $result->num_rows > 0 ? $result->fetch_all(MYSQLI_ASSOC) : [];
+
+// --- TOTAL PRODUCTS COUNT ---
+$countQuery = "
+    SELECT COUNT(*) AS total
+    FROM product p
+    INNER JOIN category c ON p.ID_category = c.category_ID
+    WHERE $whereSQL
+";
+$countStmt = $conn->prepare($countQuery);
+if (!empty($bindParams)) {
+    $countParams = array_slice($bindParams, 0, -2); // no limit/offset
+    $countTypes = substr($types, 0, -2);
+    $countStmt->bind_param($countTypes, ...$countParams);
+}
+$countStmt->execute();
+$countResult = $countStmt->get_result();
+$totalProducts = $countResult->fetch_assoc()['total'];
+$totalPages = ceil($totalProducts / $limit);
 
 
 ?>
@@ -154,21 +195,54 @@ if ($result->num_rows > 0) {
         </div>
 
         <div class="row">
-            <?php foreach ($products as $product): ?>
-                <div class="col-md-3">
-                    <div class="card mb-4 text-center">
-                        <img src="<?= htmlspecialchars($product['image']) ?>" class="card-img-top" alt="<?= htmlspecialchars($product['name']) ?>">
-                        <div class="card-body">
-                            <h5 class="card-title"><?= htmlspecialchars($product['name']) ?></h5>
-                            <p class="card-text"><?= htmlspecialchars($product['short_description']) ?></p>
-                            <p class="card-text"><strong>€<?= htmlspecialchars($product['price']) ?></strong></p>
-                            <button class="btn btn-primary" onclick="window.location.href='product-details.php?product_ID=<?= $product['product_ID'] ?>'">Apskatīt</button>
-                        </div>
-                    </div>
+    <?php foreach ($products as $product): ?>
+        <div class="col-sm-6 col-md-4 col-lg-3 mb-4"> <!-- mb-4 here! -->
+            <div class="card text-center h-100">
+                <img src="<?= htmlspecialchars($product['image']) ?>" class="card-img-top" alt="<?= htmlspecialchars($product['name']) ?>">
+                <div class="card-body">
+                    <h5 class="card-title"><?= htmlspecialchars($product['name']) ?></h5>
+                    <p class="card-text"><?= htmlspecialchars($product['short_description']) ?></p>
+                    <p class="card-text"><strong>€<?= htmlspecialchars($product['price']) ?></strong></p>
+                    <button class="btn btn-primary" onclick="window.location.href='product-details.php?product_ID=<?= $product['product_ID'] ?>'">Apskatīt</button>
                 </div>
-            <?php endforeach; ?>
+            </div>
         </div>
+    <?php endforeach; ?>
+</div>
     </div>
+
+    <?php if ($totalPages > 1): ?>
+        <nav aria-label="Product pagination">
+            <ul class="pagination justify-content-center mt-4">
+                <!-- Previous Page Link -->
+                <?php
+                    $queryParams = $_GET;
+                    $queryParams['page'] = max(1, $page - 1);
+                ?>
+                <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
+                    <a class="page-link" href="?<?= http_build_query($queryParams) ?>" tabindex="-1">&laquo;</a>
+                </li>
+
+                <!-- Page Numbers -->
+                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                    <?php
+                        $queryParams['page'] = $i;
+                    ?>
+                    <li class="page-item <?= ($page == $i) ? 'active' : '' ?>">
+                        <a class="page-link" href="?<?= http_build_query($queryParams) ?>"><?= $i ?></a>
+                    </li>
+                <?php endfor; ?>
+
+                <!-- Next Page Link -->
+                <?php
+                    $queryParams['page'] = min($totalPages, $page + 1);
+                ?>
+                <li class="page-item <?= ($page >= $totalPages) ? 'disabled' : '' ?>">
+                    <a class="page-link" href="?<?= http_build_query($queryParams) ?>">&raquo;</a>
+                </li>
+            </ul>
+        </nav>
+    <?php endif; ?>
 
     <div class="filter-modal" id="filterModal">
     <form method="GET" action="eshop.php">

@@ -30,9 +30,6 @@
                             <button type="submit" class="btn btn-primary btn-block">Ielogoties</button>
                             <a href="register.php" class="btn btn-outline-main btn-block mt-2">Reģistrēties</a>
                         </form>
-                            <div class="text-center mt-3">
-                                <a href="forgot_password.php">Aizmirsāt paroli?</a>
-                            </div>
                         </div>
                         <div class="card-footer text-center">
                             <a href="index.php">Atgriezties uz sākumlapu</a>

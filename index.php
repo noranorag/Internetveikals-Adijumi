@@ -18,23 +18,23 @@
         <div class="hero-text">
             <h1>Pašdarināti adījumi</h1>
             <p>Dažādu veidu adījumi visai ģimenei</p>
-            <a href="#" class="hero-button">Iepērcies tagad</a>
+            <a href="eshop.php" class="hero-button">Iepērcies tagad</a>
         </div>
         <div class="hero-categories">
             <div class="category">
                 <img src="images/berniem.png" alt="Bērniem" class="category-image" loading="lazy">
                 <h2>Bērniem</h2>
-                <a href="#" class="category-button">Apskatīt kolekciju</a>
+                <a href="eshop.php?big_category=Bērniem" class="category-button">Apskatīt kolekciju</a>
             </div>
             <div class="category">
                 <img src="images/sievietem.png" alt="Sievietēm" class="category-image" loading="lazy">
                 <h2>Sievietēm</h2>
-                <a href="#" class="category-button">Apskatīt kolekciju</a>
+                <a href="eshop.php?big_category=Sievietēm" class="category-button">Apskatīt kolekciju</a>
             </div>
             <div class="category">
                 <img src="images/viriesiem.png" alt="Vīriešiem" class="category-image" loading="lazy">
                 <h2>Vīriešiem</h2>
-                <a href="#" class="category-button">Apskatīt kolekciju</a>
+                <a href="eshop.php?big_category=Vīriešiem" class="category-button">Apskatīt kolekciju</a>
             </div>
         </div>
     </section>
@@ -63,7 +63,7 @@
     <div class="container">
         <h3 class="mb-4 text-center">Populārākie produkti</h3>
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-12 col-sm-6 col-xl-3">
                 <div class="card mb-4 text-center">
                     <img src="images/berniem.png" class="card-img-top" alt="Product Image">
                     <div class="card-body">
@@ -74,7 +74,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-12 col-sm-6 col-xl-3">
                 <div class="card mb-4 text-center">
                     <img src="images/berniem.png" class="card-img-top" alt="Product Image">
                     <div class="card-body">
@@ -85,7 +85,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-12 col-sm-6 col-xl-3">
                 <div class="card mb-4 text-center">
                     <img src="images/berniem.png" class="card-img-top" alt="Product Image">
                     <div class="card-body">
@@ -96,7 +96,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-12 col-sm-6 col-xl-3">
                 <div class="card mb-4 text-center">
                     <img src="images/berniem.png" class="card-img-top" alt="Product Image">
                     <div class="card-body">
