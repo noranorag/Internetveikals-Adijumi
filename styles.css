@@ -1165,6 +1165,311 @@ body{
     background-color: transparent;
 }
 
+.cart-badge {
+    top: -3px; /* Adjust vertical position */
+    right: 1px; /* Adjust horizontal position */
+    font-size: 0.7rem; /* Smaller font size */
+    width: 18px; /* Circle width */
+    height: 18px; /* Circle height */
+    line-height: 18px; /* Match the height to center the text vertically */
+    border-radius: 50%; /* Make it circular */
+    background-color: #dc3545; /* Red background */
+    color: white; /* White text */
+    text-align: center; /* Center text horizontally */
+    position: absolute; /* Position relative to the cart icon */
+    font-weight: bold; /* Bold text */
+    display: flex; /* Use flexbox for centering */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+}
+
+.cart-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    z-index: 1000;
+    display: flex;
+    align-items: stretch; /* Ensure both columns (image and text) are the same height */
+    gap: 20px;
+    width: 400px; /* Increased width for better layout */
+    animation: fadeIn 0.5s ease-out, fadeOut 0.5s ease-in 4.5s forwards;
+}
+
+.cart-notification .notification-content {
+    display: flex;
+    align-items: stretch; /* Stretch the image and text to match height */
+    gap: 15px;
+    flex: 1; /* Allow the content to take up the remaining space */
+}
+
+.cart-notification .notification-image {
+    width: 120px; /* Fixed width */
+    height: 100%; /* Stretch to match the height of the notification content */
+    object-fit: cover; /* Ensure the image scales properly without distortion */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+}
+
+.cart-notification .notification-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Distribute text and button evenly */
+    flex: 1; /* Allow the text to take up the remaining space */
+}
+
+.cart-notification .notification-name {
+    font-weight: bold;
+    font-size: 1rem;
+    margin: 0;
+    color: #333;
+}
+
+.cart-notification .notification-price {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.cart-notification .notification-message {
+    margin: 5px 0;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.cart-notification .btn {
+    margin-top: 10px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    background-color: var(--third);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cart-notification .btn:hover {
+    background-color: var(--thirdHover);
+}
+
+.cart-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 300px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    display: none; /* Hidden by default */
+    z-index: 1000;
+}
+
+.nav-item:hover .cart-dropdown {
+    display: block; /* Show on hover */
+}
+
+.cart-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 200px; /* Limit height for scrolling */
+    overflow-y: auto; /* Enable scrolling */
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.cart-item-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 10px;
+}
+
+.cart-item-details {
+    flex: 1;
+}
+
+.cart-item-name {
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin: 0;
+    color: #333;
+}
+
+.cart-item-price {
+    font-size: 0.8rem;
+    color: #555;
+    margin: 0;
+}
+
+.cart-empty {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #777;
+    margin: 10px 0;
+}
+
+.cart-dropdown-footer {
+    margin-top: 10px;
+}
+
+.cart-scroll-indicator {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #999;
+    margin-top: 5px;
+}
+
+.cart-dropdown-footer .btn {
+    background-color: var(--third); /* Use the third color */
+    color: white;
+}
+
+.cart-dropdown-footer .btn:hover {
+    background-color: var(--thirdHover); /* Use the third hover color */
+    color: white;
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+.message-button-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.message-button {
+    width: 60px;
+    height: 60px;
+    background-color: var(--third); /* Use your third color */
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.message-button:hover {
+    background-color: var(--thirdHover); /* Use your third hover color */
+    transform: scale(1.1);
+}
+
+.message-icons {
+    position: absolute;
+    bottom: 70px; /* Adjusted to align properly */
+    right: 50%; /* Center relative to the main button */
+    transform: translateX(50%); /* Center horizontally */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.message-button-container:hover .message-icons {
+    opacity: 1;
+    visibility: visible;
+}
+
+.message-icon {
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    color: var(--third);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.message-icon:hover {
+    color: white;
+    transform: scale(1.1);
+    text-decoration: none;
+}
+
+.message-icon.whatsapp {
+    color: #25D366; /* WhatsApp green */
+}
+
+.message-icon.messenger {
+    color: #0084FF; /* Messenger blue */
+}
+
+.message-icon.email {
+    color: #D44638; /* Email red */
+}
+
+.message-icon.phone {
+    color: #34B7F1; /* Phone blue */
+}
+
+.message-hover-text {
+    position: absolute;
+    top: 50%; /* Center vertically relative to the container */
+    transform: translateY(-50%); /* Adjust for perfect vertical centering */
+    right: 90px; /* Position the text to the left of the icons */
+    font-size: 1rem;
+    color: var(--third);
+    background-color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    white-space: nowrap;
+    z-index: 1000;
+}
+
+.message-button-container:hover .message-hover-text {
+    opacity: 1;
+    visibility: visible;
+}
+
 
 @media (max-width: 1240px) {
     .hero-categories {

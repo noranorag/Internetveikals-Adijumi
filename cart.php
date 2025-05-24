@@ -75,7 +75,7 @@ $progressPercentage = min(100, ($totalPrice / $freeShippingThreshold) * 100); //
     <div class="free-shipping-box d-flex justify-content-between align-items-center">
         <div style="flex: 1">
             <?php if ($remainingAmount > 0): ?>
-                <p class="mb-2">Tev vēl ir <?= number_format($remainingAmount, 2) ?>€ līdz bezmaksas piegādei</p>
+                <p class="mb-2">Tev vēl ir nepieciešami <?= number_format($remainingAmount, 2) ?>€ līdz bezmaksas piegādei</p>
             <?php else: ?>
                 <p class="mb-2">Bezmaksas piegāde!</p>
             <?php endif; ?>
@@ -103,7 +103,7 @@ $progressPercentage = min(100, ($totalPrice / $freeShippingThreshold) * 100); //
                     </div>
                     <div class="d-flex align-items-center mt-3">
                         <!-- Form for decreasing quantity -->
-                        <form action="update_cart_quantity.php" method="POST" class="d-inline">
+                        <form action="user-database/update_cart_quantity.php" method="POST" class="d-inline">
                             <input type="hidden" name="cart_ID" value="<?= $item['cart_ID'] ?>">
                             <input type="hidden" name="action" value="decrease">
                             <button type="submit" class="btn btn-outline-secondary btn-sm">-</button>
@@ -112,7 +112,7 @@ $progressPercentage = min(100, ($totalPrice / $freeShippingThreshold) * 100); //
                         <input type="text" class="form-control form-control-sm mx-2 text-center" value="<?= $item['quantity'] ?>" style="width: 50px;" readonly>
 
                         <!-- Form for increasing quantity -->
-                        <form action="update_cart_quantity.php" method="POST" class="d-inline">
+                        <form action="user-database/update_cart_quantity.php" method="POST" class="d-inline">
                             <input type="hidden" name="cart_ID" value="<?= $item['cart_ID'] ?>">
                             <input type="hidden" name="action" value="increase">
                             <button type="submit" class="btn btn-outline-secondary btn-sm">+</button>
@@ -122,7 +122,7 @@ $progressPercentage = min(100, ($totalPrice / $freeShippingThreshold) * 100); //
                     </div>
                 </div>
                 <!-- Dzēšanas poga -->
-                <form action="remove_from_cart.php" method="POST" class="position-absolute" style="top: 10px; right: 10px;">
+                <form action="user-database/remove_from_cart.php" method="POST" class="position-absolute" style="top: 10px; right: 10px;">
                     <input type="hidden" name="cart_ID" value="<?= $item['cart_ID'] ?>">
                     <button type="submit" class="btn btn-danger btn-sm">
                         <i class="fas fa-times"></i>
@@ -161,6 +161,8 @@ $progressPercentage = min(100, ($totalPrice / $freeShippingThreshold) * 100); //
         </div>
     </div>
   </div>
+
+  <?php include 'files/messages.php'; ?>
 
   <?php include 'files/footer.php'; ?>
 

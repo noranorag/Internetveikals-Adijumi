@@ -304,42 +304,132 @@ function checkLoginForHeart(event) {
     .catch(error => console.error('Error during login check:', error));
 }
 
-document.getElementById("addToGalleryBtn").addEventListener("click", function () {
-    fetch('check_login.php')
-        .then(response => response.json())
-        .then(data => {
-            if (data.loggedIn) {
-                // Ja ielogojies, atver attēla pievienošanas modāli
-                $('#addImageModal').modal('show');
-            } else {
-                // Ja nav ielogojies, atver login modāli
-                $('#loginModal').modal('show');
-            }
-        })
-        .catch(error => {
-            console.error('Kļūda pārbaudot ielogošanos:', error);
+document.addEventListener('DOMContentLoaded', function () {
+    const addToGalleryBtn = document.getElementById("addToGalleryBtn");
+    if (addToGalleryBtn) {
+        addToGalleryBtn.addEventListener("click", function () {
+            fetch('check_login.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.loggedIn) {
+                        // If logged in, show the modal
+                        $('#addImageModal').modal('show');
+                    } else {
+                        // If not logged in, show the login modal
+                        $('#loginModal').modal('show');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error checking login status:', error);
+                });
         });
+    }
 });
 
 function addToCart(productID) {
     const quantity = document.getElementById('quantity').value;
 
-    fetch('add_to_cart.php', {
+    fetch('user-database/add_to_cart.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ product_ID: productID, quantity: quantity }),
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.success) {
             const button = document.getElementById('addToCartButton');
             button.innerHTML = '<i class="fas fa-check"></i> Jau grozā';
             button.disabled = true;
+
+            console.log('Calling updateCartCount...');
+            updateCartCount(); // Update the cart count dynamically
+
+            // Show the notification
+            showCartNotification(productID);
         } else {
-            alert('Kļūda pievienojot grozam.');
+            alert('Kļūda pievienojot grozam: ' + data.error);
         }
     })
-    .catch(error => console.error('Error:', error));
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+function showCartNotification(productID) {
+    // Fetch product details for the notification
+    fetch(`user-database/get_product_details.php?product_ID=${productID}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const notification = document.getElementById('cartNotification');
+                const notificationImage = document.getElementById('notificationImage');
+                const notificationName = document.getElementById('notificationName');
+                const notificationPrice = document.getElementById('notificationPrice');
+
+                // Update notification content
+                notificationImage.src = data.product.image;
+                notificationName.textContent = data.product.name;
+                notificationPrice.textContent = `Cena: €${data.product.price}`;
+
+                // Show the notification
+                notification.style.display = 'flex';
+
+                // Hide the notification after 5 seconds
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 5000);
+            } else {
+                console.error('Failed to fetch product details for notification:', data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching product details for notification:', error);
+        });
+}
+
+function updateCartCount() {
+    console.log('updateCartCount: Fetching cart count...');
+    fetch('user-database/get_cart_counts.php') // Updated to match the new file name
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('updateCartCount: Cart count response:', data);
+            if (data.success) {
+                const cartBadge = document.querySelector('.cart-badge');
+                const cartIcon = document.querySelector('.fa-shopping-cart');
+                if (data.cartCount > 0) {
+                    if (!cartBadge) {
+                        // Create the badge if it doesn't exist
+                        const badge = document.createElement('span');
+                        badge.className = 'badge badge-danger position-absolute cart-badge';
+                        badge.style.top = '-5px';
+                        badge.style.right = '-10px';
+                        badge.textContent = data.cartCount;
+                        cartIcon.parentElement.appendChild(badge);
+                    } else {
+                        // Update the badge count
+                        cartBadge.textContent = data.cartCount;
+                    }
+                } else if (cartBadge) {
+                    // Remove the badge if the cart is empty
+                    cartBadge.remove();
+                }
+            } else {
+                console.error('updateCartCount: Failed to fetch cart count:', data.error);
+            }
+        })
+        .catch(error => {
+            console.error('updateCartCount: Error fetching cart count:', error);
+        });
 }

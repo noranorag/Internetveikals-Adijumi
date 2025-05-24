@@ -1,6 +1,5 @@
 <?php
 require 'db_connection.php';
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $conn->real_escape_string($_POST['name']);
     $description = $conn->real_escape_string($_POST['description']);
@@ -13,8 +12,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['success' => false, 'error' => 'Invalid date provided.']);
         exit();
     }
-
-    
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         $imageName = basename($_FILES['image']['name']);
         $targetDir = "../images/"; 
@@ -27,8 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
     }
-
-    
     $sql = "INSERT INTO fair (name, description, link, image, date) VALUES (?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
 
@@ -36,7 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(['success' => false, 'error' => 'Failed to prepare statement: ' . $conn->error]);
         exit();
     }
-
     $stmt->bind_param('sssss', $name, $description, $link, $image, $date);
 
     if ($stmt->execute()) {
@@ -44,7 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo json_encode(['success' => false, 'error' => $stmt->error]);
     }
-
     $stmt->close();
 }
 

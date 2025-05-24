@@ -14,7 +14,52 @@ if (strpos($currentDir, $projectRoot) === 0) {
 }
 
 $basePath = str_repeat('../', $depth);
+
+// Fetch cart count
+$cartCount = 0;
+if (isset($_SESSION['user_id']) || session_id()) {
+    include_once $basePath . 'database/db_connection.php';
+
+    $userID = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
+    $sessionID = session_id();
+
+    $stmt = $conn->prepare("
+        SELECT SUM(quantity) AS total_quantity 
+        FROM cart 
+        WHERE (ID_user = ? AND ? != 0) OR (session_ID = ? AND ? = 0)
+    ");
+    $stmt->bind_param("isis", $userID, $userID, $sessionID, $userID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($row = $result->fetch_assoc()) {
+        $cartCount = $row['total_quantity'] ?? 0;
+    }
+}
+
+$cartItems = [];
+if (isset($_SESSION['user_id']) || session_id()) {
+    include_once $basePath . 'database/db_connection.php';
+
+    $userID = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
+    $sessionID = session_id();
+
+    $stmt = $conn->prepare("
+        SELECT c.*, p.name, p.price, p.image 
+        FROM cart c
+        INNER JOIN product p ON c.ID_product = p.product_ID
+        WHERE (c.ID_user = ? AND ? != 0) OR (c.session_ID = ? AND ? = 0)
+    ");
+    $stmt->bind_param("isis", $userID, $userID, $sessionID, $userID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $cartItems = $result->fetch_all(MYSQLI_ASSOC);
+    }
+}
 ?>
+
+<script src="scripts.js" defer></script>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
@@ -46,8 +91,38 @@ $basePath = str_repeat('../', $depth);
                         <i class="fas fa-heart"></i>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="cart.php"><i class="fas fa-shopping-cart"></i></a>
+                <li class="nav-item position-relative">
+                    <a class="nav-link" href="<?= $basePath ?>cart.php">
+                        <i class="fas fa-shopping-cart"></i>
+                        <?php if ($cartCount > 0): ?>
+                            <span class="badge badge-danger position-absolute cart-badge">
+                                <?= $cartCount ?>
+                            </span>
+                        <?php endif; ?>
+                    </a>
+                    <div class="cart-dropdown" id="cartDropdown">
+                        <?php if (!empty($cartItems)): ?>
+                            <ul class="cart-items">
+                                <?php foreach ($cartItems as $item): ?>
+                                    <li class="cart-item">
+                                        <img src="<?= htmlspecialchars($item['image']) ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="cart-item-image">
+                                        <div class="cart-item-details">
+                                            <p class="cart-item-name"><?= htmlspecialchars($item['name']) ?></p>
+                                            <p class="cart-item-price">€<?= number_format($item['price'], 2) ?></p>
+                                        </div>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                            <?php if (count($cartItems) > 3): ?>
+                                <div class="cart-scroll-indicator">Scroll for more...</div>
+                            <?php endif; ?>
+                            <div class="cart-dropdown-footer">
+                                <a href="<?= $basePath ?>cart.php" class="btn btn-primary btn-sm w-100">Apskatīt grozu</a>
+                            </div>
+                        <?php else: ?>
+                            <p class="cart-empty">Tavs grozs ir tukšs.</p>
+                        <?php endif; ?>
+                    </div>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"

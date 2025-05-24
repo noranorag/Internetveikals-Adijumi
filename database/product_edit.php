@@ -1,10 +1,6 @@
 <?php
 include 'db_connection.php';
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 header('Content-Type: application/json'); 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -25,10 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $price = floatval($_POST['price'] ?? 0);
     $stock_quantity = intval($_POST['stock_quantity'] ?? 0);
     $category_id = intval($_POST['category_id'] ?? 0);
-
     
     $current_image = $_POST['current_image'] ?? '';
-    $imagePath = $current_image; // Default to the current image
+    $imagePath = $current_image; 
 
     if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
         $imageName = uniqid() . '-' . basename($_FILES['image']['name']);
@@ -43,12 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    
-
-    error_log('Current image: ' . $current_image);
-    error_log('Image path before SQL execution: ' . $imagePath);
-
-    
     $sql = "UPDATE product 
         SET name = ?, 
             short_description = ?, 

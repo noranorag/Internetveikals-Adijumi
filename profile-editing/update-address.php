@@ -7,28 +7,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         die("User ID not found in session.");
     }
     $userId = $_SESSION['user_id'];
-
     $sql = "SELECT ID_address FROM user WHERE user_ID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $userId);
     $stmt->execute();
     $result = $stmt->get_result();
     $user = $result->fetch_assoc();
-
     $addressId = $user['ID_address'] ?? null;
-
     $country = trim($_POST['country']);
     $city = trim($_POST['city']);
     $street = trim($_POST['street']);
     $house = trim($_POST['house']);
     $apartment = trim($_POST['apartment']);
     $postal_code = trim($_POST['postal_code']);
-
     if (empty($country) && empty($city) && empty($street) && empty($house) && empty($apartment) && empty($postal_code)) {
         header('Location: address-edit.php?error=Visi lauki ir tukši!');
         exit;
     }
-
     if ($addressId) {
         $sql = "UPDATE address SET country = ?, city = ?, street = ?, house = ?, apartment = ?, postal_code = ? WHERE address_ID = ?";
         $stmt = $conn->prepare($sql);

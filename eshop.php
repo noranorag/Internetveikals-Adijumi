@@ -295,6 +295,8 @@ $totalPages = ceil($totalProducts / $limit);
     </form>
 </div>
 
+<?php include 'files/messages.php'; ?>
+
 <?php include 'files/footer.php'; ?>
 
     

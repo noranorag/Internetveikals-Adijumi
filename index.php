@@ -148,6 +148,8 @@
     </div>
 </section>
 
+<?php include 'files/messages.php'; ?>
+
 <?php include 'files/footer.php'; ?>
 
 

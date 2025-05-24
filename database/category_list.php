@@ -16,9 +16,6 @@ if (!empty($filter)) {
 
 $query .= " ORDER BY category_ID DESC";
 
-// Debugging: Log the query
-error_log("Category Query: " . $query);
-
 $result = mysqli_query($conn, $query);
 
 $json = array();
@@ -30,9 +27,6 @@ while ($row = $result->fetch_assoc()) {
         'big_category' => htmlspecialchars($row['big_category']),
     );
 }
-
-// Debugging: Log the JSON response
-error_log("Category JSON Response: " . json_encode($json));
 
 echo json_encode($json);
 ?>

@@ -81,6 +81,18 @@ if (isset($_SESSION['user_id']) || session_id()) {
 <div class="announcement" id="announcement"></div>
     <?php include 'files/navbar.php'; ?>
 
+    <div id="cartNotification" class="cart-notification" style="display: none;">
+    <div class="notification-content">
+        <img id="notificationImage" src="" alt="Product Image" class="notification-image">
+        <div class="notification-text">
+            <p id="notificationName" class="notification-name"></p>
+            <p id="notificationPrice" class="notification-price"></p>
+            <p class="notification-message">Produkts ievietots grozā</p>
+            <button class="btn btn-primary" onclick="window.location.href='cart.php'">Apskatīt grozu</button>
+        </div>
+    </div>
+</div>
+
     <div class="container" style="margin-top: 75px;"> 
     <div class="container upper mt-3">
         <button class="btn" onclick="history.back()" style="background: none; border: none; font-size: 1.5rem; color: inherit; padding: 0; margin-bottom: 10px;">
@@ -222,6 +234,8 @@ if (isset($_SESSION['user_id']) || session_id()) {
         </div>
     </div>
 </div>
+
+ <?php include 'files/messages.php'; ?>
 
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
