@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 'moder'])) {
+if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
     header('Location: ../index.php'); // Redirect to the main page
     exit();
 }
@@ -26,6 +26,7 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 
     <link rel="stylesheet" href="styles.css">
 </head>
 <body id="userPage">
+    <div id="alertContainer" class="container mt-3"></div>
     <?php include 'navbar.php'; ?>
     <div class="content">
         <div class="heading-container">

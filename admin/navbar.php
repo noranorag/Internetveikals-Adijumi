@@ -1,3 +1,4 @@
+
 <div class="navbar collapse show" id="sidebar">
     <div class="user-info">
         <i class="fas fa-user-circle"></i>
@@ -18,7 +19,9 @@
     <a href="product.php">Preces</a>
     <a href="gallery.php">Galerija</a>
     <a href="fairs.php">Tirdziņi</a>
-    <a href="user.php">Lietotāji</a>
+    <?php if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin'): ?>
+        <a href="user.php">Lietotāji</a>
+    <?php endif; ?>
     <a class="logout" href="../database/logout.php"><i class="fas fa-sign-out-alt"></i> Izlogoties</a>
 </div>
 <button class="btn btn-arrow toggle-btn" type="button" data-toggle="collapse" data-target="#sidebar" aria-expanded="true" aria-controls="sidebar">

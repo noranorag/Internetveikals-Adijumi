@@ -26,6 +26,7 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 
     <link rel="stylesheet" href="styles.css">
 </head>
 <body id="categoryPage">
+    <div id="alertContainer" class="container mt-3"></div>
     <?php include 'navbar.php'; ?>
     <div class="content">
         <div class="heading-container">
@@ -109,23 +110,23 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 
         </div>
     </div>
 
-        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteModalLabel">Apstiprināt dzēšanu</h5>
-                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Vai tiešām vēlies dzēst šo kategoriju?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Atcelt</button>
-                        <button type="button" class="btn btn-danger" id="confirmDelete">Dzēst</button>
-                    </div>
-                </div>
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Apstiprināt dzēšanu</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Vai tiešām vēlies dzēst šo kategoriju?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Atcelt</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Dzēst</button>
             </div>
         </div>
+    </div>
+</div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="script-functions.js"></script>

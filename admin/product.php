@@ -25,9 +25,9 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
-    <script src="../scripts.js" defer></script>
 </head>
 <body id="productPage">
+    <div id="alertContainer" class="container mt-3"></div>
     <?php include 'navbar.php'; ?>
     <div class="content">
         <div class="heading-container">
@@ -80,9 +80,8 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 
                 </table>
             </div>
             <div>
-            <nav aria-label="Product page navigation">
-                <ul class="pagination justify-content-center product-pagination">
-                </ul>
+            <nav>
+                <ul id="pagination" class="pagination justify-content-center"></ul>
             </nav>
 
     <div class="modal" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">

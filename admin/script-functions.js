@@ -104,47 +104,77 @@ $(document).ready(function () {
 
     
     $('#categoryForm').submit(function (e) {
-        e.preventDefault();
-    
-        const formData = {
-            id: $('#categoryId').val(),
-            name: $('#categoryName').val(),
-            big_category: $('#bigCategory').val()
-        };
-    
-        const url = isEditMode
-            ? '../database/category_edit.php' 
-            : '../database/category_add.php'; 
-    
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data: formData,
-            success: function (response) {
-                $('#categoryModal').modal('hide');
-                $('#categoryForm')[0].reset();
-                fetchCategories();
-            },
-            error: function () {
-                alert(isEditMode ? "Neizdevās rediģēt kategoriju!" : "Neizdevās pievienot kategoriju!");
+    e.preventDefault();
+
+    const formData = {
+        id: $('#categoryId').val(),
+        name: $('#categoryName').val(),
+        big_category: $('#bigCategory').val()
+    };
+
+    const url = isEditMode
+        ? '../database/category_edit.php' 
+        : '../database/category_add.php'; 
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: formData,
+        success: function (response) {
+            $('#categoryModal').modal('hide');
+            $('#categoryForm')[0].reset();
+            fetchCategories();
+
+            // Show success notification
+            if (isEditMode) {
+                showAlert('Veiksmīgi rediģēta kategorija', 'success');
+            } else {
+                showAlert('Veiksmīgi pievienota kategorija', 'success');
             }
-        });
+        },
+        error: function () {
+            alert(isEditMode ? "Neizdevās rediģēt kategoriju!" : "Neizdevās pievienot kategoriju!");
+        }
     });
+});
 
     $(document).on('click', '.category-delete', function (e) {
         e.preventDefault();
-        deleteCategoryId = $(e.currentTarget).closest('tr').attr("category_ID"); 
-        $('#deleteModal').modal('show'); 
+        console.log("Delete button clicked.");
+        deleteCategoryId = $(e.currentTarget).closest('tr').attr("category_ID");
+        console.log("Delete Category ID set to:", deleteCategoryId);
+        $('#deleteModal').modal('show');
+        console.log("Deletion modal opened.");
     });
 
-    $('#confirmDelete').click(function () {
-        if (deleteCategoryId) {
-            $.post('../database/category_delete.php', { id: deleteCategoryId }, function (response) {
-                $('#deleteModal').modal('hide'); 
-                fetchCategories(); 
-            });
-        }
-    });
+    // Handle confirm delete button click
+   $(document).on('click', '#confirmDelete', function () {
+    if (deleteCategoryId) {
+        $.post('../database/category_delete.php', { id: deleteCategoryId }, function (response) {
+            try {
+                const result = JSON.parse(response);
+                if (result.success) {
+                    $('#deleteModal').modal('hide');
+                    fetchCategories();
+
+                    // Show success notification
+                    showAlert('Veiksmīgi dzēsta kategorija', 'success');
+                } else {
+                    showAlert(result.error || 'Neizdevās dzēst kategoriju.', 'danger');
+                }
+            } catch (e) {
+                showAlert('Neizdevās apstrādāt servera atbildi.', 'danger');
+            }
+        }).fail(function () {
+            showAlert('Neizdevās nosūtīt pieprasījumu.', 'danger');
+        });
+    }
+});
+
+    $('#deleteModal').on('shown.bs.modal', function () {
+    console.log('Delete modal shown');
+    console.log('Confirm Delete button exists:', $('#confirmDelete').length > 0);
+});
 
     function searchCategories() {
         const searchQuery = $('#searchInput').val().trim(); 
@@ -207,8 +237,7 @@ $(document).ready(function () {
 
 
 
-
-
+    let isProductEditMode = false; 
 
 
     fetchProducts();
@@ -287,43 +316,42 @@ $(document).ready(function () {
     });
    
     function populateCategoryDropdown(selectedCategoryId = null, dropdownId = 'category') {
-        return new Promise((resolve, reject) => {
-            const categoryDropdown = $(`#${dropdownId}`);
-            categoryDropdown.empty();
-    
-            if (dropdownId === 'filterCategory') {
-                categoryDropdown.append('<option value="">Visas kategorijas</option>');
-            } else {
-                categoryDropdown.append('<option value="" selected>Izvēlies kategoriju</option>');
-            }
-    
-            $.ajax({
-                url: '../database/category_list.php',
-                type: 'GET',
-                success: function (response) {
-                    try {
-                        const categories = JSON.parse(response);
-    
-                        categories.forEach(category => {
-                            const isSelected = selectedCategoryId == category.id ? 'selected' : '';
-                            categoryDropdown.append(
-                                `<option value="${category.id}" ${isSelected}>${category.name}</option>`
-                            );
-                        });
+    return new Promise((resolve, reject) => {
+        const categoryDropdown = $(`#${dropdownId}`);
+        categoryDropdown.empty();
 
-                        resolve();
-                    } catch (e) {
-                        console.error("Error parsing categories:", e);
-                        reject();
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error fetching categories:", error);
+        if (dropdownId === 'filterCategory') {
+            categoryDropdown.append('<option value="">Visas kategorijas</option>');
+        } else {
+            categoryDropdown.append('<option value="" selected>Izvēlies kategoriju</option>');
+        }
+
+        $.ajax({
+            url: '../database/category_list.php',
+            type: 'GET',
+            success: function (response) {
+                try {
+                    const categories = JSON.parse(response);
+
+                    categories.forEach(category => {
+                        const optionText = `${category.name} (${category.big_category})`; // Pievieno big_category blakus nosaukumam
+                        const isSelected = selectedCategoryId && selectedCategoryId == category.id ? 'selected' : '';
+                        categoryDropdown.append(`<option value="${category.id}" ${isSelected}>${optionText}</option>`);
+                    });
+
+                    resolve();
+                } catch (e) {
+                    console.error("Error parsing categories:", e);
                     reject();
                 }
-            });
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching categories:", error);
+                reject();
+            }
         });
-    }
+    });
+}
 
     $('#filterCategory').on('change', function () {
         const selectedCategory = $(this).val(); 
@@ -467,67 +495,56 @@ $(document).ready(function () {
 
     
 
-    let isProductEditMode = false; 
 
     
     $(document).on('click', '#addProductButton', function () {
-        isProductEditMode = false;
-    
-        
-        $('#productForm')[0].reset();
-        $('#productId').val("");
-        $('#imagePreview').hide();
-        $('#imagePreview').attr('src', '');
-        $('#imagePath').val('');
-    
-        
-        $('#addProductModalLabel').text("Pievienot preci");
-    
-        
-        populateCategoryDropdown()
-            .then(() => {
-                $('#addProductModal').modal('show'); 
-            })
-            .catch(() => {
-                alert("Neizdevās ielādēt kategorijas!");
-            });
-    });
+    isProductEditMode = false; // Ensure this is set to false
+
+    $('#productForm')[0].reset();
+    $('#productId').val("");
+    $('#imagePreview').hide();
+    $('#imagePreview').attr('src', '');
+    $('#imagePath').val('');
+
+    $('#addProductModalLabel').text("Pievienot preci");
+
+    populateCategoryDropdown()
+        .then(() => {
+            $('#addProductModal').modal('show');
+        })
+        .catch(() => {
+            alert("Neizdevās ielādēt kategorijas!");
+        });
+});
 
     $('#addProductModal').on('hidden.bs.modal', function () {
-        isProductEditMode = false; 
-        $('#productForm')[0].reset(); 
-        $('#productId').val(""); 
-        $('#imagePreview').hide(); 
-        $('#imagePreview').attr('src', ''); 
-    
-        
-        $('#addProductModalLabel').text("Pievienot preci");
-    
-        
-        $('#addProductModal').find(':focus').blur();
-    });
+    // Do not reset isProductEditMode here
+    $('#productForm')[0].reset();
+    $('#productId').val("");
+    $('#imagePreview').hide();
+    $('#imagePreview').attr('src', '');
+    $('#addProductModalLabel').text("Pievienot preci");
+    $('#addProductModal').find(':focus').blur();
+});
 
 
     
     $(document).on('click', '.product-edit', function (e) {
-        e.preventDefault();
-        isProductEditMode = true;
-        const productId = $(this).data('id');
-    
-        
-        $.ajax({
-            url: '../database/product_get.php',
-            type: 'GET',
-            data: { id: productId },
-            success: function (response) {
-                const product = JSON.parse(response);
-    
-                if (product.error) {
-                    alert(product.error);
-                    return;
-                }
-    
-                
+    e.preventDefault();
+    isProductEditMode = true; // Ensure this is set to true
+    const productId = $(this).data('id');
+
+    $.ajax({
+        url: '../database/product_get.php',
+        type: 'GET',
+        data: { id: productId },
+        success: function (response) {
+            console.log('Server response:', response); // Debugging log
+
+            try {
+                const product = JSON.parse(response); // Parse the response
+
+                // Populate the form fields with product data
                 $('#productId').val(product.product_ID);
                 $('#productName').val(product.name);
                 $('#shortDescription').val(product.short_description);
@@ -539,8 +556,8 @@ $(document).ready(function () {
                 $('#price').val(product.price);
                 $('#quantity').val(product.stock_quantity);
                 $('#imagePath').val(product.image || '');
-    
-                
+
+                // Populate the category dropdown
                 populateCategoryDropdown(product.ID_category)
                     .then(() => {
                         $('#addProductModalLabel').text("Rediģēt preci");
@@ -549,160 +566,111 @@ $(document).ready(function () {
                     .catch(() => {
                         alert("Neizdevās ielādēt kategorijas!");
                     });
-    
-                
+
+                // Show the product image preview
                 if (product.image) {
                     const imagePath = product.image.startsWith('images/') ? `../${product.image}` : product.image;
                     $('#imagePreview').attr('src', imagePath).show();
                 } else {
                     $('#imagePreview').hide();
                 }
-            },
-            error: function () {
-                alert("Neizdevās ielādēt preces datus!");
+            } catch (e) {
+                console.error('Error parsing server response:', e, response); // Debugging log
+                showAlert('Neizdevās apstrādāt servera atbildi!', 'danger');
             }
-        });
+        },
+        error: function () {
+            showAlert('Neizdevās nosūtīt pieprasījumu!', 'danger');
+        }
     });
-    
-    $(document).on('click', '.product-edit', function (e) {
-        e.preventDefault();
-        isProductEditMode = true;
-        const productId = $(this).data('id');
-    
-        
-        $.ajax({
-            url: '../database/product_get.php',
-            type: 'GET',
-            data: { id: productId },
-            success: function (response) {
-                const product = JSON.parse(response);
-    
-                if (product.error) {
-                    alert(product.error);
-                    return;
-                }
-    
-                
-                $('#productId').val(product.product_ID);
-                $('#productName').val(product.name);
-                $('#shortDescription').val(product.short_description);
-                $('#longDescription').val(product.long_description || '');
-                $('#material').val(product.material || '');
-                $('#size').val(product.size || '');
-                $('#color').val(product.color || '');
-                $('#care').val(product.care || '');
-                $('#price').val(product.price);
-                $('#quantity').val(product.stock_quantity);
-                $('#category').val(product.ID_category);
-                $('#imagePath').val(product.image || '');
-    
-                
-                $('#createdAtText').text(`Izveidots: ${product.created_at}`).show();
-                $('#editedAtText').text(`Pēdējo reizi rediģēts: ${product.edited || 'Nav rediģēts'}`).show();
-    
-                
-                populateCategoryDropdown(product.ID_category)
-                    .then(() => {
-                        $('#addProductModalLabel').text("Rediģēt preci");
-                        $('#addProductModal').modal('show');
-                    })
-                    .catch(() => {
-                        alert("Neizdevās ielādēt kategorijas!");
-                    });
-    
-                
-                if (product.image) {
-                    const imagePath = product.image.startsWith('images/') ? `../${product.image}` : product.image;
-                    $('#imagePreview').attr('src', imagePath).show();
-                } else {
-                    $('#imagePreview').hide();
-                }
-            },
-            error: function () {
-                alert("Neizdevās ielādēt preces datus!");
-            }
-        });
-    });
+});
     
     $('#productForm').submit(function (e) {
-        e.preventDefault();
-    
-        const formData = new FormData();
-        formData.append('id', $('#productId').val());
-        formData.append('name', $('#productName').val());
-        formData.append('short_description', $('#shortDescription').val());
-        formData.append('long_description', $('#longDescription').val());
-        formData.append('material', $('#material').val());
-        formData.append('size', $('#size').val());
-        formData.append('color', $('#color').val());
-        formData.append('care', $('#care').val());
-        formData.append('price', $('#price').val());
-        formData.append('stock_quantity', $('#quantity').val());
-        formData.append('category_id', $('#category').val());
-    
-        const imageFile = $('#image')[0].files[0];
-        if (imageFile) {
-            formData.append('image', imageFile);
-        } else {
-            formData.append('current_image', $('#imagePath').val());
-        }
-    
-        const url = isProductEditMode
-            ? '../database/product_edit.php'
-            : '../database/product_add.php';
-    
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                console.log('Server response:', response);
-    
-                try {
-                    const parsedResponse = typeof response === 'string' ? JSON.parse(response) : response;
-    
-                    if (parsedResponse.success) {
-                        
-                        $('#addProductModal').modal('hide');
-    
-                        
-                        fetchProducts();
-                    } else if (parsedResponse.error) {
-                        
-                        alert('Error: ' + parsedResponse.error);
-                    }
-                } catch (e) {
-                    console.error('Failed to parse server response:', e);
-                    alert('Neizdevās apstrādāt servera atbildi!');
-                }
-            },
-            error: function (xhr, status, error) {
-                alert("Neizdevās nosūtīt pieprasījumu!");
-                console.error('AJAX error:', status, error);
-            }
-        });
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('id', $('#productId').val());
+    formData.append('name', $('#productName').val());
+    formData.append('short_description', $('#shortDescription').val());
+    formData.append('long_description', $('#longDescription').val());
+    formData.append('material', $('#material').val());
+    formData.append('size', $('#size').val());
+    formData.append('color', $('#color').val());
+    formData.append('care', $('#care').val());
+    formData.append('price', $('#price').val());
+    formData.append('stock_quantity', $('#quantity').val());
+    formData.append('category_id', $('#category').val());
+
+    const imageFile = $('#image')[0].files[0];
+    if (imageFile) {
+        formData.append('image', imageFile);
+    } else {
+        formData.append('current_image', $('#imagePath').val());
+    }
+
+    const url = isProductEditMode
+        ? '../database/product_edit.php'
+        : '../database/product_add.php';
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+    console.log('Server response:', response); // Debugging log
+    try {
+        const result = typeof response === 'string' ? JSON.parse(response) : response;
+
+        if (result.success) {
+    console.log('isProductEditMode:', isProductEditMode); // Debugging log
+    $('#addProductModal').modal('hide');
+    $('#productForm')[0].reset();
+    fetchProducts();
+
+    // Show success notification
+    if (isProductEditMode) {
+        showAlert('Veiksmīgi rediģēts produkts!', 'success');
+    } else {
+        showAlert('Veiksmīgi pievienots produkts!', 'success');
+    }
+}
+    } catch (e) {
+        console.error('Error parsing server response:', e, response); // Debugging log
+        showAlert('Neizdevās apstrādāt servera atbildi!', 'danger');
+    }
+}
     });
+});
+
 
 
     $(document).on('click', '.product-delete', function (e) {
-        e.preventDefault();
-        const deleteProductId = $(e.currentTarget).closest('tr').find('.product-edit').data('id'); 
-        $('#deleteModal').modal('show'); 
-    
-        
-        $('#confirmDelete').off('click').on('click', function () {
-            if (deleteProductId) {
-                $.post('../database/product_delete.php', { id: deleteProductId }, function (response) {
-                    $('#deleteModal').modal('hide'); 
-                    fetchProducts(); 
-                }).fail(function () {
-                    alert("Neizdevās dzēst preci!"); 
-                });
+    e.preventDefault();
+    const deleteProductId = $(e.currentTarget).data('id'); // Directly get the ID
+    $('#deleteModal').modal('show');
+
+    $('#confirmDelete').off('click').on('click', function () {
+        $.post('../database/product_delete.php', { id: deleteProductId }, function (response) {
+            try {
+                const result = JSON.parse(response);
+                if (result.success) {
+                    $('#deleteModal').modal('hide');
+                    fetchProducts();
+                    showAlert('Veiksmīgi dzēsts produkts!', 'success');
+                } else {
+                    showAlert(result.error || 'Neizdevās dzēst produktu!', 'danger');
+                }
+            } catch (e) {
+                console.error('Invalid JSON response:', response);
+                showAlert('Neizdevās apstrādāt servera atbildi!', 'danger');
             }
+        }).fail(function () {
+            showAlert('Neizdevās nosūtīt pieprasījumu!', 'danger');
         });
     });
+});
 
 
 
@@ -778,68 +746,76 @@ $(document).ready(function () {
         
 
         $(document).on('submit', '#addImageForm', function (e) {
-            e.preventDefault(); 
-        
-            const formData = new FormData(this); 
-        
-            $.ajax({
-                url: '../database/gallery_add.php', 
-                type: 'POST',
-                data: formData,
-                processData: false, 
-                contentType: false, 
-                success: function (response) {
-                    try {
-                        const result = JSON.parse(response);
-                        if (result.success) {
-                            $('#addImageModal').modal('hide'); 
-                            $('#addImageForm')[0].reset(); 
-                            fetchGallery(); 
-                            alert('Bilde veiksmīgi pievienota!');
-                        } else {
-                            alert(result.error || 'Neizdevās pievienot bildi.');
-                        }
-                    } catch (e) {
-                        console.error('Invalid JSON response:', response);
-                        alert('Neizdevās apstrādāt servera atbildi!');
-                    }
-                },
-                error: function () {
-                    alert('Neizdevās nosūtīt pieprasījumu!');
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    $.ajax({
+        url: '../database/gallery_add.php',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            try {
+                const result = JSON.parse(response);
+                if (result.success) {
+                    $('#addImageModal').modal('hide');
+                    $('#addImageForm')[0].reset();
+                    fetchGallery();
+
+                    // Show success notification
+                    showAlert('Veiksmīgi pievienota bilde!', 'success');
+                } else {
+                    showAlert(result.error || 'Neizdevās pievienot bildi.', 'danger');
                 }
-            });
-        });
+            } catch (e) {
+                console.error('Invalid JSON response:', response);
+                showAlert('Neizdevās apstrādāt servera atbildi!', 'danger');
+            }
+        },
+        error: function () {
+            showAlert('Neizdevās nosūtīt pieprasījumu!', 'danger');
+        }
+    });
+});
 
         $(document).on('click', '.approve-image, .decline-image', function (e) {
-            e.preventDefault();
-        
-            const button = $(this);
-            const galleryId = button.data('id');
-            const status = button.hasClass('approve-image') ? 'approved' : 'declined';
-        
-            $.ajax({
-                url: '../database/gallery_update_status.php',
-                type: 'POST',
-                data: { gallery_id: galleryId, status: status },
-                success: function (response) {
-                    try {
-                        const result = JSON.parse(response);
-                        if (result.success) {
-                            alert('Status updated successfully!');
-                            fetchGallery(); 
-                        } else {
-                            alert(result.error || 'Failed to update status.');
-                        }
-                    } catch (e) {
-                        console.error('Invalid JSON response:', response);
-                        alert('Failed to process server response.');
+    e.preventDefault();
+
+    const button = $(this);
+    const galleryId = button.data('id');
+    const status = button.hasClass('approve-image') ? 'approved' : 'declined';
+
+    $.ajax({
+        url: '../database/gallery_update_status.php',
+        type: 'POST',
+        data: { gallery_id: galleryId, status: status },
+        success: function (response) {
+            try {
+                const result = JSON.parse(response);
+                if (result.success) {
+                    fetchGallery();
+
+                    // Show success notification
+                    if (status === 'approved') {
+                        showAlert('Veiksmīgi apstiprināta bilde!', 'success');
+                    } else {
+                        showAlert('Veiksmīgi noraidīta bilde!', 'success');
                     }
-                },
-                error: function () {
-                    alert('Failed to send request.');
+                } else {
+                    showAlert(result.error || 'Neizdevās atjaunināt statusu.', 'danger');
                 }
-            });
-        });
+            } catch (e) {
+                console.error('Invalid JSON response:', response);
+                showAlert('Neizdevās apstrādāt servera atbildi!', 'danger');
+            }
+        },
+        error: function () {
+            showAlert('Neizdevās nosūtīt pieprasījumu!', 'danger');
+        }
+    });
+});
 
         $('#statusFilter').on('change', function () {
             const selectedStatus = $(this).val(); 
@@ -1031,78 +1007,94 @@ $(document).ready(function () {
         });
         
         $('#marketForm').off('submit').on('submit', function (e) {
-            e.preventDefault();
-        
-            const formData = new FormData(this);
-        
-            const dateInput = $('#marketDate').val();
-            const dateParts = dateInput.split('/');
-            const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
-            formData.set('date', formattedDate);
-        
-            const fairId = $('#fairId').val();
-            formData.set('id', fairId);
-        
-            const imageFile = $('#marketImage')[0].files[0];
-            if (imageFile) {
-                formData.set('image', imageFile);
-            } else {
-                formData.set('current_image', $('#currentImagePath').val());
-            }
-        
-            $.ajax({
-                url: isFairEditMode ? '../database/fair_edit.php' : '../database/fair_add.php',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function (response) {
-                    const result = JSON.parse(response);
-        
-                    if (result.success) {
-                        $('#addMarketModal').modal('hide');
-                        $('#marketForm')[0].reset();
-                        fetchFairs();
+    e.preventDefault();
+
+    const formData = new FormData(this);
+
+    const dateInput = $('#marketDate').val();
+    const dateParts = dateInput.split('/');
+    const formattedDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
+    formData.set('date', formattedDate);
+
+    const fairId = $('#fairId').val();
+    formData.set('id', fairId);
+
+    const imageFile = $('#marketImage')[0].files[0];
+    if (imageFile) {
+        formData.set('image', imageFile);
+    } else {
+        formData.set('current_image', $('#currentImagePath').val());
+    }
+
+    $.ajax({
+        url: isFairEditMode ? '../database/fair_edit.php' : '../database/fair_add.php',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            try {
+                const result = JSON.parse(response);
+                if (result.success) {
+                    $('#addMarketModal').modal('hide');
+                    $('#marketForm')[0].reset();
+                    fetchFairs();
+
+                    // Show success notification
+                    if (isFairEditMode) {
+                        showAlert('Veiksmīgi rediģēts tirdziņš!', 'success');
                     } else {
-                        alert(result.error || "Neizdevās saglabāt tirdziņu!");
+                        showAlert('Veiksmīgi pievienots tirdziņš!', 'success');
                     }
-                },
-                error: function () {
-                    alert("Neizdevās nosūtīt pieprasījumu!");
+                } else {
+                    showAlert(result.error || 'Neizdevās saglabāt tirdziņu!', 'danger');
                 }
-            });
-        });
+            } catch (e) {
+                console.error('Invalid JSON response:', response);
+                showAlert('Neizdevās apstrādāt servera atbildi!', 'danger');
+            }
+        },
+        error: function () {
+            showAlert('Neizdevās nosūtīt pieprasījumu!', 'danger');
+        }
+    });
+});
     
         
         $(document).on('click', '.delete-fair', function (e) {
-            e.preventDefault();
-            const fairId = $(this).data('id'); 
-        
-            
-            $('#deleteModal').modal('show');
-        
-            
-            $('#confirmDelete').off('click').on('click', function () {
-                $.ajax({
-                    url: '../database/fair_delete.php',
-                    type: 'POST',
-                    data: { id: fairId },
-                    success: function (response) {
-                        const result = JSON.parse(response);
-        
-                        if (result.success) {
-                            $('#deleteModal').modal('hide'); 
-                            fetchFairs(); 
-                        } else {
-                            alert(result.error || "Neizdevās dzēst tirdziņu!");
-                        }
-                    },
-                    error: function () {
-                        alert("Neizdevās nosūtīt pieprasījumu!");
+    e.preventDefault();
+    const fairId = $(this).data('id');
+
+    $('#deleteModal').modal('show');
+
+    $('#confirmDelete').off('click').on('click', function () {
+        $.ajax({
+            url: '../database/fair_delete.php',
+            type: 'POST',
+            data: { id: fairId },
+            success: function (response) {
+                try {
+                    const result = JSON.parse(response);
+                    if (result.success) {
+                        $('#deleteModal').modal('hide');
+                        fetchFairs();
+
+                        // Show success notification
+                        showAlert('Veiksmīgi dzēsts tirdziņš!', 'success');
+                    } else {
+                        showAlert(result.error || 'Neizdevās dzēst tirdziņu!', 'danger');
                     }
-                });
-            });
+                } catch (e) {
+                    console.error('Invalid JSON response:', response);
+                    showAlert('Neizdevās apstrādāt servera atbildi!', 'danger');
+                }
+            },
+            error: function () {
+                showAlert('Neizdevās nosūtīt pieprasījumu!', 'danger');
+            }
         });
+    });
+});
     
         $('#fairSearchInput').on('input', function () {
             const searchQuery = $(this).val().trim(); 
@@ -1345,78 +1337,92 @@ $(document).ready(function () {
     });
     
     $('#userForm').submit(function (e) {
-        e.preventDefault();
-    
-        const formData = {
-            id: editingUserId,
-            name: $('#userFirstName').val(),
-            surname: $('#userLastName').val(),
-            phone: $('#userPhone').val(),
-            email: $('#userEmail').val(),
-            role: $('#userRole').val(),
-            password: $('#userPassword').val()
-        };
-    
-        const url = isUserEditMode
-            ? '../database/user_edit.php'
-            : '../database/user_add.php';
-    
-        $.ajax({
-            url: url,
-            type: 'POST',
-            data: formData,
-            success: function (response) {
+    e.preventDefault();
+
+    const formData = {
+        id: editingUserId,
+        name: $('#userFirstName').val(),
+        surname: $('#userLastName').val(),
+        phone: $('#userPhone').val(),
+        email: $('#userEmail').val(),
+        role: $('#userRole').val(),
+        password: $('#userPassword').val()
+    };
+
+    const url = isUserEditMode
+        ? '../database/user_edit.php'
+        : '../database/user_add.php';
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: formData,
+        success: function (response) {
+            try {
                 const result = JSON.parse(response);
                 if (result.success) {
                     $('#addUserModal').modal('hide');
                     $('#userForm')[0].reset();
                     fetchUsers();
+
+                    // Show success notification
+                    if (isUserEditMode) {
+                        showAlert('Veiksmīgi rediģēts lietotājs!', 'success');
+                    } else {
+                        showAlert('Veiksmīgi pievienots lietotājs!', 'success');
+                    }
                 } else {
-                    alert(result.error || "Neizdevās saglabāt lietotāju!");
+                    showAlert(result.error || 'Neizdevās saglabāt lietotāju!', 'danger');
                 }
-            },
-            error: function () {
-                alert("Neizdevās nosūtīt pieprasījumu!");
+            } catch (e) {
+                console.error('Invalid JSON response:', response);
+                showAlert('Neizdevās apstrādāt servera atbildi!', 'danger');
             }
-        });
+        },
+        error: function () {
+            showAlert('Neizdevās nosūtīt pieprasījumu!', 'danger');
+        }
     });
+});
 
     let deleteUserId = null; 
 
     
     $(document).on('click', '.delete-user', function (e) {
-        e.preventDefault();
-        deleteUserId = $(this).data('id'); 
-        $('#deleteModal').modal('show'); 
-    });
+    e.preventDefault();
+    deleteUserId = $(this).data('id');
+    $('#deleteModal').modal('show');
+});
 
-    
-    $('#confirmDelete').off('click').on('click', function () {
-        if (deleteUserId) {
-            $.ajax({
-                url: '../database/user_delete.php',
-                type: 'POST',
-                data: { id: deleteUserId },
-                success: function (response) {
-                    try {
-                        const result = JSON.parse(response);
-                        if (result.success) {
-                            $('#deleteModal').modal('hide'); 
-                            fetchUsers(); 
-                        } else {
-                            alert(result.error || "Neizdevās dzēst lietotāju!");
-                        }
-                    } catch (e) {
-                        console.error('Invalid JSON response:', response);
-                        alert("Neizdevās apstrādāt servera atbildi!");
+$('#confirmDelete').off('click').on('click', function () {
+    if (deleteUserId) {
+        $.ajax({
+            url: '../database/user_delete.php',
+            type: 'POST',
+            data: { id: deleteUserId },
+            success: function (response) {
+                try {
+                    const result = JSON.parse(response);
+                    if (result.success) {
+                        $('#deleteModal').modal('hide');
+                        fetchUsers();
+
+                        // Show success notification
+                        showAlert('Veiksmīgi dzēsts lietotājs!', 'success');
+                    } else {
+                        showAlert(result.error || 'Neizdevās dzēst lietotāju!', 'danger');
                     }
-                },
-                error: function () {
-                    alert("Neizdevās nosūtīt pieprasījumu!");
+                } catch (e) {
+                    console.error('Invalid JSON response:', response);
+                    showAlert('Neizdevās apstrādāt servera atbildi!', 'danger');
                 }
-            });
-        }
-    });
+            },
+            error: function () {
+                showAlert('Neizdevās nosūtīt pieprasījumu!', 'danger');
+            }
+        });
+    }
+});
 
     
     $('#userSearchInput').on('input', function () {
@@ -1785,16 +1791,24 @@ function toggleCategory(id) {
     elem.style.display = elem.style.display === 'none' ? 'block' : 'none';
 }
 
-function fetchProductsByCategory(bigCategory, subCategory) {
+function fetchProductsByCategory(bigCategory, subCategory, setId) {
     $.ajax({
         url: '../database/product_list.php',
         type: 'GET',
         success: function (response) {
             const products = JSON.parse(response);
-            const filteredProducts = products.filter(product => 
-                product.big_category === bigCategory && product.category_name === subCategory
-            );
 
+            // Fetch the products already in the set
+            const setProducts = $('#modalProductsContainer .product-display').map(function () {
+                return $(this).find('p:first').text().replace('ID: ', '').trim(); // Extract product ID
+            }).get();
+
+            // Filter products that are not already in the set
+            const filteredProducts = products.filter(product => 
+                product.big_category === bigCategory &&
+                product.category_name === subCategory &&
+                !setProducts.includes(product.id.toString())
+            );
 
             let productTemplate = '';
             filteredProducts.forEach(product => {
@@ -1816,10 +1830,9 @@ function fetchProductsByCategory(bigCategory, subCategory) {
             const sanitizedId = `${bigCategory.replace(/\s+/g, '-').toLowerCase()}-${subCategory.replace(/\s+/g, '-').toLowerCase()}`;
             $(`#${sanitizedId}`).html(productTemplate).show();
 
-            
+            // Add click event for adding products to the set
             $(`#${sanitizedId} .add-to-set`).off('click').on('click', function () {
                 const productId = $(this).data('product-id');
-                const setId = $('#setDetailsModal').data('set-id'); 
                 addProductToSet(productId, setId);
             });
         },
@@ -1834,7 +1847,8 @@ function toggleSubCategory(bigCategory, subCategoryId) {
     if (elem.style.display === 'none') {
         elem.style.display = 'block';
         const subCategoryName = $(`#${subCategoryId}`).data('subcategory');
-        fetchProductsByCategory(bigCategory, subCategoryName);
+        const setId = $('#setDetailsModal').data('set-id'); // Get the current set ID
+        fetchProductsByCategory(bigCategory, subCategoryName, setId);
     } else {
         elem.style.display = 'none';
     }
