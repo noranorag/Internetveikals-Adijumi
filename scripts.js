@@ -396,7 +396,7 @@ function showCartNotification(productID) {
 
 function updateCartCount() {
     console.log('updateCartCount: Fetching cart count...');
-    fetch('user-database/get_cart_counts.php') // Updated to match the new file name
+    fetch('user-database/get_cart_counts.php') // Ensure this path is correct
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -433,3 +433,11 @@ function updateCartCount() {
             console.error('updateCartCount: Error fetching cart count:', error);
         });
 }
+
+document.querySelector('.close').addEventListener('click', () => {
+    $('#loginModal').modal('hide');
+});
+
+document.querySelector('.btn-secondary').addEventListener('click', () => {
+    $('#loginModal').modal('hide');
+});

@@ -3,28 +3,54 @@ session_start();
 require 'db_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $name = $_POST['first_name'];
-    $surname = $_POST['last_name'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-    $password = $_POST['password'];
+    $name = trim($_POST['first_name']);
+    $surname = trim($_POST['last_name']);
+    $email = trim($_POST['email']);
+    $phone = trim($_POST['phone']);
+    $password = trim($_POST['password']);
 
+    // Validate input lengths
+    if (strlen($name) > 50) {
+        header('Location: ../register.php?error=Vārds nedrīkst pārsniegt 50 rakstzīmes!');
+        exit();
+    }
+    if (strlen($surname) > 50) {
+        header('Location: ../register.php?error=Uzvārds nedrīkst pārsniegt 50 rakstzīmes!');
+        exit();
+    }
+    if (strlen($email) > 255) {
+        header('Location: ../register.php?error=E-pasts nedrīkst pārsniegt 255 rakstzīmes!');
+        exit();
+    }
+    if (strlen($phone) > 12) {
+        header('Location: ../register.php?error=Tālrunis nedrīkst pārsniegt 12 rakstzīmes!');
+        exit();
+    }
+    if (strlen($password) > 255) {
+        header('Location: ../register.php?error=Parole nedrīkst pārsniegt 255 rakstzīmes!');
+        exit();
+    }
+
+    // Check if email already exists
     $stmt = $conn->prepare("SELECT * FROM user WHERE email = ?");
     if ($stmt === false) {
-        die('Prepare failed: ' . htmlspecialchars($conn->error));
+        header('Location: ../register.php?error=Datubāzes kļūda!');
+        exit();
     }
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        echo "Email already exists.";
+        header('Location: ../register.php?error=E-pasts jau tiek izmantots!');
+        exit();
     } else {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
         $stmt = $conn->prepare("INSERT INTO user (name, surname, email, phone, password) VALUES (?, ?, ?, ?, ?)");
         if ($stmt === false) {
-            die('Prepare failed: ' . htmlspecialchars($conn->error));
+            header('Location: ../register.php?error=Datubāzes kļūda!');
+            exit();
         }
         $stmt->bind_param("sssss", $name, $surname, $email, $phone, $hashed_password);
 
@@ -37,7 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Location: ../index.php");
             exit();
         } else {
-            echo "Error: " . htmlspecialchars($stmt->error);
+            header('Location: ../register.php?error=Kļūda reģistrējoties!');
+            exit();
         }
     }
 }

@@ -16,7 +16,8 @@ $query = "
         description,
         image,
         link,
-        status
+        status,
+        date
     FROM fair
     WHERE active = 'active'
     ORDER BY fair_ID DESC
@@ -35,6 +36,7 @@ if ($result) {
             'image' => htmlspecialchars($row['image']),
             'link' => htmlspecialchars($row['link']),
             'status' => htmlspecialchars($row['status']),
+            'date' => htmlspecialchars($row['date']), 
         ];
         if ($fair['status'] === 'upcoming') {
             $upcomingFairs[] = $fair;
@@ -43,6 +45,65 @@ if ($result) {
         }
     }
 }
+
+// Number of late fairs per page
+$lateFairsPerPage = 8;
+
+// Get the current page for late fairs from URL (default to 1)
+$latePage = isset($_GET['late_page']) && is_numeric($_GET['late_page']) ? (int)$_GET['late_page'] : 1;
+
+// Calculate the offset for SQL LIMIT clause
+$lateOffset = ($latePage - 1) * $lateFairsPerPage;
+
+// Query to fetch late fairs with pagination
+$lateFairsQuery = "
+    SELECT 
+        fair_ID AS id,
+        name,
+        description,
+        image,
+        link,
+        status,
+        date
+    FROM fair
+    WHERE active = 'active' AND status = 'late'
+    ORDER BY fair_ID DESC
+    LIMIT $lateFairsPerPage OFFSET $lateOffset
+";
+
+$lateFairsResult = mysqli_query($conn, $lateFairsQuery);
+
+// Fetch late fairs
+$lateFairs = [];
+if ($lateFairsResult) {
+    while ($row = mysqli_fetch_assoc($lateFairsResult)) {
+        $lateFairs[] = [
+            'id' => htmlspecialchars($row['id']),
+            'name' => htmlspecialchars($row['name']),
+            'description' => htmlspecialchars($row['description']),
+            'image' => htmlspecialchars($row['image']),
+            'link' => htmlspecialchars($row['link']),
+            'status' => htmlspecialchars($row['status']),
+            'date' => htmlspecialchars($row['date']), 
+        ];
+    }
+}
+
+// Get the total number of late fairs for pagination
+$totalLateFairsQuery = "
+    SELECT COUNT(*) AS total
+    FROM fair
+    WHERE active = 'active' AND status = 'late'
+";
+$totalLateFairsResult = mysqli_query($conn, $totalLateFairsQuery);
+$totalLateFairs = 0;
+if ($totalLateFairsResult) {
+    $row = mysqli_fetch_assoc($totalLateFairsResult);
+    $totalLateFairs = (int)$row['total'];
+}
+
+// Calculate total pages for late fairs
+$totalLatePages = ceil($totalLateFairs / $lateFairsPerPage);
 ?>
 
 <!DOCTYPE html>
@@ -70,13 +131,18 @@ if ($result) {
         <?php if (!empty($upcomingFairs)): ?>
             <div class="row">
                 <?php foreach ($upcomingFairs as $fair): ?>
-                    <div class="col-md-6 mb-2"> <!-- Reduced gap between rows further -->
-                        <div class="market-item">
-                            <img src="<?= $fair['image'] ?>" alt="<?= $fair['name'] ?>" class="market-image" data-toggle="modal" data-target="#imageModal" data-src="<?= $fair['image'] ?>">
+                    <div class="col-md-6 mb-2">
+                        <div class="market-item" data-toggle="modal" data-target="#imageModal" data-src="<?= $fair['image'] ?>">
+                            <img src="<?= $fair['image'] ?>" alt="<?= $fair['name'] ?>" class="market-image">
                             <div>
                                 <h3><?= $fair['name'] ?></h3>
-                                <p><?= $fair['description'] ?></p>
-                                <a href="<?= $fair['link'] ?>" class="market-link" target="_blank">Apskati <?= $fair['name'] ?></a>
+                                <p class="market-details">
+                                    <span class="market-date">Norisinās: <?= htmlspecialchars($fair['date']) ?></span>
+                                    <?= $fair['description'] ?>
+                                </p>
+                                <p class="market-link">
+                                    Apskati: <a href="<?= $fair['link'] ?>" target="_blank"><?= $fair['name'] ?></a>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -89,23 +155,52 @@ if ($result) {
         <!-- Late Fairs -->
         <?php if (!empty($lateFairs)): ?>
             <div class="mt-5">
-                <p class="page-heading text-left">Bijušie tirdziņi</p> <!-- Simple text without lines -->
+                <p class="page-heading text-left">Bijušie tirdziņi</p>
             </div>
             <div class="row">
                 <?php foreach ($lateFairs as $fair): ?>
-                    <div class="col-md-6 mb-2"> <!-- Reduced gap between rows further -->
-                        <div class="market-item dimmed">
-                            <img src="<?= $fair['image'] ?>" alt="<?= $fair['name'] ?>" class="market-image" data-toggle="modal" data-target="#imageModal" data-src="<?= $fair['image'] ?>">
+                    <div class="col-md-6 mb-2">
+                        <div class="market-item dimmed" data-toggle="modal" data-target="#imageModal" data-src="<?= $fair['image'] ?>">
+                            <img src="<?= $fair['image'] ?>" alt="<?= $fair['name'] ?>" class="market-image">
                             <div>
                                 <h3><?= $fair['name'] ?></h3>
-                                <p><?= $fair['description'] ?></p>
-                                <a href="<?= $fair['link'] ?>" class="market-link" target="_blank">Apskati <?= $fair['name'] ?></a>
+                                <p class="market-details">
+                                    <span class="market-date">Norisinājās: <?= htmlspecialchars($fair['date']) ?></span>
+                                    <?= $fair['description'] ?>
+                                </p>
+                                <p class="market-link">
+                                    Apskati: <a href="<?= $fair['link'] ?>" target="_blank"><?= $fair['name'] ?></a>
+                                </p>
                             </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
             </div>
+        <?php else: ?>
+            <p class="text-muted">Šobrīd nav bijušo tirdziņu.</p>
         <?php endif; ?>
+
+            <!-- Pagination for late fairs -->
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center mt-4">
+                    <!-- Previous Page Link -->
+                    <li class="page-item <?= ($latePage <= 1) ? 'disabled' : '' ?>">
+                        <a class="page-link" href="?late_page=<?= $latePage - 1 ?>" tabindex="-1">&laquo;</a>
+                    </li>
+
+                    <!-- Page Number Links -->
+                    <?php for ($i = 1; $i <= $totalLatePages; $i++): ?>
+                        <li class="page-item <?= ($latePage == $i) ? 'active' : '' ?>">
+                            <a class="page-link" href="?late_page=<?= $i ?>"><?= $i ?></a>
+                        </li>
+                    <?php endfor; ?>
+
+                    <!-- Next Page Link -->
+                    <li class="page-item <?= ($latePage >= $totalLatePages) ? 'disabled' : '' ?>">
+                        <a class="page-link" href="?late_page=<?= $latePage + 1 ?>">&raquo;</a>
+                    </li>
+                </ul>
+            </nav>
     </div>
 
     <!-- Image Modal -->

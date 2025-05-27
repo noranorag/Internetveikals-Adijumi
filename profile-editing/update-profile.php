@@ -13,6 +13,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $phone = trim($_POST['phone']);
     $email = trim($_POST['email']);
 
+    // Validate character limits
+    if (strlen($name) > 50) {
+        header('Location: profile-edit.php?error=Vārds nedrīkst pārsniegt 50 rakstzīmes!');
+        exit;
+    }
+    if (strlen($surname) > 50) {
+        header('Location: profile-edit.php?error=Uzvārds nedrīkst pārsniegt 50 rakstzīmes!');
+        exit;
+    }
+    if (strlen($phone) > 12) {
+        header('Location: profile-edit.php?error=Telefons nedrīkst pārsniegt 12 rakstzīmes!');
+        exit;
+    }
+    if (strlen($email) > 255) {
+        header('Location: profile-edit.php?error=E-pasts nedrīkst pārsniegt 255 rakstzīmes!');
+        exit;
+    }
+
     if (empty($name) || empty($surname) || empty($phone) || empty($email)) {
         header('Location: profile-edit.php?error=Visi lauki ir obligāti!');
         exit;

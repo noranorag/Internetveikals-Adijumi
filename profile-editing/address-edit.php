@@ -100,13 +100,13 @@ if ($addressId) {
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="country">Valsts</label>
-                                <input type="text" id="country" name="country" class="form-control" placeholder="Valsts" value="<?php echo htmlspecialchars($address['country']); ?>" required>
+                                <input type="text" id="country" name="country" class="form-control" placeholder="Valsts" value="<?php echo htmlspecialchars($address['country']); ?>" maxlength="50" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="city">Pilsēta</label>
-                                <input type="text" id="city" name="city" class="form-control" placeholder="Pilsēta" value="<?php echo htmlspecialchars($address['city']); ?>" required>
+                                <input type="text" id="city" name="city" class="form-control" placeholder="Pilsēta" value="<?php echo htmlspecialchars($address['city']); ?>" maxlength="50" required>
                             </div>
                         </div>
                     </div>
@@ -114,23 +114,23 @@ if ($addressId) {
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="street">Iela</label>
-                                <input type="text" id="street" name="street" class="form-control" placeholder="Iela" value="<?php echo htmlspecialchars($address['street']); ?>" required>
+                                <input type="text" id="street" name="street" class="form-control" placeholder="Iela" value="<?php echo htmlspecialchars($address['street']); ?>" maxlength="50" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="house">Mājas numurs</label>
-                                <input type="text" id="house" name="house" class="form-control" placeholder="Mājas numurs" value="<?php echo htmlspecialchars($address['house']); ?>" required>
+                                <input type="text" id="house" name="house" class="form-control" placeholder="Mājas numurs" value="<?php echo htmlspecialchars($address['house']); ?>" maxlength="30" required>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="apartment">Dzīvokļa numurs</label>
-                        <input type="text" id="apartment" name="apartment" class="form-control" placeholder="Dzīvokļa numurs" value="<?php echo htmlspecialchars($address['apartment']); ?>">
+                        <input type="text" id="apartment" name="apartment" class="form-control" placeholder="Dzīvokļa numurs" value="<?php echo htmlspecialchars($address['apartment']); ?>" maxlength="30">
                     </div>
                     <div class="form-group">
                         <label for="postal_code">Pasta indekss</label>
-                        <input type="text" id="postal_code" name="postal_code" class="form-control" placeholder="Pasta indekss" value="<?php echo htmlspecialchars($address['postal_code']); ?>" required>
+                        <input type="text" id="postal_code" name="postal_code" class="form-control" placeholder="Pasta indekss" value="<?php echo htmlspecialchars($address['postal_code']); ?>" maxlength="7" required>
                     </div>
                     <button type="submit" class="btn btn-main">Saglabāt</button>
                 </form>

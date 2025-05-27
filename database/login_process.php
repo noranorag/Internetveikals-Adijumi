@@ -2,14 +2,16 @@
 session_start();
 require 'db_connection.php';
 
+header('Content-Type: application/json'); 
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
-    $redirect = isset($_POST['redirect']) && !empty($_POST['redirect']) ? $_POST['redirect'] : '../index.php'; // Default to index.php if redirect is not set
 
     $stmt = $conn->prepare("SELECT user_ID, name, surname, email, password, role FROM user WHERE email = ?");
     if ($stmt === false) {
-        die('Prepare failed: ' . htmlspecialchars($conn->error));
+        echo json_encode(['success' => false, 'message' => 'Datubāzes kļūda.']);
+        exit();
     }
     $stmt->bind_param("s", $email);
     $stmt->execute();
@@ -28,20 +30,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['user_email'] = $user['email'];
             $_SESSION['user_role'] = $user['role'];
 
-            // Redirect based on user role
-            if (in_array($user['role'], ['admin', 'moder'])) {
-                header("Location: ../admin/index.php");
-                exit();
-            }
+            $base_url = dirname(dirname($_SERVER['SCRIPT_NAME'])); 
 
-            // Redirect to the specified location
-            header("Location: $redirect");
+            if ($user['role'] === 'admin' || $user['role'] === 'moder') {
+                $redirect = $base_url . '/admin/index.php';
+            } else if ($user['role'] === 'user') {
+                $redirect = $base_url . '/index.php';
+            } else {
+                $redirect = $base_url . '/index.php'; 
+            }
+            echo json_encode(['success' => true, 'redirect' => $redirect]);
             exit();
         } else {
-            echo "Invalid password.";
+            echo json_encode(['success' => false, 'message' => 'Nepareiza parole.']);
+            exit();
         }
     } else {
-        echo "No user found with this email.";
+        echo json_encode(['success' => false, 'message' => 'Lietotājs ar šādu e-pastu nav atrasts.']);
+        exit();
     }
 }
 ?>

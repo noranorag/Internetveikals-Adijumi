@@ -441,22 +441,27 @@ body{
 }
 
 .gallery {
-    column-count: 3;
-    column-gap: 1rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+    gap: 1rem; /* Space between items */
 }
+
 .gallery-item {
     position: relative;
-    break-inside: avoid;
-    margin-bottom: 1rem;
-    cursor: pointer;
     overflow: hidden;
+    width: 100%; /* Ensure it spans the full column width */
+    aspect-ratio: 4 / 5; /* Adjusted aspect ratio for a balanced size */
+    background-color: #f0f0f0; /* Optional: Add a background color for empty spaces */
+    max-height: 300px; /* Limit the maximum height */
+    cursor: pointer;
 }
 
 .gallery-item img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover; /* Crop the image to fit the container */
     display: block;
-    transition: opacity 0.3s ease;
+    cursor: pointer;
 }
 
 .gallery-item .overlay {
@@ -508,9 +513,22 @@ body{
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    height: 200px;
+    height: 220px;
     width: 100%;
     box-sizing: border-box;
+    position: relative; /* Add relative positioning for the date */
+}
+
+.market-details {
+    font-size: 1rem; /* Match the font size of the description */
+    color: #555; /* Match the color of the description */
+    margin: 10px 0; /* Add spacing above and below */
+    line-height: 1.5; /* Adjust line height for readability */
+}
+
+.market-details .market-date {
+    font-weight: bold; /* Make the date bold */
+    margin-right: 3px; /* Add spacing between the date and description */
 }
 
 .market-item img {
@@ -534,7 +552,7 @@ body{
 
 .market-item p {
     font-size: 1rem;
-    margin: 10px 0;
+    margin: 5px 0;
 }
 
 .market-item .btn {
@@ -542,15 +560,26 @@ body{
 }
 
 .market-link {
-    color: var(--main);
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s ease;
+    color: rgb(80, 80, 80); /* Change the link color to black */
+    font-size: 1rem; /* Make the font size smaller */
+    text-decoration: none; /* Remove underline */
+    font-weight: bold; /* Make the font weight normal */
+}
+
+.market-link a {
+    color: #555; /* Style the clickable name */
+    font-weight: normal; /* Make the name bold */
+    text-decoration: none; /* Remove underline */
+}
+
+.market-link a:hover {
+    color: #444444; /* Optional: Change color on hover */
+    text-decoration: underline; /* Add underline only to the link */
 }
 
 .market-link:hover {
-    color: var(--mainHover);
-    text-decoration: underline;
+    color: #444; /* Optional: Change color on hover */
+    text-decoration: underline; /* Add underline on hover */
 }
 
 .market-image {
@@ -945,6 +974,17 @@ body{
     z-index: 1050;
     overflow: hidden;
     transition: visibility 0s, opacity 0.3s ease;
+}
+
+#loginModal .modal-dialog {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0; /* Remove default Bootstrap margin */
+    position: absolute; /* Ensure proper positioning */
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust for perfect centering */
 }
 
 #loginModal.show{
@@ -1470,6 +1510,26 @@ body{
     visibility: visible;
 }
 
+
+
+.notification-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1050; /* Ensure it appears above everything else */
+    width: 90%; /* Increase width */
+    max-width: 800px; /* Set a larger maximum width */
+    pointer-events: none; /* Prevent interaction with elements behind */
+}
+
+.notification-container .alert {
+    pointer-events: auto; /* Allow interaction with the alert itself */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Add a shadow for better visibility */
+    padding: 30px; /* Increase padding for more height */
+    font-size: 1.2rem; /* Increase font size for better readability */
+    line-height: 1.5; /* Adjust line height for better spacing */
+}
 
 @media (max-width: 1240px) {
     .hero-categories {

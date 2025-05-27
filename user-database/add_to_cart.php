@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 include '../database/db_connection.php';
@@ -11,8 +12,6 @@ if (isset($data['product_ID'], $data['quantity'])) {
     $quantity = intval($data['quantity']);
     $userID = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null; // Set to NULL for guest users
     $sessionID = session_id();
-
-    error_log("add_to_cart.php: Received product_ID: $productID, quantity: $quantity, userID: $userID, sessionID: $sessionID");
 
     // Check if the specific product is already in the cart
     $stmt = $conn->prepare("
@@ -34,7 +33,6 @@ if (isset($data['product_ID'], $data['quantity'])) {
         ");
         $stmt->bind_param("issi", $quantity, $userID, $sessionID, $productID);
         $stmt->execute();
-        error_log("add_to_cart.php: Updated cart for product ID: $productID, quantity: $quantity");
     } else {
         // Insert new product into the cart
         $stmt = $conn->prepare("
@@ -43,12 +41,24 @@ if (isset($data['product_ID'], $data['quantity'])) {
         ");
         $stmt->bind_param("ssii", $sessionID, $userID, $productID, $quantity);
         $stmt->execute();
-        error_log("add_to_cart.php: Inserted into cart: product ID: $productID, quantity: $quantity");
     }
 
-    echo json_encode(['success' => true]);
+    // Fetch the updated cart count
+    $stmt = $conn->prepare("
+        SELECT SUM(quantity) AS total_quantity 
+        FROM cart 
+        WHERE (ID_user = ? AND ID_user IS NOT NULL) OR (session_ID = ? AND ID_user IS NULL)
+    ");
+    $stmt->bind_param("is", $userID, $sessionID);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $cartCount = 0;
+    if ($row = $result->fetch_assoc()) {
+        $cartCount = $row['total_quantity'] ?? 0;
+    }
+
+    echo json_encode(['success' => true, 'cartCount' => $cartCount]);
 } else {
-    error_log("add_to_cart.php: Invalid input received.");
     echo json_encode(['success' => false, 'error' => 'Invalid input.']);
 }
 ?>

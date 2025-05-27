@@ -12,6 +12,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $newPassword = $_POST['new_password'];
     $confirmPassword = $_POST['confirm_password'];
 
+    // Validate password length
+    if (strlen($currentPassword) > 255 || strlen($newPassword) > 255 || strlen($confirmPassword) > 255) {
+        header('Location: password-change.php?error=Parole nedrīkst pārsniegt 255 rakstzīmes!');
+        exit;
+    }
+
     if ($newPassword !== $confirmPassword) {
         header('Location: password-change.php?error=Jaunā parole un apstiprinājums nesakrīt!');
         exit;

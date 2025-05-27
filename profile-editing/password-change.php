@@ -72,15 +72,15 @@ if (!$user) {
                 <form action="update-password.php" method="POST">
                     <div class="form-group">
                         <label for="current_password">Esošā parole</label>
-                        <input type="password" id="current_password" name="current_password" class="form-control" placeholder="Ievadiet esošo paroli" required>
+                        <input type="password" id="current_password" name="current_password" class="form-control" placeholder="Ievadiet esošo paroli" maxlength="255" required>
                     </div>
                     <div class="form-group">
                         <label for="new_password">Jaunā parole</label>
-                        <input type="password" id="new_password" name="new_password" class="form-control" placeholder="Ievadiet jauno paroli" required>
+                        <input type="password" id="new_password" name="new_password" class="form-control" placeholder="Ievadiet jauno paroli" maxlength="255" required>
                     </div>
                     <div class="form-group">
                         <label for="confirm_password">Apstiprināt jauno paroli</label>
-                        <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="Apstipriniet jauno paroli" required>
+                        <input type="password" id="confirm_password" name="confirm_password" class="form-control" placeholder="Apstipriniet jauno paroli" maxlength="255" required>
                     </div>
                     <button type="submit" class="btn btn-main">Saglabāt</button>
                 </form>

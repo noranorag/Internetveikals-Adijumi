@@ -70,20 +70,20 @@ if (!$user) {
                 <div class="form-group-row">
                     <div class="form-group">
                         <label for="name">Vārds</label>
-                        <input type="text" id="name" name="name" class="form-control" placeholder="Vārds" value="<?php echo htmlspecialchars($user['name']); ?>" required>
+                        <input type="text" id="name" name="name" class="form-control" placeholder="Vārds" value="<?php echo htmlspecialchars($user['name']); ?>" maxlength="50" required>
                     </div>
                     <div class="form-group">
                         <label for="surname">Uzvārds</label>
-                        <input type="text" id="surname" name="surname" class="form-control" placeholder="Uzvārds" value="<?php echo htmlspecialchars($user['surname']); ?>" required>
+                        <input type="text" id="surname" name="surname" class="form-control" placeholder="Uzvārds" value="<?php echo htmlspecialchars($user['surname']); ?>" maxlength="50" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="phone">Telefons</label>
-                    <input type="text" id="phone" name="phone" class="form-control" placeholder="Telefons" value="<?php echo htmlspecialchars($user['phone']); ?>" required>
+                    <input type="text" id="phone" name="phone" class="form-control" placeholder="Telefons" value="<?php echo htmlspecialchars($user['phone']); ?>" maxlength="12" required>
                 </div>
                 <div class="form-group">
                     <label for="email">E-pasts</label>
-                    <input type="email" id="email" name="email" class="form-control" placeholder="E-pasts" value="<?php echo htmlspecialchars($user['email']); ?>" required>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="E-pasts" value="<?php echo htmlspecialchars($user['email']); ?>" maxlength="255" required>
                 </div>
                 <button type="submit" class="btn btn-main btn-small">Saglabāt</button>
             </form>

@@ -79,6 +79,26 @@ if ($result) {
 
     <?php include 'files/navbar.php'; ?>
 
+    <div class="notification-container">
+        <?php if (isset($_SESSION['success_message'])): ?>
+            <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                <?= $_SESSION['success_message']; ?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <?php unset($_SESSION['success_message']); ?>
+        <?php elseif (isset($_SESSION['error_message'])): ?>
+            <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+                <?= $_SESSION['error_message']; ?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <?php unset($_SESSION['error_message']); ?>
+        <?php endif; ?>
+    </div>
+
     <div class="container mt-5 pt-5">
         <div class="heading-container">
             <h1 class="mb-2">Galerija</h1>
@@ -142,28 +162,28 @@ if ($result) {
     </div>
 
    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
+        <div class="modal-dialog">
+            <div class="modal-content">
 
-      <div class="modal-header">
-        <h5 class="modal-title" id="loginModalLabel">Tu neesi ielogojies</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Aizvērt">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Tu neesi ielogojies</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Aizvērt">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
 
-      <div class="modal-body">
-        <p>Vai ielogoties?</p>
-      </div>
+            <div class="modal-body">
+                <p>Vai ielogoties?</p>
+            </div>
 
-      <div class="modal-footer">
-        <a href="<?= $basePath ?>login.php" class="btn btn-primary">Ielogoties</a>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Aizvērt</button>
-      </div>
+            <div class="modal-footer">
+                <a href="<?= $basePath ?>login.php" class="btn btn-primary">Ielogoties</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Aizvērt</button>
+            </div>
 
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
     <div class="modal fade" id="addImageModal" tabindex="-1" aria-labelledby="addImageModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -174,7 +194,7 @@ if ($result) {
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="upload_image.php" method="POST" enctype="multipart/form-data">
+                <form action="user-database/upload_image.php" method="POST" enctype="multipart/form-data">
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="imageInput">Izvēlies bildi:</label>
