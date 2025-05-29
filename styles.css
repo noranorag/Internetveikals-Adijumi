@@ -1531,6 +1531,146 @@ body{
     line-height: 1.5; /* Adjust line height for better spacing */
 }
 
+
+
+
+
+
+
+
+.checkout-container {
+    max-width: 800px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+
+.step-header {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.step {
+    text-align: center;
+    flex: 1;
+    position: relative;
+    cursor: pointer;
+    cursor: pointer;
+    transition: opacity 0.3s ease, color 0.3s ease;
+}
+
+.step.dimmed {
+  opacity: 0.8;
+  color: #aaa;
+}
+
+.step.active {
+  opacity: 1;
+  color: var(--main);
+}
+
+.step-icon {
+    background: var(--main);
+    color: white;
+    border-radius: 50%;
+    padding: 12px;
+    font-size: 18px;
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    line-height: 16px;
+    margin-bottom: 10px;
+}
+
+.step-title {
+    font-weight: bold;
+}
+
+.form-section {
+    background: #fafafa;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+h3 {
+    margin-top: 0;
+    color: var(--main);
+}
+
+.btn-outline-main {
+    background-color: transparent;
+    border: 1px solid var(--main); /* Ensure border is visible */
+    color: var(--main);
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+}
+
+.btn-outline-main:hover {
+    background-color: var(--main); /* Change background color on hover */
+    color: white; /* Change text color on hover */
+    border-color: var(--main); /* Keep border consistent */
+}
+
+.address-container {
+    margin-top: 30px; /* Add larger margin between delivery options and address inputs */
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.address-container {
+    margin-top: 30px;
+}
+
+#omniva-dropdown, #dpd-dropdown {
+    margin-top: 20px;
+}
+
+select.form-control {
+    height: auto; /* Allow the dropdown to adjust its height automatically */
+    line-height: 1.5; /* Adjust line height for better spacing */
+    padding: 8px 12px; /* Add padding for better readability */
+    font-size: 16px; /* Ensure the font size is consistent */
+    overflow: visible; /* Prevent content from being cut off */
+}
+
+select.form-control option {
+    padding: 8px 12px; /* Add padding to the dropdown options */
+    line-height: 1.5; /* Ensure proper spacing between lines */
+    font-size: 16px; /* Match the font size of the dropdown */
+}
+
 @media (max-width: 1240px) {
     .hero-categories {
         flex-direction: column;
