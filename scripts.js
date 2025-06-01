@@ -1,7 +1,8 @@
-const messages = [
-    "Pirkumiem virs 55 eiro bezmaksas piegāde",
-    "Nopērc kvalitatīvus adījumus jau šodien"
-];
+if (!window.messages) {
+    const messages = [
+        "Pirkumiem virs 55 eiro bezmaksas piegāde",
+        "Nopērc kvalitatīvus adījumus jau šodien"
+    ];
 let currentMessageIndex = 0;
 const announcementElement = document.getElementById('announcement');
 let announcementText = document.createElement('span');
@@ -27,6 +28,7 @@ setInterval(() => {
         currentMessageIndex = (currentMessageIndex + 1) % messages.length;
     }, 1050);
 }, 4000);
+}
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -441,3 +443,4 @@ document.querySelector('.close').addEventListener('click', () => {
 document.querySelector('.btn-secondary').addEventListener('click', () => {
     $('#loginModal').modal('hide');
 });
+

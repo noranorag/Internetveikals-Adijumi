@@ -1671,6 +1671,23 @@ select.form-control option {
     font-size: 16px; /* Match the font size of the dropdown */
 }
 
+#order-summary h5 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* Style the cart items */
+#cart-items p {
+    margin-bottom: 5px;
+}
+
+/* Center the "Pasūtīt" button */
+#order .text-center {
+    margin-top: 30px;
+}
+
+
+
 @media (max-width: 1240px) {
     .hero-categories {
         flex-direction: column;

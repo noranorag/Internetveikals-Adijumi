@@ -3,9 +3,13 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$projectRoot = '/Internetveikals-Adijumi2'; 
+// Define the project root
+$projectRoot = '/Internetveikals-Adijumi2';
+
+// Get the current directory relative to the project root
 $currentDir = str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME']));
 
+// Calculate the depth of the current directory
 if (strpos($currentDir, $projectRoot) === 0) {
     $relativePath = substr($currentDir, strlen($projectRoot));
     $depth = substr_count($relativePath, '/');
@@ -13,12 +17,16 @@ if (strpos($currentDir, $projectRoot) === 0) {
     $depth = 0;
 }
 
-$basePath = str_repeat('../', $depth);
+// Generate the base path dynamically
+$basePath = $depth > 0 ? str_repeat('../', $depth) : './';
+
+// Debugging: Output the calculated $basePath
+error_log("Base Path: " . $basePath);
 
 // Fetch cart count
 $cartCount = 0;
 if (isset($_SESSION['user_id']) || session_id()) {
-    include_once $basePath . 'database/db_connection.php';
+    include_once $_SERVER['DOCUMENT_ROOT'] . $projectRoot . '/database/db_connection.php';
 
     $userID = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
     $sessionID = session_id();
@@ -36,13 +44,9 @@ if (isset($_SESSION['user_id']) || session_id()) {
     }
 }
 
+// Fetch cart items for dropdown
 $cartItems = [];
 if (isset($_SESSION['user_id']) || session_id()) {
-    include_once $basePath . 'database/db_connection.php';
-
-    $userID = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 0;
-    $sessionID = session_id();
-
     $stmt = $conn->prepare("
         SELECT c.*, p.name, p.price, p.image 
         FROM cart c
@@ -59,7 +63,7 @@ if (isset($_SESSION['user_id']) || session_id()) {
 }
 ?>
 
-<script src="scripts.js" defer></script>
+<script src="<?= $basePath ?>scripts.js" defer></script>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
@@ -164,3 +168,9 @@ if (isset($_SESSION['user_id']) || session_id()) {
         </div>
     </div>
 </div>
+
+
+<?php
+// Debugging: Output the calculated $basePath
+error_log("Base Path: " . $basePath);
+?>

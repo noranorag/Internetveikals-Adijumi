@@ -89,51 +89,51 @@ $progressPercentage = min(100, ($totalPrice / $freeShippingThreshold) * 100); //
     </div>
 
     <div class="row">
-            <!-- Kreisā puse: Groza preces -->
-            <div class="col-md-8">
-    <?php if (!empty($cartItems)): ?>
-        <?php foreach ($cartItems as $item): ?>
-            <div class="product-box d-flex mb-3 position-relative">
-                <div class="col-3">
-                    <img src="<?= htmlspecialchars($item['image']) ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="img-fluid">
-                </div>
-                <div class="col-9 d-flex flex-column justify-content-between pl-3">
-                    <div>
-                        <strong><?= htmlspecialchars($item['name']) ?></strong>
-                    </div>
-                    <div class="d-flex align-items-center mt-3">
-                        <!-- Form for decreasing quantity -->
-                        <form action="user-database/update_cart_quantity.php" method="POST" class="d-inline">
+        <!-- Kreisā puse: Groza preces -->
+        <div class="col-md-8">
+            <?php if (!empty($cartItems)): ?>
+                <?php foreach ($cartItems as $item): ?>
+                    <div class="product-box d-flex mb-3 position-relative">
+                        <div class="col-3">
+                            <img src="<?= htmlspecialchars($item['image']) ?>" alt="<?= htmlspecialchars($item['name']) ?>" class="img-fluid">
+                        </div>
+                        <div class="col-9 d-flex flex-column justify-content-between pl-3">
+                            <div>
+                                <strong><?= htmlspecialchars($item['name']) ?></strong>
+                            </div>
+                            <div class="d-flex align-items-center mt-3">
+                                <!-- Form for decreasing quantity -->
+                                <form action="user-database/update_cart_quantity.php" method="POST" class="d-inline">
+                                    <input type="hidden" name="cart_ID" value="<?= $item['cart_ID'] ?>">
+                                    <input type="hidden" name="action" value="decrease">
+                                    <button type="submit" class="btn btn-outline-secondary btn-sm">-</button>
+                                </form>
+
+                                <input type="text" class="form-control form-control-sm mx-2 text-center" value="<?= $item['quantity'] ?>" style="width: 50px;" readonly>
+
+                                <!-- Form for increasing quantity -->
+                                <form action="user-database/update_cart_quantity.php" method="POST" class="d-inline">
+                                    <input type="hidden" name="cart_ID" value="<?= $item['cart_ID'] ?>">
+                                    <input type="hidden" name="action" value="increase">
+                                    <button type="submit" class="btn btn-outline-secondary btn-sm">+</button>
+                                </form>
+
+                                <div class="ml-auto font-weight-bold">€<?= number_format($item['price'] * $item['quantity'], 2) ?></div>
+                            </div>
+                        </div>
+                        <!-- Dzēšanas poga -->
+                        <form action="user-database/remove_from_cart.php" method="POST" class="position-absolute" style="top: 10px; right: 10px;">
                             <input type="hidden" name="cart_ID" value="<?= $item['cart_ID'] ?>">
-                            <input type="hidden" name="action" value="decrease">
-                            <button type="submit" class="btn btn-outline-secondary btn-sm">-</button>
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <i class="fas fa-times"></i>
+                            </button>
                         </form>
-
-                        <input type="text" class="form-control form-control-sm mx-2 text-center" value="<?= $item['quantity'] ?>" style="width: 50px;" readonly>
-
-                        <!-- Form for increasing quantity -->
-                        <form action="user-database/update_cart_quantity.php" method="POST" class="d-inline">
-                            <input type="hidden" name="cart_ID" value="<?= $item['cart_ID'] ?>">
-                            <input type="hidden" name="action" value="increase">
-                            <button type="submit" class="btn btn-outline-secondary btn-sm">+</button>
-                        </form>
-
-                        <div class="ml-auto font-weight-bold">€<?= number_format($item['price'] * $item['quantity'], 2) ?></div>
                     </div>
-                </div>
-                <!-- Dzēšanas poga -->
-                <form action="user-database/remove_from_cart.php" method="POST" class="position-absolute" style="top: 10px; right: 10px;">
-                    <input type="hidden" name="cart_ID" value="<?= $item['cart_ID'] ?>">
-                    <button type="submit" class="btn btn-danger btn-sm">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </form>
-            </div>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <p>Tavs grozs ir tukšs.</p>
-    <?php endif; ?>
-</div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p>Tavs grozs ir tukšs.</p>
+            <?php endif; ?>
+        </div>
 
             <!-- Labā puse: Kopsavilkums -->
             <div class="col-md-4">
@@ -155,7 +155,16 @@ $progressPercentage = min(100, ($totalPrice / $freeShippingThreshold) * 100); //
                         <strong>Kopā</strong>
                         <strong>€<?= number_format($totalPrice, 2) ?></strong>
                     </div>
-                    <button class="btn btn-dark w-100 mt-4">Apmaksāt</button>
+                    <?php if ($remainingAmount > 0): ?>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span></span> <!-- Empty span for alignment -->
+                            <span class="text-muted">+ Piegādes cena</span>
+                        </div>
+                    <?php endif; ?>
+                    <?php
+                    $freeShipping = $remainingAmount <= 0; // Determine if free shipping is available
+                    ?>
+                    <button class="btn btn-dark w-100 mt-4" onclick="window.location.href='checkout.php?freeShipping=<?= $freeShipping ? 'true' : 'false' ?>';">Apmaksāt</button>
                 </div>
             </div>
         </div>
