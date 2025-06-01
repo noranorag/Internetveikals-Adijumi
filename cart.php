@@ -6,12 +6,10 @@ if ($conn->connect_error) {
     die("Savienojums neizdevās: " . $conn->connect_error);
 }
 
-// Pārbaudīt, vai lietotājs ir pieteicies
 $userID = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 $sessionID = session_id();
 
 if ($userID) {
-    // Iegūt groza preces pieteikušam lietotājam
     $query = "
         SELECT c.*, p.name, p.price, p.image 
         FROM cart c
@@ -21,7 +19,6 @@ if ($userID) {
     $stmt = $conn->prepare($query);
     $stmt->bind_param('i', $userID);
 } else {
-    // Iegūt groza preces pēc sesijas ID
     $query = "
         SELECT c.*, p.name, p.price, p.image 
         FROM cart c
@@ -45,9 +42,9 @@ foreach ($cartItems as $item) {
     $totalPrice += $item['price'] * $item['quantity'];
 }
 
-$freeShippingThreshold = 55; // Bezmaksas piegādes slieksnis
-$remainingAmount = max(0, $freeShippingThreshold - $totalPrice); // Cik vēl jāiepērkas
-$progressPercentage = min(100, ($totalPrice / $freeShippingThreshold) * 100); // Procenti progress bar
+$freeShippingThreshold = 55;
+$remainingAmount = max(0, $freeShippingThreshold - $totalPrice); 
+$progressPercentage = min(100, ($totalPrice / $freeShippingThreshold) * 100); 
 ?>
 
 <!DOCTYPE html>
@@ -71,7 +68,6 @@ $progressPercentage = min(100, ($totalPrice / $freeShippingThreshold) * 100); //
     <h2>Tavs grozs</h2>
     <p><?= count($cartItems) ?> preces</p>
 
-    <!-- Bezmaksas piegādes josla -->
     <div class="free-shipping-box d-flex justify-content-between align-items-center">
         <div style="flex: 1">
             <?php if ($remainingAmount > 0): ?>
@@ -89,7 +85,6 @@ $progressPercentage = min(100, ($totalPrice / $freeShippingThreshold) * 100); //
     </div>
 
     <div class="row">
-        <!-- Kreisā puse: Groza preces -->
         <div class="col-md-8">
             <?php if (!empty($cartItems)): ?>
                 <?php foreach ($cartItems as $item): ?>
@@ -102,7 +97,6 @@ $progressPercentage = min(100, ($totalPrice / $freeShippingThreshold) * 100); //
                                 <strong><?= htmlspecialchars($item['name']) ?></strong>
                             </div>
                             <div class="d-flex align-items-center mt-3">
-                                <!-- Form for decreasing quantity -->
                                 <form action="user-database/update_cart_quantity.php" method="POST" class="d-inline">
                                     <input type="hidden" name="cart_ID" value="<?= $item['cart_ID'] ?>">
                                     <input type="hidden" name="action" value="decrease">
@@ -111,7 +105,6 @@ $progressPercentage = min(100, ($totalPrice / $freeShippingThreshold) * 100); //
 
                                 <input type="text" class="form-control form-control-sm mx-2 text-center" value="<?= $item['quantity'] ?>" style="width: 50px;" readonly>
 
-                                <!-- Form for increasing quantity -->
                                 <form action="user-database/update_cart_quantity.php" method="POST" class="d-inline">
                                     <input type="hidden" name="cart_ID" value="<?= $item['cart_ID'] ?>">
                                     <input type="hidden" name="action" value="increase">
@@ -121,7 +114,7 @@ $progressPercentage = min(100, ($totalPrice / $freeShippingThreshold) * 100); //
                                 <div class="ml-auto font-weight-bold">€<?= number_format($item['price'] * $item['quantity'], 2) ?></div>
                             </div>
                         </div>
-                        <!-- Dzēšanas poga -->
+                    
                         <form action="user-database/remove_from_cart.php" method="POST" class="position-absolute" style="top: 10px; right: 10px;">
                             <input type="hidden" name="cart_ID" value="<?= $item['cart_ID'] ?>">
                             <button type="submit" class="btn btn-danger btn-sm">
@@ -135,7 +128,6 @@ $progressPercentage = min(100, ($totalPrice / $freeShippingThreshold) * 100); //
             <?php endif; ?>
         </div>
 
-            <!-- Labā puse: Kopsavilkums -->
             <div class="col-md-4">
                 <div class="summary-box">
                     <h5 class="mb-4">Kopsavilkums</h5>
@@ -157,12 +149,12 @@ $progressPercentage = min(100, ($totalPrice / $freeShippingThreshold) * 100); //
                     </div>
                     <?php if ($remainingAmount > 0): ?>
                         <div class="d-flex justify-content-between mt-2">
-                            <span></span> <!-- Empty span for alignment -->
+                            <span></span> 
                             <span class="text-muted">+ Piegādes cena</span>
                         </div>
                     <?php endif; ?>
                     <?php
-                    $freeShipping = $remainingAmount <= 0; // Determine if free shipping is available
+                    $freeShipping = $remainingAmount <= 0;
                     ?>
                     <button class="btn btn-dark w-100 mt-4" onclick="window.location.href='checkout.php?freeShipping=<?= $freeShipping ? 'true' : 'false' ?>';">Apmaksāt</button>
                 </div>

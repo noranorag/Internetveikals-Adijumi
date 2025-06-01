@@ -15,7 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $apartment = trim($_POST['apartment']);
     $postal_code = trim($_POST['postal_code']);
 
-    // Validate character limits
     if (strlen($country) > 50) {
         header('Location: address-edit.php?error=Valsts nedrīkst pārsniegt 50 rakstzīmes!');
         exit;

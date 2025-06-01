@@ -12,20 +12,17 @@ if (session_status() === PHP_SESSION_NONE) {
   <title>Piegādes lapa</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <link rel="stylesheet" href="styles.css"> <!-- Updated path -->
-  <script src="scripts.js" defer></script> <!-- Ensure correct path -->
+  <link rel="stylesheet" href="styles.css"> 
+  <script src="scripts.js" defer></script>
   <script src="checkoutScripts.js" defer></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
-    <!-- Paziņojums -->
     <div class="announcement" id="announcement"></div>
 
-    <!-- Navigācijas josla -->
-    <?php include 'files/navbar.php'; ?> <!-- Updated path -->
+    <?php include 'files/navbar.php'; ?> 
 
-    <!-- Galvenais saturs -->
     <div class="container mt-5 pt-1">
         <div class="checkout-container">
             <div class="step-header">
@@ -46,7 +43,6 @@ if (session_status() === PHP_SESSION_NONE) {
                 <div class="line-highlight"></div>
             </div>
 
-            <!-- Informācija Section -->
             <div id="information" class="form-section">
                 <div class="login-prompt text-center mb-4">
                     <p>Ir konts? <a href="login.php" class="btn btn-outline-main">Ielogojies</a> lai aizpildītu informāciju</p>
@@ -73,7 +69,6 @@ if (session_status() === PHP_SESSION_NONE) {
                 </div>
             </div>
 
-            <!-- Piegāde Section -->
             <div id="shipping" class="form-section" style="display: none;">
                 <div id="shipping-errors" class="text-danger mb-3" style="display: none;"></div>
                 <div class="form-group">
@@ -107,19 +102,16 @@ if (session_status() === PHP_SESSION_NONE) {
                     </div>
                 </div>
 
-                <!-- Dropdown for Omniva Pakomāti -->
                 <div id="omniva-dropdown" class="form-group" style="display: none;">
                     <label>Izvēlieties Omniva pakomātu *</label>
                     <select class="form-control" id="omniva-pakomati" name="pickup_address"></select>
                 </div>
 
-                <!-- Dropdown for DPD Pakomāti -->
                 <div id="dpd-dropdown" class="form-group" style="display: none;">
                     <label>Izvēlieties DPD pakomātu *</label>
                     <select class="form-control" id="dpd-pakomati" name="pickup_address"></select>
                 </div>
 
-                <!-- Address Inputs -->
                 <div id="address-container" class="address-container" style="display: none;">
                     <div class="form-group">
                         <label>Valsts *</label>
@@ -155,29 +147,23 @@ if (session_status() === PHP_SESSION_NONE) {
             <div id="order" class="form-section" style="display: none;">
                 <h3 class="mb-4">Jūsu pasūtījuma detaļas</h3>
                 <div id="order-summary" class="row">
-                    <!-- Left Column -->
                     <div class="col-md-6">
-                        <!-- User Information -->
                         <h5>Lietotāja informācija</h5>
                         <p><strong>Vārds:</strong> <span id="summary-name"></span></p>
                         <p><strong>Uzvārds:</strong> <span id="summary-surname"></span></p>
                         <p><strong>E-pasts:</strong> <span id="summary-email"></span></p>
                         <p><strong>Tālrunis:</strong> <span id="summary-phone"></span></p>
 
-                        <!-- Delivery Method -->
                         <h5 class="mt-4">Piegādes metode</h5>
                         <p><strong>Metode:</strong> <span id="summary-delivery-method"></span></p>
 
-                        <!-- Parcel Location -->
                         <div id="parcel-location-summary" style="display: none;">
                             <h5 class="mt-4">Pakomāta lokācija</h5>
                             <p><strong>Lokācija:</strong> <span id="summary-parcel-location"></span></p>
                         </div>
                     </div>
 
-                    <!-- Right Column -->
                     <div class="col-md-6">
-                        <!-- Address Information -->
                         <div id="address-summary">
                             <h5>Adrese</h5>
                             <p><strong>Valsts:</strong> <span id="summary-country"></span></p>
@@ -188,7 +174,6 @@ if (session_status() === PHP_SESSION_NONE) {
                             <p><strong>Pasta indekss:</strong> <span id="summary-postal-code"></span></p>
                         </div>
 
-                        <!-- Cart Items -->
                         <h5 class="mt-4">Preces</h5>
                         <div id="cart-items"></div>
 
@@ -240,13 +225,12 @@ $freeShipping = isset($_GET['freeShipping']) && $_GET['freeShipping'] === 'true'
 
     document.addEventListener('DOMContentLoaded', () => {
     if (freeShipping) {
-        // Hide all shipping prices
         document.querySelectorAll('.shipping-price').forEach(price => {
-            price.style.display = 'none'; // Hide the shipping price
+            price.style.display = 'none'; 
         });
     }
 
-    const form = document.getElementById('final-checkout-form'); // Use the correct ID
+    const form = document.getElementById('final-checkout-form'); 
     if (form) {
         form.addEventListener('submit', collectOrderData);
 
@@ -260,10 +244,10 @@ $freeShipping = isset($_GET['freeShipping']) && $_GET['freeShipping'] === 'true'
 
   const freeShipping = <?= $freeShipping ? 'true' : 'false' ?>;
   const shippingPrices = {
-    'omniva-pakomats': 3.00, // Omniva pakomāts price
-    'omniva-kurjers': 12.00, // Omniva kurjers price
-    'dpd': 2.50,             // DPD price
-    'pasts': 4.00            // Latvijas pasts price
+    'omniva-pakomats': 3.00, 
+    'omniva-kurjers': 12.00, 
+    'dpd': 2.50,        
+    'pasts': 4.00   
 };
 
 
@@ -272,14 +256,12 @@ function collectOrderData(event) {
 
     const finalForm = document.getElementById('final-checkout-form');
 
-    // Collect data from the visible form
     const deliveryMethod = document.querySelector('input[name="delivery"]:checked')?.value || '';
 
-    console.log('Selected Delivery Method:', deliveryMethod); // Debugging
+    console.log('Selected Delivery Method:', deliveryMethod); 
 
     finalForm.querySelector('input[name="delivery"]').value = deliveryMethod;
 
-    // Debugging
     console.log('Final Form Data:', new FormData(finalForm));
 
     const pickupAddress = (() => {
@@ -287,9 +269,9 @@ function collectOrderData(event) {
         const dpdDropdown = document.getElementById('dpd-pakomati');
 
         if (omnivaDropdown && omnivaDropdown.style.display !== 'none' && omnivaDropdown.value) {
-            return omnivaDropdown.options[omnivaDropdown.selectedIndex].text; // Use the full text
+            return omnivaDropdown.options[omnivaDropdown.selectedIndex].text; 
         } else if (dpdDropdown && dpdDropdown.style.display !== 'none' && dpdDropdown.value) {
-            return dpdDropdown.options[dpdDropdown.selectedIndex].text; // Use the full text
+            return dpdDropdown.options[dpdDropdown.selectedIndex].text; 
         }
         return '';
     })();
@@ -320,10 +302,8 @@ function collectOrderData(event) {
     finalForm.querySelector('input[name="apartment"]').value = apartment;
     finalForm.querySelector('input[name="postal_code"]').value = postalCode;
 
-    // Debugging
     console.log('Final Form Data:', new FormData(finalForm));
 
-    // Submit the hidden form
     finalForm.submit();
 }
 </script>

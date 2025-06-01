@@ -13,19 +13,15 @@ if (session_status() === PHP_SESSION_NONE) {
   <title>Pasūtījums veiksmīgs</title>
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <link rel="stylesheet" href="styles.css"> <!-- Updated path -->
-  <script src="scripts.js" defer></script> <!-- Ensure correct path -->
+  <link rel="stylesheet" href="styles.css"> 
+  <script src="scripts.js" defer></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-
-    <!-- Paziņojums -->
     <div class="announcement" id="announcement"></div>
 
-    <!-- Navigācijas josla -->
-    <?php include 'files/navbar.php'; ?> <!-- Updated path -->
+    <?php include 'files/navbar.php'; ?>
 
-    <!-- Galvenais saturs -->
     <div class="container mt-5 pt-1">
         <div class="checkout-container">
             <div class="step-header">
@@ -38,7 +34,6 @@ if (session_status() === PHP_SESSION_NONE) {
                 <div class="line-highlight"></div>
             </div>
 
-            <!-- Success Message Section -->
             <div id="order-success" class="form-section text-center">
                 <h3 class="mb-4">Paldies par jūsu pasūtījumu!</h3>
                 <p>Jūsu pasūtījums ir veiksmīgi apstiprināts un tiks apstrādāts tik līdz tiks pārskaitīta nauda uz norādīto kontu.</p>

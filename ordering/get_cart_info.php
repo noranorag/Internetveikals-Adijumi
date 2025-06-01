@@ -5,11 +5,9 @@ require '../database/db_connection.php';
 header('Content-Type: application/json');
 
 try {
-    // Check if the user is logged in
     if (isset($_SESSION['user_id'])) {
         $userId = $_SESSION['user_id'];
 
-        // Query to fetch cart data for logged-in users
         $sql = "SELECT 
                     c.quantity, 
                     p.name AS product_name, 
@@ -23,10 +21,8 @@ try {
         }
         $stmt->bind_param('i', $userId);
     } else {
-        // Use session_id for guest users
         $sessionId = session_id();
 
-        // Query to fetch cart data for guest users
         $sql = "SELECT 
                     c.quantity, 
                     p.name AS product_name, 
@@ -49,9 +45,8 @@ try {
         $cartItems[] = $row;
     }
 
-    echo json_encode($cartItems); // Return the cart data as JSON
+    echo json_encode($cartItems); 
 } catch (Exception $e) {
-    // Log the error and return an error response
     error_log("Error in get_cart_info.php: " . $e->getMessage());
     echo json_encode(['error' => 'An error occurred while fetching cart items.']);
 }

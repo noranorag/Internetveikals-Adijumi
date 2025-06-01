@@ -13,7 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $phone = trim($_POST['phone']);
     $email = trim($_POST['email']);
 
-    // Validate character limits
     if (strlen($name) > 50) {
         header('Location: profile-edit.php?error=Vārds nedrīkst pārsniegt 50 rakstzīmes!');
         exit;

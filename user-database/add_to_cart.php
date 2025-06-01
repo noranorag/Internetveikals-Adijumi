@@ -10,10 +10,9 @@ $data = json_decode(file_get_contents('php://input'), true);
 if (isset($data['product_ID'], $data['quantity'])) {
     $productID = intval($data['product_ID']);
     $quantity = intval($data['quantity']);
-    $userID = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null; // Set to NULL for guest users
+    $userID = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null; 
     $sessionID = session_id();
 
-    // Check if the specific product is already in the cart
     $stmt = $conn->prepare("
         SELECT * FROM cart 
         WHERE ((ID_user = ? AND ID_user IS NOT NULL) OR (session_ID = ? AND ID_user IS NULL)) 
@@ -24,7 +23,6 @@ if (isset($data['product_ID'], $data['quantity'])) {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        // Update quantity if the specific product is already in the cart
         $stmt = $conn->prepare("
             UPDATE cart 
             SET quantity = quantity + ? 
@@ -34,7 +32,6 @@ if (isset($data['product_ID'], $data['quantity'])) {
         $stmt->bind_param("issi", $quantity, $userID, $sessionID, $productID);
         $stmt->execute();
     } else {
-        // Insert new product into the cart
         $stmt = $conn->prepare("
             INSERT INTO cart (session_ID, ID_user, ID_product, quantity, added_at) 
             VALUES (?, ?, ?, ?, NOW())
@@ -43,7 +40,6 @@ if (isset($data['product_ID'], $data['quantity'])) {
         $stmt->execute();
     }
 
-    // Fetch the updated cart count
     $stmt = $conn->prepare("
         SELECT SUM(quantity) AS total_quantity 
         FROM cart 

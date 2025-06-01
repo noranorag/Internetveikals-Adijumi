@@ -1,7 +1,6 @@
 <footer class="site-footer mt-5">
     <div class="container">
         <div class="row">
-            <!-- 2 columns on small (≥576px), 4 columns on medium (≥768px) and up -->
             <div class="col-sm-6 col-md-3 mb-4">
                 <img src="images/logo.png" alt="Logo" class="footer-logo">
             </div>
