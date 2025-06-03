@@ -23,7 +23,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
     <?php include 'files/navbar.php'; ?> 
 
-    <div class="container mt-5 pt-1">
+    
         <div class="checkout-container">
             <div class="step-header">
                 <div class="step active" onclick="showSection('information', 0)">
@@ -42,6 +42,12 @@ if (session_status() === PHP_SESSION_NONE) {
             <div class="line-container mt-2">
                 <div class="line-highlight"></div>
             </div>
+            <div class="container mt-5 pt-1">
+        <?php if (isset($_GET['error'])): ?>
+            <div class="alert alert-danger text-center" role="alert">
+                <?= htmlspecialchars($_GET['error'], ENT_QUOTES, 'UTF-8') ?>
+            </div>
+        <?php endif; ?>
 
             <div id="information" class="form-section">
                 <div class="login-prompt text-center mb-4">
@@ -50,19 +56,19 @@ if (session_status() === PHP_SESSION_NONE) {
                 <div id="information-errors" class="text-danger mb-3" style="display: none;"></div>
                 <div class="form-group">
                     <label>Vārds *</label>
-                    <input type="text" name="name" class="form-control" placeholder="Ievadiet savu vārdu" required>
+                    <input type="text" name="name" class="form-control" placeholder="Ievadiet savu vārdu" required maxlength="50">
                 </div>
                 <div class="form-group">
                     <label>Uzvārds *</label>
-                    <input type="text" name="surname" class="form-control" placeholder="Ievadiet savu uzvārdu" required>
+                    <input type="text" name="surname" class="form-control" placeholder="Ievadiet savu uzvārdu" required maxlength="50">
                 </div>
                 <div class="form-group">
                     <label>E-pasts *</label>
-                    <input type="email" name="email" class="form-control" placeholder="Ievadiet savu e-pastu" required>
+                    <input type="email" name="email" class="form-control" placeholder="Ievadiet savu e-pastu" required maxlength="255">
                 </div>
                 <div class="form-group">
                     <label>Tālrunis *</label>
-                    <input type="tel" name="phone" class="form-control" placeholder="Ievadiet savu tālruņa numuru" required>
+                    <input type="tel" name="phone" class="form-control" placeholder="Ievadiet savu tālruņa numuru" required maxlength="12">
                 </div>
                 <div class="text-center">
                     <button type="button" class="btn btn-main mt-3" style="width: 200px;" onclick="showSection('shipping', 1)">Tālāk</button>
@@ -115,27 +121,27 @@ if (session_status() === PHP_SESSION_NONE) {
                 <div id="address-container" class="address-container" style="display: none;">
                     <div class="form-group">
                         <label>Valsts *</label>
-                        <input type="text" name="country" class="form-control" placeholder="Ievadiet valsti" required>
+                        <input type="text" name="country" class="form-control" placeholder="Ievadiet valsti" required maxlength="50">
                     </div>
                     <div class="form-group">
                         <label>Pilsēta *</label>
-                        <input type="text" name="city" class="form-control" placeholder="Ievadiet pilsētu" required>
+                        <input type="text" name="city" class="form-control" placeholder="Ievadiet pilsētu" required maxlength="50">
                     </div>
                     <div class="form-group">
                         <label>Iela *</label>
-                        <input type="text" name="street" class="form-control" placeholder="Ievadiet ielu" required>
+                        <input type="text" name="street" class="form-control" placeholder="Ievadiet ielu" required maxlength="50">
                     </div>
                     <div class="form-group">
                         <label>Mājas numurs *</label>
-                        <input type="text" name="house" class="form-control" placeholder="Ievadiet mājas numuru" required>
+                        <input type="text" name="house" class="form-control" placeholder="Ievadiet mājas numuru" required maxlength="30">
                     </div>
                     <div class="form-group">
                         <label>Dzīvokļa numurs</label>
-                        <input type="text" name="apartment" class="form-control" placeholder="Ievadiet dzīvokļa numuru">
+                        <input type="text" name="apartment" class="form-control" placeholder="Ievadiet dzīvokļa numuru" maxlength="30">
                     </div>
                     <div class="form-group">
                         <label>Pasta indekss *</label>
-                        <input type="text" name="postal_code" class="form-control" placeholder="Ievadiet pasta indeksu" required>
+                        <input type="text" name="postal_code" class="form-control" placeholder="Ievadiet pasta indeksu" required maxlength="7">
                     </div>
                 </div>
 
@@ -307,6 +313,7 @@ function collectOrderData(event) {
     finalForm.submit();
 }
 </script>
+
 
 </body>
 </html>

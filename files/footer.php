@@ -9,9 +9,9 @@
                 <h5 class="footer-heading">Navigācija</h5>
                 <ul class="footer-links">
                     <li><a href="index.php">Sākums</a></li>
-                    <li><a href="internetveikals.php">Internetveikals</a></li>
-                    <li><a href="galerija.php">Galerija</a></li>
-                    <li><a href="kontakti.php">Kontakti</a></li>
+                    <li><a href="eshop.php">Internetveikals</a></li>
+                    <li><a href="gallery.php">Galerija</a></li>
+                    <li><a href="#">Kontakti</a></li>
                 </ul>
             </div>
 

@@ -3,6 +3,10 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+$orderId = $_GET['order_id'] ?? null;
+if (!$orderId) {
+    die('Order ID is missing.');
+}
 ?>
 
 <!DOCTYPE html>
@@ -47,3 +51,4 @@ if (session_status() === PHP_SESSION_NONE) {
 
 </body>
 </html>
+
