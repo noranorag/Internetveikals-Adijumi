@@ -16,6 +16,7 @@
         </p>
     </div>
     <a href="index.php">Sākums</a>
+    <a href="orders.php">Pasūtījumi</a>
     <a href="product.php">Preces</a>
     <a href="gallery.php">Galerija</a>
     <a href="fairs.php">Tirdziņi</a>

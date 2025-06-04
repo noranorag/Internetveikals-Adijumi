@@ -1,4 +1,232 @@
 $(document).ready(function () {
+
+fetchOrders();
+
+    // Handle search input
+    $('#orderSearchInput').on('input', function () {
+        const searchQuery = $(this).val().trim();
+        const statusFilter = $('#statusFilter').val();
+        fetchOrders(searchQuery, statusFilter);
+    });
+
+    // Handle status filter change
+    $('#statusFilter').on('change', function () {
+        const statusFilter = $(this).val();
+        const searchQuery = $('#orderSearchInput').val().trim();
+        fetchOrders(searchQuery, statusFilter);
+    });
+
+    function fetchOrders(searchQuery = '', statusFilter = '') {
+        $.ajax({
+            url: '../database/order_list.php',
+            type: 'GET',
+            data: { search: searchQuery, status: statusFilter },
+            success: function (response) {
+                const orders = JSON.parse(response);
+                displayOrders(orders);
+            },
+            error: function () {
+                showAlert('Neizdevās ielādēt pasūtījumu datus!', 'danger');
+            }
+        });
+    }
+
+$(document).on('click', '.edit-order', function () {
+    const orderId = $(this).data('id');
+
+    $.ajax({
+        url: '../database/order_get.php',
+        type: 'GET',
+        data: { id: orderId },
+        success: function (response) {
+            const result = JSON.parse(response);
+
+            if (result.success) {
+                const order = result.order;
+
+                // Populate modal fields
+                $('#orderId').val(order.order_ID);
+                $('#customerName').val(`${order.name} ${order.surname}`);
+                $('#customerEmail').val(order.email);
+                $('#customerPhone').val(order.phone);
+                $('#deliveryMethod').val(order.delivery);
+                $('#totalAmount').val(`€${order.total_amount}`);
+
+                // Populate shipping details
+                if (order.pickup_address) {
+                    $('#shippingDetails').val(`Pakomāts: ${order.pickup_address}`);
+                } else {
+                    $('#shippingDetails').val(
+                        `Valsts: ${order.country}\nPilsēta: ${order.city}\nIela: ${order.street}\nMājas numurs: ${order.house}\nDzīvokļa numurs: ${order.apartment || 'Nav norādīts'}\nPasta indekss: ${order.postal_code}`
+                    );
+                }
+
+                // Populate order items
+                let itemsTemplate = '';
+                order.items.forEach(item => {
+                    itemsTemplate += `
+                        <tr>
+                            <td>${item.ID_product}</td>
+                            <td>${item.product_name}</td>
+                            <td>${item.quantity}</td>
+                            <td>€${item.price}</td>
+                        </tr>
+                    `;
+                });
+                $('#orderItemsTable tbody').html(itemsTemplate);
+
+                // Populate status dropdown
+                const statusOptions = ['Jauns', 'Pieņemts', 'Nosūtīts'];
+                let statusTemplate = `<option value="${order.status}" selected>${order.status}</option>`;
+                statusOptions.forEach(status => {
+                    if (status !== order.status) {
+                        statusTemplate += `<option value="${status}">${status}</option>`;
+                    }
+                });
+                $('#orderStatus').html(statusTemplate);
+
+                // Show the modal
+                $('#editOrderModal').modal('show');
+            } else {
+                showAlert(result.error, 'danger');
+            }
+        },
+        error: function () {
+            showAlert('Neizdevās ielādēt pasūtījuma datus!', 'danger');
+        }
+    });
+});
+
+$('#saveOrderChanges').on('click', function () {
+    const orderId = $('#orderId').val();
+    const orderStatus = $('#orderStatus').val();
+
+    $.ajax({
+        url: '../database/order_update.php',
+        type: 'POST',
+        data: { id: orderId, status: orderStatus },
+        success: function (response) {
+            const result = JSON.parse(response);
+
+            if (result.success) {
+                showAlert('Pasūtījuma izmaiņas veiksmīgi saglabātas!', 'success');
+                $('#editOrderModal').modal('hide');
+                fetchOrders(); // Refresh the orders table
+            } else {
+                showAlert(result.error || 'Neizdevās saglabāt izmaiņas.', 'danger');
+            }
+        },
+        error: function () {
+            showAlert('Neizdevās nosūtīt pieprasījumu!', 'danger');
+        }
+    });
+});
+
+function showAlert(message, type = 'success', duration = 5000) {
+    const alertId = `alert-${Date.now()}`;
+    const alertHTML = `
+        <div id="${alertId}" class="alert alert-${type} alert-dismissible fade show" role="alert">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    `;
+    $('#alertContainer').append(alertHTML);
+    setTimeout(() => {
+        $(`#${alertId}`).alert('close');
+    }, duration);
+}
+
+function displayOrders(orders) {
+let template = '';
+
+if (orders.length === 0) {
+    template = '<tr><td colspan="9" class="text-center">Nav pieejamu pasūtījumu</td></tr>';
+} else {
+    orders.forEach(order => {
+        template += `
+            <tr>
+                <td>${order.order_ID}</td>
+                <td>${order.name} ${order.surname}</td>
+                <td>${order.email}</td>
+                <td>${order.phone}</td>
+                <td>€${order.total_amount}</td>
+                <td>${order.delivery}</td>
+                <td>${order.status}</td>
+                <td>${order.created_at}</td>
+                <td>
+                    <button class="btn btn-sm btn-warning edit-order" data-id="${order.order_ID}" title="Rediģēt">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-danger delete-order" data-id="${order.order_ID}" title="Dzēst">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+$('#orderTableBody').html(template);
+}
+
+
+let deleteOrderId = null; // Store the ID of the order to be deleted
+
+$(document).on('click', '.delete-order', function (e) {
+    e.preventDefault();
+    deleteOrderId = $(this).data('id'); // Get the order ID from the button
+    $('#deleteOrderModal').modal('show'); // Show the delete confirmation modal
+});
+
+$('#confirmDeleteOrder').on('click', function () {
+    if (deleteOrderId) {
+        $.post('../database/order_delete.php', { id: deleteOrderId }, function (response) {
+            try {
+                const result = JSON.parse(response);
+                if (result.success) {
+                    showAlert('Pasūtījums veiksmīgi dzēsts!', 'success');
+                    $('#deleteOrderModal').modal('hide'); // Hide the modal
+                    fetchOrders(); // Refresh the orders table
+                } else {
+                    showAlert(result.error || 'Neizdevās dzēst pasūtījumu.', 'danger');
+                }
+            } catch (e) {
+                console.error('Error parsing response:', e, response);
+                showAlert('Neizdevās apstrādāt servera atbildi.', 'danger');
+            }
+        }).fail(function () {
+            showAlert('Neizdevās nosūtīt pieprasījumu.', 'danger');
+        });
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     let isEditMode = false; 
 
     fetchCategories();
