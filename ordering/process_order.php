@@ -1,47 +1,39 @@
 <?php
-session_start();
-include '../database/db_connection.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+require '../database/db_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = $_POST['name'] ?? null;
-    $surname = $_POST['surname'] ?? null;
-    $email = $_POST['email'] ?? null;
-    $phone = $_POST['phone'] ?? null;
-    $country = $_POST['country'] ?? null;
-    $city = $_POST['city'] ?? null;
-    $street = $_POST['street'] ?? null;
-    $house = $_POST['house'] ?? null;
-    $apartment = $_POST['apartment'] ?? null;
-    $postal_code = $_POST['postal_code'] ?? null;
-    $total_amount = $_POST['total_amount'] ?? 0;
-    $delivery = $_POST['delivery'] ?? null;
-    $pickup_address = $_POST['pickup_address'] ?? null;
-
-    // Input length validation
-    if (strlen($name) > 50 || strlen($surname) > 50 || strlen($email) > 255 || strlen($phone) > 12 ||
-        strlen($country) > 50 || strlen($city) > 50 || strlen($street) > 50 || strlen($house) > 30 ||
-        strlen($apartment) > 30 || strlen($postal_code) > 7) {
-        header("Location: ../checkout.php?error=Ievadītie dati pārsniedz atļauto garumu.");
-        exit;
-    }
-
-    if (!$name || !$surname || !$email || !$phone || !$total_amount || !$delivery) {
-        header("Location: ../checkout.php?error=Trūkst obligāto lauku.");
-        exit;
-    }
-
-    // Start a transaction
-    $conn->begin_transaction();
-
     try {
-        // Insert into orders table
-        $stmt = $conn->prepare("INSERT INTO orders (name, surname, email, phone, country, city, street, house, apartment, postal_code, total_amount, delivery, pickup_address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        if (!$stmt) {
-            throw new Exception('Prepare failed: ' . $conn->error);
-        }
+        // Collect form data
+        $name = $_POST['name'] ?? '';
+        $surname = $_POST['surname'] ?? '';
+        $email = $_POST['email'] ?? '';
+        $phone = $_POST['phone'] ?? '';
+        $country = $_POST['country'] ?? '';
+        $city = $_POST['city'] ?? '';
+        $street = $_POST['street'] ?? '';
+        $house = $_POST['house'] ?? '';
+        $apartment = $_POST['apartment'] ?? '';
+        $postalCode = $_POST['postal_code'] ?? '';
+        $totalAmount = $_POST['total_amount'] ?? 0.00;
+        $delivery = $_POST['delivery'] ?? '';
+        $pickupAddress = $_POST['pickup_address'] ?? '';
+        $shippingPrice = $_POST['shipping_price'] ?? 0.00; // Default to 0.00 if not provided
+        $status = 'Pending'; // Default status
+        $createdAt = date('Y-m-d H:i:s'); // Current timestamp
 
-        $stmt->bind_param(
-            'ssssssssssdss',
+        // Insert into `orders` table
+        $sqlOrder = "INSERT INTO orders (name, surname, email, phone, country, city, street, house, apartment, postal_code, total_amount, created_at, delivery, pickup_address, shipping_price) 
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmtOrder = $conn->prepare($sqlOrder);
+        if (!$stmtOrder) {
+            throw new Exception("Failed to prepare statement for orders: " . $conn->error);
+        }
+        $stmtOrder->bind_param(
+            'ssssssssssdssss',
             $name,
             $surname,
             $email,
@@ -51,17 +43,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $street,
             $house,
             $apartment,
-            $postal_code,
-            $total_amount,
+            $postalCode,
+            $totalAmount,
+            $createdAt,
             $delivery,
-            $pickup_address
+            $pickupAddress,
+            $shippingPrice
         );
 
-        if (!$stmt->execute()) {
-            throw new Exception('Error: ' . $stmt->error);
+        if (!$stmtOrder->execute()) {
+            throw new Exception("Failed to execute statement for orders: " . $stmtOrder->error);
         }
 
-        $order_id = $stmt->insert_id;
+        // Get the last inserted order ID
+        $orderId = $stmtOrder->insert_id;
 
         // Fetch cart items
         if (isset($_SESSION['user_id'])) {
@@ -100,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         while ($cartItem = $cartResult->fetch_assoc()) {
             $orderItemsStmt->bind_param(
                 'iiid',
-                $order_id,
+                $orderId, // Use $orderId instead of $order_id
                 $cartItem['ID_product'],
                 $cartItem['quantity'],
                 $cartItem['price']
@@ -108,6 +103,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (!$orderItemsStmt->execute()) {
                 throw new Exception('Error: ' . $orderItemsStmt->error);
+            }
+
+            // Update the reserved field for the product
+            $updateReservedQuery = "UPDATE product SET reserved = 1 WHERE product_ID = ?";
+            $updateReservedStmt = $conn->prepare($updateReservedQuery);
+            if (!$updateReservedStmt) {
+                throw new Exception('Prepare failed for reserved update: ' . $conn->error);
+            }
+            $updateReservedStmt->bind_param('i', $cartItem['ID_product']);
+            if (!$updateReservedStmt->execute()) {
+                throw new Exception('Error updating reserved field: ' . $updateReservedStmt->error);
             }
         }
 
@@ -130,14 +136,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conn->commit();
 
         // Redirect to success page
-        header("Location: ../order_sucess.php?order_id=$order_id");
+        header("Location: ../order_sucess.php?order_id=$orderId");
         exit;
     } catch (Exception $e) {
-        // Rollback the transaction on error
-        $conn->rollback();
-        die('Error: ' . $e->getMessage());
+        error_log("Error in process_order.php: " . $e->getMessage());
+        header("Location: ../checkout.php?error=" . urlencode("Failed to process order."));
+        exit();
     }
 } else {
-    die('Invalid request method.');
+    header("Location: ../checkout.php?error=" . urlencode("Invalid request method."));
+    exit();
 }
 ?>

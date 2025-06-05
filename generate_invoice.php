@@ -18,6 +18,9 @@ if (!$order) {
     die('Order not found.');
 }
 
+// Fetch the shipping price from the order
+$shippingPrice = $order['shipping_price'] ?? 0.00; // Default to 0.00 if not found
+
 // Fetch products from the order_items table
 $productStmt = $conn->prepare("
     SELECT 
@@ -46,7 +49,7 @@ $pdf->SetFont('Times', 'B', 14);
 $pdf->Cell(0, 10, 'Rēķins', 0, 1, 'C');
 
 // Invoice Number and Date
-$pdf->SetFont('Times', '', 12);
+$pdf->SetFont('Times', '', 10);
 $pdf->Cell(95, 10, 'Datums: ' . date('d/m/Y'), 0, 0, 'L'); // Latvian date format
 $pdf->Cell(95, 10, 'Nr. GGG-' . $orderId . '/' . date('Y'), 0, 1, 'R');
 
@@ -54,11 +57,11 @@ $pdf->Cell(95, 10, 'Nr. GGG-' . $orderId . '/' . date('Y'), 0, 1, 'R');
 $pdf->Ln(5);
 
 // Service Provider Section
-$pdf->SetFont('Times', 'B', 12);
+$pdf->SetFont('Times', 'B', 11);
 $pdf->Cell(95, 10, 'Pakalpojumu sniedzējs', 0, 0, 'L');
 $pdf->Cell(95, 10, 'Pakalpojumu saņēmējs', 0, 1, 'L');
 
-$pdf->SetFont('Times', '', 12);
+$pdf->SetFont('Times', '', 11);
 $pdf->Cell(95, 5, 'Nosaukums: G.G.G., IU', 0, 0, 'L');
 $pdf->Cell(95, 5, 'Nosaukums: ' . $order['name'] . ' ' . $order['surname'], 0, 1, 'L');
 $pdf->Cell(95, 10, 'Reģ. Nr.: 41202014505', 0, 0, 'L');
@@ -98,7 +101,7 @@ $pdf->SetXY($x2 + 25, $y); // Reset position for the next cell
 $pdf->Ln(10);
 
 // Table Rows (Products)
-$pdf->SetFont('Times', '', 10);
+$pdf->SetFont('Times', '', 11);
 $counter = 1;
 $total = 0;
 while ($product = $products->fetch_assoc()) {
@@ -115,10 +118,19 @@ while ($product = $products->fetch_assoc()) {
     $pdf->Cell(25, 10, number_format($sum, 2), 1, 1, 'R');
 }
 
+// Add shipping price to the invoice
+$total += $shippingPrice;
+
+$pdf->Cell(10, 10, $counter++, 1, 0, 'C');
+$pdf->Cell(90, 10, 'Piegāde', 1, 0, 'L');
+$pdf->Cell(20, 10, '-', 1, 0, 'C');
+$pdf->Cell(20, 10, '-', 1, 0, 'C');
+$pdf->Cell(25, 10, number_format($shippingPrice, 2), 1, 0, 'R'); // Use shipping_price from the orders table
+$pdf->Cell(25, 10, number_format($shippingPrice, 2), 1, 1, 'R'); // Use shipping_price from the orders table
+
+
 // Summary Section
 $pdf->SetFont('Times', 'B', 10);
-
-// Kopā (Total)
 $pdf->Cell(140, 10, '', 0, 0, 'C'); // Empty space for alignment
 $pdf->Cell(25, 10, 'Kopā:', 1, 0, 'L'); // Text under "Cena EUR bez PVN" aligned left
 $pdf->Cell(25, 10, number_format($total, 2), 1, 1, 'R'); // Number under "Summa EUR bez PVN"
@@ -146,6 +158,12 @@ $pdf->Cell(140, 10, '', 0, 0, 'C'); // Empty space for alignment
 $pdf->MultiCell(25, 5, "Summa\napmaksai:", 1, 'L'); // Two-line text under "Cena EUR bez PVN"
 $pdf->SetXY($pdf->GetX() + 165, $pdf->GetY() - 10); // Adjust position for the next column
 $pdf->Cell(25, 10, number_format($total, 2), 1, 1, 'R'); // Use $total for the number under "Summa EUR bez PVN"
+
+$pdf->Ln(5); // Add 5 units of vertical spacing
+
+// Add the payment deadline note
+$pdf->SetFont('Times', '', 11);
+$pdf->Cell(0, 10, 'Rēķins jāsamaksā 12 stundu laikā, vai arī tas var tikt anulēts.', 0, 1, 'L'); // Align text to the left
 
 // Output the PDF
 $pdf->Output('I', 'Rekins.pdf');

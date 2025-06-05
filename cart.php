@@ -11,7 +11,7 @@ $sessionID = session_id();
 
 if ($userID) {
     $query = "
-        SELECT c.*, p.name, p.price, p.image 
+        SELECT c.*, p.name, p.price, p.image, p.reserved, p.stock_quantity 
         FROM cart c
         INNER JOIN product p ON c.ID_product = p.product_ID
         WHERE c.ID_user = ?
@@ -20,7 +20,7 @@ if ($userID) {
     $stmt->bind_param('i', $userID);
 } else {
     $query = "
-        SELECT c.*, p.name, p.price, p.image 
+        SELECT c.*, p.name, p.price, p.image, p.reserved, p.stock_quantity 
         FROM cart c
         INNER JOIN product p ON c.ID_product = p.product_ID
         WHERE c.session_ID = ?
@@ -45,6 +45,34 @@ foreach ($cartItems as $item) {
 $freeShippingThreshold = 55;
 $remainingAmount = max(0, $freeShippingThreshold - $totalPrice); 
 $progressPercentage = min(100, ($totalPrice / $freeShippingThreshold) * 100); 
+
+$shippingPrice = $remainingAmount <= 0 ? 0 : 5; // Example shipping price if not free
+
+$hasError = false;
+$errorMessage = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
+    foreach ($cartItems as $item) {
+        if ($item['reserved'] == 1 || $item['stock_quantity'] == 0) {
+            $hasError = true;
+            $errorMessage = 'Daži produkti tavā grozā ir rezervēti vai nav pieejami noliktavā.';
+            break;
+        }
+
+        if ($item['quantity'] > $item['stock_quantity']) {
+            $hasError = true;
+            $errorMessage = 'Daži produkti tavā grozā pārsniedz pieejamo daudzumu noliktavā.';
+            break;
+        }
+    }
+
+    // Redirect to the checkout page if there are no errors
+    if (!$hasError) {
+        $freeShipping = $remainingAmount <= 0 ? 'true' : 'false';
+        header("Location: checkout.php?freeShipping=$freeShipping");
+        exit;
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -59,6 +87,12 @@ $progressPercentage = min(100, ($totalPrice / $freeShippingThreshold) * 100);
   <script src="scripts.js" defer></script>
 </head>
 <body>
+
+<?php if ($hasError): ?>
+    <div class="alert alert-danger alert-dismissible fade show position-fixed top-0 start-0 w-100 text-center" role="alert" style="z-index: 1050;">
+        <strong><?= htmlspecialchars($errorMessage) ?></strong>
+    </div>
+<?php endif; ?>
 
   <div class="announcement" id="announcement"></div>
 
@@ -134,12 +168,10 @@ $progressPercentage = min(100, ($totalPrice / $freeShippingThreshold) * 100);
                     <div class="border-top pt-3">
                         <?php if (!empty($cartItems)): ?>
                             <?php foreach ($cartItems as $item): ?>
-                                <?php for ($i = 0; $i < $item['quantity']; $i++): ?>
-                                    <div class="d-flex justify-content-between">
-                                        <span><?= htmlspecialchars($item['name']) ?></span>
-                                        <span>€<?= number_format($item['price'], 2) ?></span>
-                                    </div>
-                                <?php endfor; ?>
+                                <div class="d-flex justify-content-between">
+                                    <span><?= htmlspecialchars($item['name']) ?></span>
+                                    <span>€<?= number_format($item['price'], 2) ?></span>
+                                </div>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </div>
@@ -156,7 +188,10 @@ $progressPercentage = min(100, ($totalPrice / $freeShippingThreshold) * 100);
                     <?php
                     $freeShipping = $remainingAmount <= 0;
                     ?>
-                    <button class="btn btn-dark w-100 mt-4" onclick="window.location.href='checkout.php?freeShipping=<?= $freeShipping ? 'true' : 'false' ?>';">Apmaksāt</button>
+                    <form method="POST">
+                        <input type="hidden" name="checkout" value="1">
+                        <button class="btn btn-dark w-100 mt-4">Apmaksāt</button>
+                    </form>
                 </div>
             </div>
         </div>

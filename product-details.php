@@ -101,6 +101,15 @@ if (isset($_SESSION['user_id']) || session_id()) {
     </div>
     <div class="row">
         <div class="col-md-6">
+            <?php if ($product['reserved'] == 1): ?>
+                <div class="reserved-label position-absolute text-white bg-primary px-2 py-1" style="top: 20px; left: 30px; z-index: 1; border-radius: 5px;">
+                    Rezervēts
+                </div>
+            <?php elseif ($product['stock_quantity'] == 0): ?>
+                <div class="sold-out-label position-absolute text-white bg-danger px-2 py-1" style="top: 20px; left: 30px; z-index: 1; border-radius: 5px;">
+                    Izpārdots
+                </div>
+            <?php endif; ?>
             <img src="<?= htmlspecialchars($product['image']) ?>" class="img-fluid" alt="<?= htmlspecialchars($product['name']) ?>">
         </div>
         <div class="col-md-6">
@@ -175,7 +184,7 @@ if (isset($_SESSION['user_id']) || session_id()) {
     <div class="row">
         <?php
         $stmt = $conn->prepare("
-            SELECT DISTINCT p.product_ID, p.name, p.short_description, p.price, p.image 
+            SELECT DISTINCT p.product_ID, p.name, p.short_description, p.price, p.image, p.reserved, p.stock_quantity
             FROM product p
             INNER JOIN product_sets ps ON p.product_ID = ps.ID_product
             INNER JOIN sets s ON ps.ID_set = s.set_ID
@@ -198,6 +207,17 @@ if (isset($_SESSION['user_id']) || session_id()) {
                 ?>
                 <div class="col-md-3">
                     <div class="card mb-4 text-center">
+                        <?php if ($relatedProduct['reserved'] == 1): ?>
+                            <!-- Rezervēts label -->
+                            <div class="reserved-label position-absolute text-white bg-primary px-2 py-1" style="top: 10px; left: 10px; z-index: 1; border-radius: 5px;">
+                                Rezervēts
+                            </div>
+                        <?php elseif ($relatedProduct['stock_quantity'] == 0): ?>
+                            <!-- Izpārdots label -->
+                            <div class="sold-out-label position-absolute text-white bg-danger px-2 py-1" style="top: 10px; left: 10px; z-index: 1; border-radius: 5px;">
+                                Izpārdots
+                            </div>
+                        <?php endif; ?>
                         <img src="<?= htmlspecialchars($relatedProduct['image']) ?>" class="card-img-top" alt="<?= htmlspecialchars($relatedProduct['name']) ?>">
                         <div class="card-body">
                             <h5 class="card-title"><?= htmlspecialchars($relatedProduct['name']) ?></h5>

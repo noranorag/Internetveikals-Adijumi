@@ -195,20 +195,31 @@ $totalPages = ceil($totalProducts / $limit);
         </div>
 
         <div class="row">
-    <?php foreach ($products as $product): ?>
-        <div class="col-sm-6 col-md-4 col-lg-3 mb-4"> <!-- mb-4 here! -->
-            <div class="card text-center h-100">
-                <img src="<?= htmlspecialchars($product['image']) ?>" class="card-img-top" alt="<?= htmlspecialchars($product['name']) ?>">
-                <div class="card-body">
-                    <h5 class="card-title"><?= htmlspecialchars($product['name']) ?></h5>
-                    <p class="card-text"><?= htmlspecialchars($product['short_description']) ?></p>
-                    <p class="card-text"><strong>€<?= htmlspecialchars($product['price']) ?></strong></p>
-                    <button class="btn btn-primary" onclick="window.location.href='product-details.php?product_ID=<?= $product['product_ID'] ?>'">Apskatīt</button>
+            <?php foreach ($products as $product): ?>
+                <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                    <div class="card text-center h-100 position-relative">
+                        <?php if ($product['reserved'] == 1): ?>
+                            <!-- Rezervēts label -->
+                            <div class="reserved-label position-absolute text-white bg-primary px-2 py-1" style="top: 10px; left: 10px; z-index: 1; border-radius: 5px;">
+                                Rezervēts
+                            </div>
+                        <?php elseif ($product['stock_quantity'] == 0): ?>
+                            <!-- Izpārdots label -->
+                            <div class="sold-out-label position-absolute text-white bg-danger px-2 py-1" style="top: 10px; left: 10px; z-index: 1; border-radius: 5px;">
+                                Izpārdots
+                            </div>
+                        <?php endif; ?>
+                        <img src="<?= htmlspecialchars($product['image']) ?>" class="card-img-top" alt="<?= htmlspecialchars($product['name']) ?>">
+                        <div class="card-body">
+                            <h5 class="card-title"><?= htmlspecialchars($product['name']) ?></h5>
+                            <p class="card-text"><?= htmlspecialchars($product['short_description']) ?></p>
+                            <p class="card-text"><strong>€<?= htmlspecialchars($product['price']) ?></strong></p>
+                            <button class="btn btn-primary" onclick="window.location.href='product-details.php?product_ID=<?= $product['product_ID'] ?>'">Apskatīt</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            <?php endforeach; ?>
         </div>
-    <?php endforeach; ?>
-</div>
     </div>
 
     <?php if ($totalPages > 1): ?>

@@ -1,3 +1,46 @@
+<?php
+include 'database/db_connection.php';
+
+$popularProducts = [];
+
+try {
+    // Fetch the most popular products based on quantity in orders
+    $popularProductsQuery = $conn->prepare("
+        SELECT 
+            p.product_ID, 
+            p.name, 
+            p.short_description AS description, 
+            p.image, 
+            p.price, 
+            p.reserved, 
+            p.stock_quantity, 
+            SUM(oi.quantity) AS total_quantity
+        FROM order_items oi
+        INNER JOIN product p ON oi.ID_product = p.product_ID
+        GROUP BY oi.ID_product
+        ORDER BY total_quantity DESC
+        LIMIT 4
+    ");
+    $popularProductsQuery->execute();
+    $result = $popularProductsQuery->get_result();
+    while ($row = $result->fetch_assoc()) {
+        $popularProducts[] = [
+            'product_ID' => htmlspecialchars($row['product_ID']),
+            'name' => htmlspecialchars($row['name']),
+            'description' => htmlspecialchars($row['description']),
+            'image' => htmlspecialchars($row['image']),
+            'price' => htmlspecialchars($row['price']),
+            'reserved' => htmlspecialchars($row['reserved']),
+            'stock_quantity' => htmlspecialchars($row['stock_quantity']),
+            'total_quantity' => htmlspecialchars($row['total_quantity']),
+        ];
+    }
+    $popularProductsQuery->close();
+} catch (mysqli_sql_exception $e) {
+    error_log("Database query error: " . $e->getMessage());
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,56 +103,36 @@
     </section>
 
     <section class="popular-products-section mt-5">
-    <div class="container">
-        <h3 class="mb-4 text-center">Populārākie produkti</h3>
-        <div class="row">
-            <div class="col-12 col-sm-6 col-xl-3">
-                <div class="card mb-4 text-center">
-                    <img src="images/berniem.png" class="card-img-top" alt="Product Image">
-                    <div class="card-body">
-                        <h5 class="card-title">Produkts 1</h5>
-                        <p class="card-text">Īss apraksts par produktu.</p>
-                        <p class="card-text"><strong>€20.00</strong></p>
-                        <button class="btn btn-primary" onclick="window.location.href='product-details.php'">Apskatīt</button>
+        <div class="container">
+            <h3 class="mb-4 text-center">Populārākie produkti</h3>
+            <div class="row">
+                <?php foreach ($popularProducts as $product): ?>
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card mb-4 text-center">
+                            <?php if ($product['reserved'] == 1): ?>
+                                <!-- Rezervēts label -->
+                                <div class="reserved-label position-absolute text-white bg-primary px-2 py-1" style="top: 10px; left: 10px; z-index: 1; border-radius: 5px;">
+                                    Rezervēts
+                                </div>
+                            <?php elseif ($product['stock_quantity'] == 0): ?>
+                                <!-- Izpārdots label -->
+                                <div class="sold-out-label position-absolute text-white bg-danger px-2 py-1" style="top: 10px; left: 10px; z-index: 1; border-radius: 5px;">
+                                    Izpārdots
+                                </div>
+                            <?php endif; ?>
+                            <img src="<?php echo $product['image']; ?>" class="card-img-top" alt="Product Image">
+                            <div class="card-body">
+                                <h5 class="card-title"><?php echo $product['name']; ?></h5>
+                                <p class="card-text"><?php echo $product['description']; ?></p>
+                                <p class="card-text"><strong>€<?php echo $product['price']; ?></strong></p>
+                                <button class="btn btn-primary" onclick="window.location.href='product-details.php?product_ID=<?php echo $product['product_ID']; ?>'">Apskatīt</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-xl-3">
-                <div class="card mb-4 text-center">
-                    <img src="images/berniem.png" class="card-img-top" alt="Product Image">
-                    <div class="card-body">
-                        <h5 class="card-title">Produkts 2</h5>
-                        <p class="card-text">Īss apraksts par produktu.</p>
-                        <p class="card-text"><strong>€25.00</strong></p>
-                        <button class="btn btn-primary" onclick="window.location.href='product-details.php'">Apskatīt</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-xl-3">
-                <div class="card mb-4 text-center">
-                    <img src="images/berniem.png" class="card-img-top" alt="Product Image">
-                    <div class="card-body">
-                        <h5 class="card-title">Produkts 3</h5>
-                        <p class="card-text">Īss apraksts par produktu.</p>
-                        <p class="card-text"><strong>€30.00</strong></p>
-                        <button class="btn btn-primary" onclick="window.location.href='product-details.php'">Apskatīt</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-xl-3">
-                <div class="card mb-4 text-center">
-                    <img src="images/berniem.png" class="card-img-top" alt="Product Image">
-                    <div class="card-body">
-                        <h5 class="card-title">Produkts 4</h5>
-                        <p class="card-text">Īss apraksts par produktu.</p>
-                        <p class="card-text"><strong>€35.00</strong></p>
-                        <button class="btn btn-primary" onclick="window.location.href='product-details.php'">Apskatīt</button>
-                    </div>
-                </div>
+                <?php endforeach; ?>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
 <section class="about-products-section mt-5">
     <div class="container position-relative">

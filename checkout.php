@@ -42,7 +42,7 @@ if (session_status() === PHP_SESSION_NONE) {
             <div class="line-container mt-2">
                 <div class="line-highlight"></div>
             </div>
-            <div class="container mt-5 pt-1">
+            <div class="container mt-3 pt-1">
         <?php if (isset($_GET['error'])): ?>
             <div class="alert alert-danger text-center" role="alert">
                 <?= htmlspecialchars($_GET['error'], ENT_QUOTES, 'UTF-8') ?>
@@ -50,9 +50,11 @@ if (session_status() === PHP_SESSION_NONE) {
         <?php endif; ?>
 
             <div id="information" class="form-section">
-                <div class="login-prompt text-center mb-4">
-                    <p>Ir konts? <a href="login.php" class="btn btn-outline-main">Ielogojies</a> lai aizpildītu informāciju</p>
-                </div>
+                <?php if (!isset($_SESSION['user_id'])): ?>
+                    <div class="login-prompt text-center mb-4">
+                        <p>Ir konts? <a href="login.php" class="btn btn-outline-main">Ielogojies</a> lai aizpildītu informāciju</p>
+                    </div>
+                <?php endif; ?>
                 <div id="information-errors" class="text-danger mb-3" style="display: none;"></div>
                 <div class="form-group">
                     <label>Vārds *</label>
@@ -219,101 +221,17 @@ if (session_status() === PHP_SESSION_NONE) {
         <input type="hidden" name="house" id="house">
         <input type="hidden" name="apartment" id="apartment">
         <input type="hidden" name="postal_code" id="postal-code">
+        <input type="hidden" name="shipping_price" id="shipping-price"> <!-- Ensure this field exists -->
     </form>
 
-<?php
-$freeShipping = isset($_GET['freeShipping']) && $_GET['freeShipping'] === 'true';
-?>
+    <?php
+    $freeShipping = isset($_GET['freeShipping']) && $_GET['freeShipping'] === 'true';
+    ?>
 
-<script>
-
-    console.log(document.getElementById('checkout-form'));
-
-    document.addEventListener('DOMContentLoaded', () => {
-    if (freeShipping) {
-        document.querySelectorAll('.shipping-price').forEach(price => {
-            price.style.display = 'none'; 
-        });
-    }
-
-    const form = document.getElementById('final-checkout-form'); 
-    if (form) {
-        form.addEventListener('submit', collectOrderData);
-
-        form.addEventListener('submit', (event) => {
-            console.log('Form is being submitted...');
-        });
-    } else {
-        console.error('Form with id "final-checkout-form" not found.');
-    }
-});
-
-  const freeShipping = <?= $freeShipping ? 'true' : 'false' ?>;
-  const shippingPrices = {
-    'omniva-pakomats': 3.00, 
-    'omniva-kurjers': 12.00, 
-    'dpd': 2.50,        
-    'pasts': 4.00   
-};
-
-
-function collectOrderData(event) {
-    event.preventDefault();
-
-    const finalForm = document.getElementById('final-checkout-form');
-
-    const deliveryMethod = document.querySelector('input[name="delivery"]:checked')?.value || '';
-
-    console.log('Selected Delivery Method:', deliveryMethod); 
-
-    finalForm.querySelector('input[name="delivery"]').value = deliveryMethod;
-
-    console.log('Final Form Data:', new FormData(finalForm));
-
-    const pickupAddress = (() => {
-        const omnivaDropdown = document.getElementById('omniva-pakomati');
-        const dpdDropdown = document.getElementById('dpd-pakomati');
-
-        if (omnivaDropdown && omnivaDropdown.style.display !== 'none' && omnivaDropdown.value) {
-            return omnivaDropdown.options[omnivaDropdown.selectedIndex].text; 
-        } else if (dpdDropdown && dpdDropdown.style.display !== 'none' && dpdDropdown.value) {
-            return dpdDropdown.options[dpdDropdown.selectedIndex].text; 
-        }
-        return '';
-    })();
-    const totalAmount = parseFloat(document.getElementById('summary-total-cost')?.textContent.replace('€', '').trim()) || 0;
-    const name = document.querySelector('input[name="name"]')?.value || '';
-    const surname = document.querySelector('input[name="surname"]')?.value || '';
-    const email = document.querySelector('input[name="email"]')?.value || '';
-    const phone = document.querySelector('input[name="phone"]')?.value || '';
-    const country = document.querySelector('input[name="country"]')?.value || '';
-    const city = document.querySelector('input[name="city"]')?.value || '';
-    const street = document.querySelector('input[name="street"]')?.value || '';
-    const house = document.querySelector('input[name="house"]')?.value || '';
-    const apartment = document.querySelector('input[name="apartment"]')?.value || '';
-    const postalCode = document.querySelector('input[name="postal_code"]')?.value || '';
-
-    // Populate the hidden form
-    finalForm.querySelector('input[name="delivery"]').value = deliveryMethod;
-    finalForm.querySelector('input[name="pickup_address"]').value = pickupAddress;
-    finalForm.querySelector('input[name="total_amount"]').value = totalAmount;
-    finalForm.querySelector('input[name="name"]').value = name;
-    finalForm.querySelector('input[name="surname"]').value = surname;
-    finalForm.querySelector('input[name="email"]').value = email;
-    finalForm.querySelector('input[name="phone"]').value = phone;
-    finalForm.querySelector('input[name="country"]').value = country;
-    finalForm.querySelector('input[name="city"]').value = city;
-    finalForm.querySelector('input[name="street"]').value = street;
-    finalForm.querySelector('input[name="house"]').value = house;
-    finalForm.querySelector('input[name="apartment"]').value = apartment;
-    finalForm.querySelector('input[name="postal_code"]').value = postalCode;
-
-    console.log('Final Form Data:', new FormData(finalForm));
-
-    finalForm.submit();
-}
-</script>
-
+    <script>
+        const freeShipping = <?= json_encode($freeShipping) ?>; // Use json_encode to ensure proper boolean handling
+        console.log("Free Shipping Status in checkout.php:", freeShipping);
+    </script>
 
 </body>
 </html>
