@@ -5,6 +5,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+include 'user-database/check_reserved.php';
+
 $query = "SELECT * FROM product WHERE active = 'active'";
 $result = $conn->query($query);
 

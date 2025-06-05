@@ -11,7 +11,7 @@ if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
 }
 
 $user_id = $_SESSION['user_id'];
-$target_dir = "images/"; 
+$target_dir = "../images/"; 
 $image_name = basename($_FILES['image']['name']);
 $image_path = $target_dir . $image_name;
 $uploaded_at = date('Y-m-d H:i:s');

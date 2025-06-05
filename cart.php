@@ -6,6 +6,8 @@ if ($conn->connect_error) {
     die("Savienojums neizdevās: " . $conn->connect_error);
 }
 
+include 'user-database/check_reserved.php';
+
 $userID = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 $sessionID = session_id();
 

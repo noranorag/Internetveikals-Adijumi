@@ -12,6 +12,8 @@ if (!isset($_SESSION['user_id'])) {
     die("User not logged in.");
 }
 
+include 'user-database/check_reserved.php';
+
 $userID = $_SESSION['user_id']; 
 
 $query = "

@@ -2,6 +2,8 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+$userId = $_SESSION['user_id'] ?? null;
 ?>
 
 <!DOCTYPE html>
@@ -230,7 +232,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
     <script>
         const freeShipping = <?= json_encode($freeShipping) ?>; // Use json_encode to ensure proper boolean handling
-        console.log("Free Shipping Status in checkout.php:", freeShipping);
+        const userId = <?= json_encode($userId) ?>;
     </script>
 
 </body>

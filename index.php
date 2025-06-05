@@ -1,5 +1,6 @@
 <?php
 include 'database/db_connection.php';
+include 'user-database/check_reserved.php';
 
 $popularProducts = [];
 

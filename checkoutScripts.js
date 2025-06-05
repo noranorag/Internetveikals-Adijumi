@@ -432,3 +432,33 @@ function collectOrderData(event) {
     // Submit the form
     document.getElementById('final-checkout-form').submit();
 }
+
+function populateUserInfo() {
+    $.ajax({
+        url: 'ordering/get_user_info.php',
+        method: 'GET',
+        success: function (data) {
+            // Populate form fields with user data
+            $('input[name="name"]').val(data.name);
+            $('input[name="surname"]').val(data.surname);
+            $('input[name="email"]').val(data.email);
+            $('input[name="phone"]').val(data.phone);
+            $('input[name="country"]').val(data.country);
+            $('input[name="city"]').val(data.city);
+            $('input[name="street"]').val(data.street);
+            $('input[name="house"]').val(data.house);
+            $('input[name="apartment"]').val(data.apartment);
+            $('input[name="postal_code"]').val(data.postal_code);
+        },
+        error: function (xhr) {
+            console.error('Failed to fetch user info:', xhr.responseText);
+        }
+    });
+}
+
+// Call the function when the page loads
+$(document).ready(function () {
+    if (typeof userId !== 'undefined' && userId) {
+        populateUserInfo();
+    }
+});
