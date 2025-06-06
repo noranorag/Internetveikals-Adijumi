@@ -444,3 +444,28 @@ document.querySelector('.btn-secondary').addEventListener('click', () => {
     $('#loginModal').modal('hide');
 });
 
+$(document).on('click', '.btn-danger[data-target="#deleteImageModal"]', function () {
+    const imageId = $(this).data('id');
+    $('#deleteImageId').val(imageId);
+});
+
+$('#confirmDeleteImage').on('click', function () {
+    const imageId = $('#deleteImageId').val();
+
+    $.ajax({
+        url: 'delete_gallery_image.php',
+        type: 'POST',
+        data: { gallery_ID: imageId },
+        success: function (result) { // jQuery automatically parses JSON
+            if (result.success) {
+                $('#deleteImageModal').modal('hide');
+                location.reload(); // Reload the page to reflect changes
+            } else {
+                alert(result.error || 'Neizdevās dzēst bildi.');
+            }
+        },
+        error: function () {
+            alert('Neizdevās nosūtīt pieprasījumu.');
+        }
+    });
+});

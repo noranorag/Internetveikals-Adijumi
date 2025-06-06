@@ -1,0 +1,37 @@
+<?php
+require '../database/db_connection.php';
+
+header('Content-Type: application/json; charset=utf-8'); // Ensure the response is JSON
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+$galleryId = $_POST['gallery_ID'] ?? null;
+
+if (!$galleryId) {
+    echo json_encode(['success' => false, 'error' => 'Galerijas ID nav norādīts.']);
+    exit();
+}
+
+
+
+try {
+    // Delete the image from the database
+    $stmt = $conn->prepare("DELETE FROM gallery_images WHERE gallery_ID = ?");
+    $stmt->bind_param('i', $galleryId);
+
+    if ($stmt->execute()) {
+        echo json_encode(['success' => true]); // Properly formatted JSON
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Neizdevās dzēst bildi.']);
+    }
+    
+
+    $stmt->close();
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'error' => 'Kļūda serverī: ' . $e->getMessage()]);
+}
+
+$conn->close();
+?>

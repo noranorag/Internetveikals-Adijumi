@@ -6,6 +6,8 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
     header('Location: ../index.php'); // Redirect to the main page
     exit();
 }
+
+include '../user-database/check_notpaid.php';
 ?>
 
 <!DOCTYPE html>
@@ -41,6 +43,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
                         <option value="Jauns">Jauns</option>
                         <option value="Pieņemts">Pieņemts</option>
                         <option value="Nosūtīts">Nosūtīts</option>
+                        <option value="Neapmaksāts">Neapmaksāts</option> <!-- Added new status -->
                     </select>
                 </div>
             </div>
@@ -132,6 +135,11 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
                             <!-- Options will be dynamically populated -->
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="deliveryNumber">Piegādes Numurs:</label>
+                        <input type="text" class="form-control" id="deliveryNumber" placeholder="Ievadiet piegādes numuru">
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Aizvērt</button>

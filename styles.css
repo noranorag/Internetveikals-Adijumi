@@ -56,6 +56,7 @@ body{
 }
 
 .navbar {
+    height: 70px;
     position: absolute;
     top: 30px;
     left: 0;
@@ -1206,8 +1207,9 @@ body{
 }
 
 .cart-badge {
-    top: -3px; /* Adjust vertical position */
-    right: 1px; /* Adjust horizontal position */
+    position: absolute; /* Position relative to .fa-shopping-cart */
+    top: -5px; /* Adjust to position above the cart icon */
+    right: 5px;
     font-size: 0.7rem; /* Smaller font size */
     width: 18px; /* Circle width */
     height: 18px; /* Circle height */
@@ -1216,11 +1218,11 @@ body{
     background-color: #dc3545; /* Red background */
     color: white; /* White text */
     text-align: center; /* Center text horizontally */
-    position: absolute; /* Position relative to the cart icon */
     font-weight: bold; /* Bold text */
     display: flex; /* Use flexbox for centering */
     align-items: center; /* Center vertically */
     justify-content: center; /* Center horizontally */
+    z-index: 10; /* Ensure it appears above other elements */
 }
 
 .cart-notification {
@@ -1687,6 +1689,62 @@ select.form-control option {
 }
 
 
+.order-card {
+    border: 1px solid #ddd;
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.order-card:hover {
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.order-products img {
+    border-radius: 8px;
+}
+
+#orders-container{
+    margin-top: 100px;
+}
+
+.btn-track-order {
+    background-color: var(--main);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-decoration: none;
+}
+
+.btn-track-order:hover {
+    background-color: var(--mainHover);
+    transform: scale(1.05);
+    color: white;
+}
+
+.btn-invoice {
+    background-color: var(--third);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-decoration: none;
+}
+
+.btn-invoice:hover {
+    background-color: var(--thirdHover);
+    transform: scale(1.05);
+    color: white;
+}
+
+.custom-delete-btn {
+    padding: 8px 26px; 
+    font-size: 16px; 
+    border-radius: 5px;   
+}
 
 @media (max-width: 1240px) {
     .hero-categories {

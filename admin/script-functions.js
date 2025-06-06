@@ -34,6 +34,9 @@ fetchOrders();
 $(document).on('click', '.edit-order', function () {
     const orderId = $(this).data('id');
 
+    // Clear the delivery_number field before opening the modal
+    $('#deliveryNumber').val('');
+
     $.ajax({
         url: '../database/order_get.php',
         type: 'GET',
@@ -76,7 +79,7 @@ $(document).on('click', '.edit-order', function () {
                 $('#orderItemsTable tbody').html(itemsTemplate);
 
                 // Populate status dropdown
-                const statusOptions = ['Jauns', 'Pieņemts', 'Nosūtīts'];
+                const statusOptions = ['Jauns', 'Pieņemts', 'Nosūtīts', 'Neapmaksāts'];
                 let statusTemplate = `<option value="${order.status}" selected>${order.status}</option>`;
                 statusOptions.forEach(status => {
                     if (status !== order.status) {
@@ -84,6 +87,9 @@ $(document).on('click', '.edit-order', function () {
                     }
                 });
                 $('#orderStatus').html(statusTemplate);
+
+                // Populate delivery number field
+                $('#deliveryNumber').val(order.delivery_number || '');
 
                 // Show the modal
                 $('#editOrderModal').modal('show');
@@ -100,11 +106,12 @@ $(document).on('click', '.edit-order', function () {
 $('#saveOrderChanges').on('click', function () {
     const orderId = $('#orderId').val();
     const orderStatus = $('#orderStatus').val();
+    const deliveryNumber = $('#deliveryNumber').val(); // Get the delivery number
 
     $.ajax({
         url: '../database/order_update.php',
         type: 'POST',
-        data: { id: orderId, status: orderStatus },
+        data: { id: orderId, status: orderStatus, delivery_number: deliveryNumber }, // Include delivery_number
         success: function (response) {
             const result = JSON.parse(response);
 
@@ -909,71 +916,77 @@ $('#confirmDeleteOrder').on('click', function () {
 
 
 
-        fetchGallery();
-
         function fetchGallery() {
-            $.ajax({
-                url: '../database/gallery_list.php',
-                type: 'GET',
-                success: function (response) {
+        $.ajax({
+            url: '../database/gallery_list.php',
+            type: 'GET',
+            success: function (response) {
+                try {
                     const gallery = JSON.parse(response);
                     displayGallery(gallery);
-                },
-                error: function () {
-                    alert("Neizdevās ielādēt galerijas datus!");
+                } catch (e) {
+                    console.error('Invalid JSON response:', response);
+                    alert("Neizdevās apstrādāt galerijas datus!");
                 }
-            });
-        }
-    
-        function displayGallery(gallery) {
-            let template = "";
-    
-            gallery.forEach(item => {
-                let statusText = "";
-                switch (item.status) {
-                    case 'approved':
-                        statusText = 'Apstiprināts';
-                        break;
-                    case 'declined':
-                        statusText = 'Noraidīts';
-                        break;
-                    case 'onhold':
-                        statusText = 'Gaida apstiprinājumu';
-                        break;
-                    default:
-                        statusText = 'Nezināms';
-                }
-    
-                
-                let actionButtons = "";
-                if (item.status === 'onhold') {
-                    actionButtons = `
-                        <a href="#" class="btn btn-sm btn-success approve-image" data-id="${item.id}">
-                            <i class="fas fa-check"></i> <!-- Accept icon -->
-                        </a>
-                        <a href="#" class="btn btn-sm btn-danger decline-image" data-id="${item.id}">
-                            <i class="fas fa-times"></i> <!-- Decline icon -->
-                        </a>
-                    `;
-                }
-    
-                template += `
-                    <tr>
-                        <td>${item.id}</td>
-                        <td><img src="../${item.image_path}" style="max-width: 100px; height: auto;"></td>
-                        <td>${item.posted_by}</td>
-                        <td>${statusText}</td>
-                        <td>${actionButtons}</td>
-                    </tr>
+            },
+            error: function () {
+                alert("Neizdevās ielādēt galerijas datus!");
+            }
+        });
+    }
+
+    // Define the displayGallery function
+    function displayGallery(gallery) {
+        let template = "";
+
+        gallery.forEach(item => {
+            let statusText = "";
+            switch (item.status) {
+                case 'approved':
+                    statusText = 'Apstiprināts';
+                    break;
+                case 'denied':
+                    statusText = 'Noraidīts';
+                    break;
+                case 'onhold':
+                    statusText = 'Gaida apstiprinājumu';
+                    break;
+                default:
+                    statusText = 'Nezināms';
+            }
+
+            let actionButtons = "";
+            if (item.status === 'onhold') {
+                actionButtons = `
+                    <a href="#" class="btn btn-sm btn-success approve-image" data-id="${item.id}">
+                        <i class="fas fa-check"></i>
+                    </a>
+                    <a href="#" class="btn btn-sm btn-danger decline-image" data-id="${item.id}">
+                        <i class="fas fa-times"></i>
+                    </a>
                 `;
-            });
-    
-            $('#gallery').html(template); 
-        }
+            }
+
+            template += `
+                <tr>
+                    <td>${item.id}</td>
+                    <td><img src="../${item.image_path}" style="max-width: 100px; height: auto;"></td>
+                    <td>${item.posted_by}</td>
+                    <td>${statusText}</td>
+                    <td>${actionButtons}</td>
+                </tr>
+            `;
+        });
+
+        $('#gallery').html(template);
+    }
+
+    // Call the fetchGallery function
+    fetchGallery();
     
         
 
-        $(document).on('submit', '#addImageForm', function (e) {
+    $(document).on('submit', '#addImageForm', function (e) {
     e.preventDefault();
 
     const formData = new FormData(this);
@@ -1008,42 +1021,47 @@ $('#confirmDeleteOrder').on('click', function () {
     });
 });
 
-        $(document).on('click', '.approve-image, .decline-image', function (e) {
-    e.preventDefault();
+    $(document).on('click', '.approve-image, .decline-image', function (e) {
+        e.preventDefault();
 
-    const button = $(this);
-    const galleryId = button.data('id');
-    const status = button.hasClass('approve-image') ? 'approved' : 'declined';
+        const button = $(this);
+        const galleryId = button.data('id');
+        const status = button.hasClass('approve-image') ? 'approved' : 'denied'; // Updated "declined" to "denied"
 
-    $.ajax({
-        url: '../database/gallery_update_status.php',
-        type: 'POST',
-        data: { gallery_id: galleryId, status: status },
-        success: function (response) {
-            try {
-                const result = JSON.parse(response);
-                if (result.success) {
-                    fetchGallery();
+        console.log(`Sending request to update status: gallery_id=${galleryId}, status=${status}`);
 
-                    // Show success notification
-                    if (status === 'approved') {
-                        showAlert('Veiksmīgi apstiprināta bilde!', 'success');
+        $.ajax({
+            url: '../database/gallery_update_status.php',
+            type: 'POST',
+            data: { gallery_id: galleryId, status: status },
+            success: function (response) {
+                console.log('Server response:', response);
+                try {
+                    const result = JSON.parse(response);
+                    if (result.success) {
+                        fetchGallery();
+
+                        // Show success notification
+                        if (status === 'approved') {
+                            showAlert('Veiksmīgi apstiprināta bilde!', 'success');
+                        } else {
+                            showAlert('Veiksmīgi noraidīta bilde!', 'success');
+                        }
                     } else {
-                        showAlert('Veiksmīgi noraidīta bilde!', 'success');
+                        console.error('Error updating status:', result.error);
+                        showAlert(result.error || 'Neizdevās atjaunināt statusu.', 'danger');
                     }
-                } else {
-                    showAlert(result.error || 'Neizdevās atjaunināt statusu.', 'danger');
+                } catch (e) {
+                    console.error('Invalid JSON response:', response);
+                    showAlert('Neizdevās apstrādāt servera atbildi!', 'danger');
                 }
-            } catch (e) {
-                console.error('Invalid JSON response:', response);
-                showAlert('Neizdevās apstrādāt servera atbildi!', 'danger');
+            },
+            error: function () {
+                console.error('AJAX request failed.');
+                showAlert('Neizdevās nosūtīt pieprasījumu!', 'danger');
             }
-        },
-        error: function () {
-            showAlert('Neizdevās nosūtīt pieprasījumu!', 'danger');
-        }
+        });
     });
-});
 
         $('#statusFilter').on('change', function () {
             const selectedStatus = $(this).val(); 

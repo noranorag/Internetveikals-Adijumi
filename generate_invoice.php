@@ -165,6 +165,21 @@ $pdf->Ln(5); // Add 5 units of vertical spacing
 $pdf->SetFont('Times', '', 11);
 $pdf->Cell(0, 10, 'Rēķins jāsamaksā 12 stundu laikā, vai arī tas var tikt anulēts.', 0, 1, 'L'); // Align text to the left
 
+// Save the PDF to the file system
+$invoiceDir = 'invoices/';
+if (!is_dir($invoiceDir)) {
+    mkdir($invoiceDir, 0777, true); // Create the directory if it doesn't exist
+}
+
+$invoiceFile = $invoiceDir . 'invoice_' . $orderId . '.pdf';
+$pdf->Output('F', $invoiceFile); // Save the PDF to the file system
+
+// Save the invoice path in the database
+$updateInvoicePathStmt = $conn->prepare("UPDATE orders SET invoice_path = ? WHERE order_ID = ?");
+$updateInvoicePathStmt->bind_param('si', $invoiceFile, $orderId);
+$updateInvoicePathStmt->execute();
+$updateInvoicePathStmt->close();
+
 // Output the PDF
 $pdf->Output('I', 'Rekins.pdf');
 ?>

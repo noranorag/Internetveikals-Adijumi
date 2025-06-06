@@ -111,7 +111,7 @@ if (isset($_SESSION['user_id']) || session_id()) {
                                 <?php endforeach; ?>
                             </ul>
                             <?php if (count($cartItems) > 3): ?>
-                                <div class="cart-scroll-indicator">Scroll for more...</div>
+                                <div class="cart-scroll-indicator">Skrullē uz leju...</div>
                             <?php endif; ?>
                             <div class="cart-dropdown-footer">
                                 <a href="<?= $basePath ?>cart.php" class="btn btn-primary btn-sm w-100">Apskatīt grozu</a>
@@ -132,6 +132,8 @@ if (isset($_SESSION['user_id']) || session_id()) {
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
                         <?php if (isset($_SESSION['user_email'])): ?>
                             <a class="dropdown-item" href="<?= $basePath ?>profile-editing/profile-edit.php">Mans profils</a>
+                            <a class="dropdown-item" href="<?= $basePath ?>profile-editing/user-orders.php">Mani pasūtījumi</a>
+                            <a class="dropdown-item" href="<?= $basePath ?>profile-editing/user-gallery.php">Manas bildes</a>
                             <a class="dropdown-item" href="<?= $basePath ?>database/logout.php">Izlogoties</a>
                         <?php else: ?>
                             <a class="dropdown-item" href="<?= $basePath ?>login.php">Ielogoties</a>

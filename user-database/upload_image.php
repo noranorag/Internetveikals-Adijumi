@@ -11,20 +11,20 @@ if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
 }
 
 $user_id = $_SESSION['user_id'];
-$target_dir = "../images/"; 
+$target_dir = "images/"; // Updated to remove "../"
 $image_name = basename($_FILES['image']['name']);
 $image_path = $target_dir . $image_name;
 $uploaded_at = date('Y-m-d H:i:s');
 
-if (!is_dir($target_dir)) {
-    mkdir($target_dir, 0777, true); 
+if (!is_dir("../" . $target_dir)) { // Ensure the directory exists
+    mkdir("../" . $target_dir, 0777, true); 
 }
 
-if (!is_writable($target_dir)) {
+if (!is_writable("../" . $target_dir)) { // Check if the directory is writable
     die("Error: Target directory is not writable.");
 }
 
-if (!move_uploaded_file($_FILES['image']['tmp_name'], $image_path)) {
+if (!move_uploaded_file($_FILES['image']['tmp_name'], "../" . $image_path)) { // Adjust path for file upload
     die("Error: Failed to upload the image.");
 }
 

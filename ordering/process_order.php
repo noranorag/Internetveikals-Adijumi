@@ -143,6 +143,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Commit the transaction
         $conn->commit();
 
+        // After inserting the order into the `orders` table and retrieving the $orderId
+        if (isset($_SESSION['user_id'])) {
+            $userId = $_SESSION['user_id'];
+
+            // Insert into `user_order` table
+            $sqlUserOrder = "INSERT INTO user_order (ID_user, ID_order) VALUES (?, ?)";
+            $stmtUserOrder = $conn->prepare($sqlUserOrder);
+            if (!$stmtUserOrder) {
+                throw new Exception("Neizdevās sagatavot pieprasījumu lietotāja pasūtījumiem: " . $conn->error);
+            }
+            $stmtUserOrder->bind_param('ii', $userId, $orderId);
+
+            if (!$stmtUserOrder->execute()) {
+                throw new Exception("Neizdevās izpildīt pieprasījumu lietotāja pasūtījumiem: " . $stmtUserOrder->error);
+            }
+        }
+
         // Redirect to success page
         header("Location: ../order_sucess.php?order_id=$orderId");
         exit;
