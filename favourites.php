@@ -66,12 +66,10 @@ if ($result->num_rows > 0) {
                     <div class="col-md-3">
                         <div class="card mb-4 text-center">
                             <?php if ($product['reserved'] == 1): ?>
-                                <!-- Rezervēts label -->
                                 <div class="reserved-label position-absolute text-white bg-primary px-2 py-1" style="top: 10px; left: 10px; z-index: 1; border-radius: 5px;">
                                     Rezervēts
                                 </div>
                             <?php elseif ($product['stock_quantity'] == 0): ?>
-                                <!-- Izpārdots label -->
                                 <div class="sold-out-label position-absolute text-white bg-danger px-2 py-1" style="top: 10px; left: 10px; z-index: 1; border-radius: 5px;">
                                     Izpārdots
                                 </div>

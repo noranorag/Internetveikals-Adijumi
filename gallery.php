@@ -1,16 +1,12 @@
 <?php
 require 'database/db_connection.php'; 
 
-// Number of images per page
 $imagesPerPage = 21;
 
-// Get the current page from URL (default to 1)
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
 
-// Calculate the offset for SQL LIMIT clause
 $offset = ($page - 1) * $imagesPerPage;
 
-// First, get total number of approved images to calculate total pages
 $countQuery = "
     SELECT COUNT(*) AS total 
     FROM user_gallery ug
@@ -25,10 +21,8 @@ if ($countResult) {
     $totalImages = (int)$row['total'];
 }
 
-// Calculate total pages
 $totalPages = ceil($totalImages / $imagesPerPage);
 
-// Now, get the images for the current page only
 $query = "
     SELECT 
         gi.gallery_ID AS gallery_id,
@@ -56,7 +50,7 @@ if ($result) {
         $galleryItems[] = [
             'gallery_id' => htmlspecialchars($row['gallery_id']),
             'image_path' => htmlspecialchars($row['image_path']),
-            'review' => htmlspecialchars($row['review']), // Add review to the array
+            'review' => htmlspecialchars($row['review']), 
             'posted_by' => htmlspecialchars($row['posted_by']),
             'user_name' => htmlspecialchars($row['user_name']),
             'user_surname' => htmlspecialchars($row['user_surname']),
@@ -127,19 +121,16 @@ if ($result) {
 
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center mt-4">
-            <!-- Previous Page Link -->
             <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
             <a class="page-link" href="?page=<?= $page - 1 ?>" tabindex="-1">&laquo;</a>
             </li>
 
-            <!-- Page Number Links -->
             <?php for ($i = 1; $i <= $totalPages; $i++): ?>
             <li class="page-item <?= ($page == $i) ? 'active' : '' ?>">
                 <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
             </li>
             <?php endfor; ?>
 
-            <!-- Next Page Link -->
             <li class="page-item <?= ($page >= $totalPages) ? 'disabled' : '' ?>">
             <a class="page-link" href="?page=<?= $page + 1 ?>">&raquo;</a>
             </li>
@@ -165,8 +156,8 @@ if ($result) {
                 </div>
                 <div class="modal-body text-center">
                     <img src="" id="modalImage" class="img-fluid mt-3" alt="Gallery Image">
-                    <p class="review-full font-italic" id="modalReview"></p> <!-- Full review -->
-                    <p class="user-name font-weight-bold mt-2" id="modalProduct"></p> <!-- Name and surname -->
+                    <p class="review-full font-italic" id="modalReview"></p> 
+                    <p class="user-name font-weight-bold mt-2" id="modalProduct"></p> 
                 </div>
             </div>
         </div>
@@ -212,15 +203,15 @@ if ($result) {
 
     <script>
         $('#imageModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var name = button.data('name'); // Extract user name
-            var review = button.data('review'); // Extract review
-            var imageSrc = button.data('image'); // Extract image source
+            var button = $(event.relatedTarget); 
+            var name = button.data('name'); 
+            var review = button.data('review'); 
+            var imageSrc = button.data('image'); 
 
             var modal = $(this);
-            modal.find('#modalImage').attr('src', imageSrc); // Set the image source
-            modal.find('#modalReview').text('"' + review + '"'); // Add quotes around the review
-            modal.find('#modalProduct').text('- ' + name); // Add a dash before the name
+            modal.find('#modalImage').attr('src', imageSrc); 
+            modal.find('#modalReview').text('"' + review + '"'); 
+            modal.find('#modalProduct').text('- ' + name); 
         });
     </script>
 </body>

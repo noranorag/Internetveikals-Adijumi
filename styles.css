@@ -443,24 +443,24 @@ body{
 
 .gallery {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
-    gap: 1rem; /* Space between items */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem; 
 }
 
 .gallery-item {
     position: relative;
     overflow: hidden;
-    width: 100%; /* Ensure it spans the full column width */
-    aspect-ratio: 4 / 5; /* Adjusted aspect ratio for a balanced size */
-    background-color: #f0f0f0; /* Optional: Add a background color for empty spaces */
-    max-height: 300px; /* Limit the maximum height */
+    width: 100%; 
+    aspect-ratio: 4 / 5;
+    background-color: #f0f0f0; 
+    max-height: 300px; 
     cursor: pointer;
 }
 
 .gallery-item img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Crop the image to fit the container */
+    object-fit: cover;
     display: block;
     cursor: pointer;
 }
@@ -545,19 +545,19 @@ body{
     height: 220px;
     width: 100%;
     box-sizing: border-box;
-    position: relative; /* Add relative positioning for the date */
+    position: relative; 
 }
 
 .market-details {
-    font-size: 1rem; /* Match the font size of the description */
-    color: #555; /* Match the color of the description */
-    margin: 10px 0; /* Add spacing above and below */
-    line-height: 1.5; /* Adjust line height for readability */
+    font-size: 1rem; 
+    color: #555; 
+    margin: 10px 0; 
+    line-height: 1.5;
 }
 
 .market-details .market-date {
-    font-weight: bold; /* Make the date bold */
-    margin-right: 3px; /* Add spacing between the date and description */
+    font-weight: bold; 
+    margin-right: 3px;
 }
 
 .market-item img {
@@ -589,26 +589,26 @@ body{
 }
 
 .market-link {
-    color: rgb(80, 80, 80); /* Change the link color to black */
-    font-size: 1rem; /* Make the font size smaller */
-    text-decoration: none; /* Remove underline */
-    font-weight: bold; /* Make the font weight normal */
+    color: rgb(80, 80, 80);
+    font-size: 1rem;
+    text-decoration: none;
+    font-weight: bold;
 }
 
 .market-link a {
-    color: #555; /* Style the clickable name */
-    font-weight: normal; /* Make the name bold */
-    text-decoration: none; /* Remove underline */
+    color: #555;
+    font-weight: normal;
+    text-decoration: none;
 }
 
 .market-link a:hover {
-    color: #444444; /* Optional: Change color on hover */
-    text-decoration: underline; /* Add underline only to the link */
+    color: #444444;
+    text-decoration: underline;
 }
 
 .market-link:hover {
-    color: #444; /* Optional: Change color on hover */
-    text-decoration: underline; /* Add underline on hover */
+    color: #444;
+    text-decoration: underline;
 }
 
 .market-image {
@@ -1009,11 +1009,11 @@ body{
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0; /* Remove default Bootstrap margin */
-    position: absolute; /* Ensure proper positioning */
-    top: 50%; /* Center vertically */
-    left: 50%; /* Center horizontally */
-    transform: translate(-50%, -50%); /* Adjust for perfect centering */
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 #loginModal.show{
@@ -1031,17 +1031,17 @@ body{
 
 
 .profile-form-container {
-    max-width: 600px; /* Set a maximum width for the form */
-    margin: 0 auto; /* Center the form horizontally */
-    padding: 20px; /* Add some padding for spacing */
-    background-color: white; /* Optional: Add a background color */
-    border-radius: 10px; /* Optional: Add rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .profile-container {
     display: flex;
-    padding-top: 70px; /* Adjust for navbar height */
+    padding-top: 70px;
 }
 
 .profile-sidebar {
@@ -1102,31 +1102,31 @@ body{
 .user-info {
     display: flex;
     align-items: center;
-    gap: 15px; /* Space between the icon and text */
+    gap: 15px;
 }
 
 .user-icon {
-    font-size: 100px; /* Adjust size of the user icon */
-    color: rgb(70, 70, 70); /* Use the main color */
+    font-size: 100px;
+    color: rgb(70, 70, 70);
 }
 
 .user-details h2 {
     margin: 0;
     font-size: 1.7rem;
-    color: var(--thirdDark); /* Adjust text color */
+    color: var(--thirdDark);
 }
 
 .user-details p {
     margin: 5px 0 0;
     font-size: 1.1rem;
-    color: var(--third); /* Adjust text color */
+    color: var(--third);
 }
 
 .profile-form {
     margin-top: 20px;
     flex-direction: column;
     gap: 15px;
-    max-width: 1000px; /* Limit the form width */
+    max-width: 1000px;
 }
 
 .form-group-row {
@@ -1152,7 +1152,7 @@ body{
     border-radius: 5px;
     font-size: 1rem;
     color: var(--thirdDark);
-    max-width: 1000px; /* Limit the input field width */
+    max-width: 1000px;
 }
 
 .form-group input:focus {
@@ -1162,11 +1162,11 @@ body{
 }
 
 .no-outline {
-    border: none; /* Remove border */
-    outline: none; /* Remove focus outline */
-    background: none; /* Ensure no background is applied */
-    color: inherit; /* Keep the text color consistent */
-    cursor: pointer; /* Ensure it looks clickable */
+    border: none;
+    outline: none;
+    background: none;
+    color: inherit;
+    cursor: pointer;
 }
 
 .free-shipping-box {
@@ -1176,7 +1176,7 @@ body{
   margin-bottom: 20px;
 }
 
-/* Product */
+
 .product-box {
   border-bottom: 1px solid #ccc;
   padding: 15px 0;
@@ -1188,7 +1188,7 @@ body{
   height: 150px;
 }
 
-/* Summary box */
+
 .summary-box {
   background-color: #f5f5f5;
   padding: 20px;
@@ -1235,22 +1235,22 @@ body{
 }
 
 .cart-badge {
-    position: absolute; /* Position relative to .fa-shopping-cart */
-    top: -5px; /* Adjust to position above the cart icon */
+    position: absolute;
+    top: -5px;
     right: 5px;
-    font-size: 0.7rem; /* Smaller font size */
-    width: 18px; /* Circle width */
-    height: 18px; /* Circle height */
-    line-height: 18px; /* Match the height to center the text vertically */
-    border-radius: 50%; /* Make it circular */
-    background-color: #dc3545; /* Red background */
-    color: white; /* White text */
-    text-align: center; /* Center text horizontally */
-    font-weight: bold; /* Bold text */
-    display: flex; /* Use flexbox for centering */
-    align-items: center; /* Center vertically */
-    justify-content: center; /* Center horizontally */
-    z-index: 10; /* Ensure it appears above other elements */
+    font-size: 0.7rem;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    border-radius: 50%;
+    background-color: #dc3545;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
 }
 
 .cart-notification {
@@ -1263,31 +1263,31 @@ body{
     padding: 20px;
     z-index: 1000;
     display: flex;
-    align-items: stretch; /* Ensure both columns (image and text) are the same height */
+    align-items: stretch;
     gap: 20px;
-    width: 400px; /* Increased width for better layout */
+    width: 400px;
     animation: fadeIn 0.5s ease-out, fadeOut 0.5s ease-in 4.5s forwards;
 }
 
 .cart-notification .notification-content {
     display: flex;
-    align-items: stretch; /* Stretch the image and text to match height */
+    align-items: stretch;
     gap: 15px;
-    flex: 1; /* Allow the content to take up the remaining space */
+    flex: 1;
 }
 
 .cart-notification .notification-image {
-    width: 120px; /* Fixed width */
-    height: 100%; /* Stretch to match the height of the notification content */
-    object-fit: cover; /* Ensure the image scales properly without distortion */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+    width: 120px;
+    height: 100%;
+    object-fit: cover;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .cart-notification .notification-text {
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Distribute text and button evenly */
-    flex: 1; /* Allow the text to take up the remaining space */
+    justify-content: space-between;
+    flex: 1;
 }
 
 .cart-notification .notification-name {
@@ -1335,20 +1335,20 @@ body{
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 10px;
-    display: none; /* Hidden by default */
+    display: none;
     z-index: 1000;
 }
 
 .nav-item:hover .cart-dropdown {
-    display: block; /* Show on hover */
+    display: block;
 }
 
 .cart-items {
     list-style: none;
     padding: 0;
     margin: 0;
-    max-height: 200px; /* Limit height for scrolling */
-    overflow-y: auto; /* Enable scrolling */
+    max-height: 200px;
+    overflow-y: auto;
 }
 
 .cart-item {
@@ -1407,12 +1407,12 @@ body{
 }
 
 .cart-dropdown-footer .btn {
-    background-color: var(--third); /* Use the third color */
+    background-color: var(--third);
     color: white;
 }
 
 .cart-dropdown-footer .btn:hover {
-    background-color: var(--thirdHover); /* Use the third hover color */
+    background-color: var(--thirdHover);
     color: white;
 }
 
@@ -1445,7 +1445,7 @@ body{
 .message-button {
     width: 60px;
     height: 60px;
-    background-color: var(--third); /* Use your third color */
+    background-color: var(--third);
     color: white;
     border-radius: 50%;
     display: flex;
@@ -1457,15 +1457,15 @@ body{
 }
 
 .message-button:hover {
-    background-color: var(--thirdHover); /* Use your third hover color */
+    background-color: var(--thirdHover);
     transform: scale(1.1);
 }
 
 .message-icons {
     position: absolute;
-    bottom: 70px; /* Adjusted to align properly */
-    right: 50%; /* Center relative to the main button */
-    transform: translateX(50%); /* Center horizontally */
+    bottom: 70px;
+    right: 50%;
+    transform: translateX(50%);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1502,26 +1502,26 @@ body{
 }
 
 .message-icon.whatsapp {
-    color: #25D366; /* WhatsApp green */
+    color: #25D366;
 }
 
 .message-icon.messenger {
-    color: #0084FF; /* Messenger blue */
+    color: #0084FF;
 }
 
 .message-icon.email {
-    color: #D44638; /* Email red */
+    color: #D44638;
 }
 
 .message-icon.phone {
-    color: #34B7F1; /* Phone blue */
+    color: #34B7F1;
 }
 
 .message-hover-text {
     position: absolute;
-    top: 50%; /* Center vertically relative to the container */
-    transform: translateY(-50%); /* Adjust for perfect vertical centering */
-    right: 90px; /* Position the text to the left of the icons */
+    top: 50%;
+    transform: translateY(-50%);
+    right: 90px;
     font-size: 1rem;
     color: var(--third);
     background-color: white;
@@ -1547,18 +1547,18 @@ body{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 1050; /* Ensure it appears above everything else */
-    width: 90%; /* Increase width */
-    max-width: 800px; /* Set a larger maximum width */
-    pointer-events: none; /* Prevent interaction with elements behind */
+    z-index: 1050;
+    width: 90%;
+    max-width: 800px;
+    pointer-events: none;
 }
 
 .notification-container .alert {
-    pointer-events: auto; /* Allow interaction with the alert itself */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Add a shadow for better visibility */
-    padding: 30px; /* Increase padding for more height */
-    font-size: 1.2rem; /* Increase font size for better readability */
-    line-height: 1.5; /* Adjust line height for better spacing */
+    pointer-events: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    font-size: 1.2rem;
+    line-height: 1.5;
 }
 
 
@@ -1660,19 +1660,19 @@ h3 {
 
 .btn-outline-main {
     background-color: transparent;
-    border: 1px solid var(--main); /* Ensure border is visible */
+    border: 1px solid var(--main);
     color: var(--main);
-    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .btn-outline-main:hover {
-    background-color: var(--main); /* Change background color on hover */
-    color: white; /* Change text color on hover */
-    border-color: var(--main); /* Keep border consistent */
+    background-color: var(--main);
+    color: white;
+    border-color: var(--main);
 }
 
 .address-container {
-    margin-top: 30px; /* Add larger margin between delivery options and address inputs */
+    margin-top: 30px;
 }
 
 .form-group {
@@ -1688,17 +1688,17 @@ h3 {
 }
 
 select.form-control {
-    height: auto; /* Allow the dropdown to adjust its height automatically */
-    line-height: 1.5; /* Adjust line height for better spacing */
-    padding: 8px 12px; /* Add padding for better readability */
-    font-size: 16px; /* Ensure the font size is consistent */
-    overflow: visible; /* Prevent content from being cut off */
+    height: auto;
+    line-height: 1.5;
+    padding: 8px 12px;
+    font-size: 16px;
+    overflow: visible;
 }
 
 select.form-control option {
-    padding: 8px 12px; /* Add padding to the dropdown options */
-    line-height: 1.5; /* Ensure proper spacing between lines */
-    font-size: 16px; /* Match the font size of the dropdown */
+    padding: 8px 12px;
+    line-height: 1.5;
+    font-size: 16px;
 }
 
 #order-summary h5 {
@@ -1706,12 +1706,12 @@ select.form-control option {
     margin-bottom: 10px;
 }
 
-/* Style the cart items */
+
 #cart-items p {
     margin-bottom: 5px;
 }
 
-/* Center the "Pasūtīt" button */
+
 #order .text-center {
     margin-top: 30px;
 }
@@ -1776,7 +1776,7 @@ select.form-control option {
 
 .nav-item .active {
     font-weight: 900;
-    color: #000000; /* Example color */
+    color: #000000;
 }
 
 #addImageModal textarea {
@@ -1892,7 +1892,7 @@ select.form-control option {
     }
 
     .about-products-image {
-        position: static; /* No absolute positioning */
+        position: static;
         width: 100%;
         max-width: 300px;
         margin: 20px auto 0 auto;

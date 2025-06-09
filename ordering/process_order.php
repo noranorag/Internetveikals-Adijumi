@@ -7,7 +7,6 @@ require '../database/db_connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
-        // Collect form data
         $name = $_POST['name'] ?? '';
         $surname = $_POST['surname'] ?? '';
         $email = $_POST['email'] ?? '';
@@ -21,19 +20,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $totalAmount = $_POST['total_amount'] ?? 0.00;
         $delivery = $_POST['delivery'] ?? '';
         $pickupAddress = $_POST['pickup_address'] ?? '';
-        $shippingPrice = $_POST['shipping_price'] ?? 0.00; // Default to 0.00 if not provided
+        $shippingPrice = $_POST['shipping_price'] ?? 0.00;
 
-        // Backend validation for input lengths
         if (strlen($name) > 50 || strlen($surname) > 50 || strlen($email) > 255 || strlen($phone) > 12 ||
             strlen($country) > 50 || strlen($city) > 50 || strlen($street) > 50 || strlen($house) > 30 ||
             strlen($apartment) > 30 || strlen($postalCode) > 7 || strlen($delivery) > 50 || strlen($pickupAddress) > 255) {
             throw new Exception("Ievades garuma validācija neizdevās.");
         }
 
-        $status = 'Pending'; // Default status
-        $createdAt = date('Y-m-d H:i:s'); // Current timestamp
+        $status = 'Pending'; 
+        $createdAt = date('Y-m-d H:i:s'); 
 
-        // Insert into `orders` table
         $sqlOrder = "INSERT INTO orders (name, surname, email, phone, country, city, street, house, apartment, postal_code, total_amount, created_at, delivery, pickup_address, shipping_price) 
                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmtOrder = $conn->prepare($sqlOrder);
@@ -63,10 +60,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new Exception("Neizdevās izpildīt pieprasījumu pasūtījumiem: " . $stmtOrder->error);
         }
 
-        // Get the last inserted order ID
         $orderId = $stmtOrder->insert_id;
 
-        // Fetch cart items
         if (isset($_SESSION['user_id'])) {
             $userId = $_SESSION['user_id'];
             $cartQuery = "SELECT c.ID_product, c.quantity, p.price 
@@ -94,7 +89,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $cartStmt->execute();
         $cartResult = $cartStmt->get_result();
 
-        // Insert cart items into order_items table
         $orderItemsStmt = $conn->prepare("INSERT INTO order_items (ID_order, ID_product, quantity, price) VALUES (?, ?, ?, ?)");
         if (!$orderItemsStmt) {
             throw new Exception('Neizdevās sagatavot pieprasījumu pasūtījuma vienībām: ' . $conn->error);
@@ -103,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         while ($cartItem = $cartResult->fetch_assoc()) {
             $orderItemsStmt->bind_param(
                 'iiid',
-                $orderId, // Use $orderId instead of $order_id
+                $orderId, 
                 $cartItem['ID_product'],
                 $cartItem['quantity'],
                 $cartItem['price']
@@ -113,7 +107,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception('Kļūda: ' . $orderItemsStmt->error);
             }
 
-            // Update the reserved field and reservation_time for the product
             $updateReservedQuery = "UPDATE product SET reserved = 1, reservation_time = NOW() WHERE product_ID = ?";
             $updateReservedStmt = $conn->prepare($updateReservedQuery);
             if (!$updateReservedStmt) {
@@ -125,7 +118,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // Clear the cart after order is placed
         if (isset($_SESSION['user_id'])) {
             $clearCartQuery = "DELETE FROM cart WHERE ID_user = ?";
             $clearCartStmt = $conn->prepare($clearCartQuery);
@@ -140,14 +132,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new Exception('Kļūda, dzēšot grozu: ' . $clearCartStmt->error);
         }
 
-        // Commit the transaction
         $conn->commit();
 
-        // After inserting the order into the `orders` table and retrieving the $orderId
         if (isset($_SESSION['user_id'])) {
             $userId = $_SESSION['user_id'];
 
-            // Insert into `user_order` table
             $sqlUserOrder = "INSERT INTO user_order (ID_user, ID_order) VALUES (?, ?)";
             $stmtUserOrder = $conn->prepare($sqlUserOrder);
             if (!$stmtUserOrder) {
@@ -160,7 +149,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // Redirect to success page
         header("Location: ../order_sucess.php?order_id=$orderId");
         exit;
     } catch (Exception $e) {

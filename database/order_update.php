@@ -3,10 +3,9 @@ require 'db_connection.php';
 
 $orderId = isset($_POST['id']) ? intval($_POST['id']) : 0;
 $status = isset($_POST['status']) ? $conn->real_escape_string($_POST['status']) : '';
-$deliveryNumber = isset($_POST['delivery_number']) ? $conn->real_escape_string($_POST['delivery_number']) : null; // Handle delivery_number
+$deliveryNumber = isset($_POST['delivery_number']) ? $conn->real_escape_string($_POST['delivery_number']) : null;
 
 if ($orderId > 0 && !empty($status)) {
-    // Fetch the current status of the order
     $currentStatusQuery = "SELECT status FROM orders WHERE order_ID = ?";
     $stmtCurrentStatus = $conn->prepare($currentStatusQuery);
     $stmtCurrentStatus->bind_param('i', $orderId);
@@ -14,15 +13,12 @@ if ($orderId > 0 && !empty($status)) {
     $currentStatusResult = $stmtCurrentStatus->get_result();
     $currentStatus = $currentStatusResult->fetch_assoc()['status'];
 
-    // Update the order status and delivery number
     $query = "UPDATE orders SET status = ?, delivery_number = ? WHERE order_ID = ?";
     $stmt = $conn->prepare($query);
     $stmt->bind_param('ssi', $status, $deliveryNumber, $orderId);
 
     if ($stmt->execute()) {
-        // Handle status-specific logic
         if ($currentStatus === 'Jauns' && $status === 'Pieņemts') {
-            // Fetch the products in the order
             $orderItemsQuery = "SELECT ID_product, quantity FROM order_items WHERE ID_order = ?";
             $stmtOrderItems = $conn->prepare($orderItemsQuery);
             $stmtOrderItems->bind_param('i', $orderId);
@@ -33,7 +29,6 @@ if ($orderId > 0 && !empty($status)) {
                 $productId = $item['ID_product'];
                 $quantity = $item['quantity'];
 
-                // Update the reserved column and decrement stock_quantity
                 $updateProductQuery = "UPDATE product SET reserved = 0, stock_quantity = stock_quantity - ? WHERE product_ID = ?";
                 $stmtUpdateProduct = $conn->prepare($updateProductQuery);
                 $stmtUpdateProduct->bind_param('ii', $quantity, $productId);

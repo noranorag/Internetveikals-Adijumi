@@ -2,7 +2,6 @@
 require 'database/db_connection.php';
 
 try {
-    // Update products where reserved is 1 and the reservation time exceeds 24 hours
     $query = "
         UPDATE product 
         SET reserved = 0 

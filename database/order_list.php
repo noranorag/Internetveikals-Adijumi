@@ -21,7 +21,6 @@ $result = mysqli_query($conn, $query);
 $json = array();
 
 while ($row = $result->fetch_assoc()) {
-    // Format the date to Latvian format (DD/MM/YYYY)
     $formattedDate = date('d/m/Y', strtotime($row['created_at']));
 
     $json[] = array(
@@ -33,7 +32,7 @@ while ($row = $result->fetch_assoc()) {
         'total_amount' => htmlspecialchars($row['total_amount']),
         'delivery' => htmlspecialchars($row['delivery']),
         'status' => htmlspecialchars($row['status']),
-        'created_at' => htmlspecialchars($formattedDate), // Use formatted date
+        'created_at' => htmlspecialchars($formattedDate), 
     );
 }
 

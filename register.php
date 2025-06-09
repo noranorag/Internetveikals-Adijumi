@@ -17,7 +17,6 @@
                             <h3>Reģistrācija</h3>
                         </div>
                         <div class="card-body">
-                            <!-- Error message placeholder -->
                             <?php if (isset($_GET['error'])): ?>
                                 <p id="errorMessage" class="text-danger text-center">
                                     <?php echo htmlspecialchars($_GET['error']); ?>

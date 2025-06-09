@@ -5,7 +5,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userGalleryId = $_POST['gallery_id'] ?? null; 
     $status = $_POST['status'] ?? null;
 
-    // Log input values
     error_log("gallery_id: $userGalleryId, status: $status");
 
     if (!$userGalleryId || !$status) {
@@ -14,15 +13,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // Validate the status
-    $validStatuses = ['approved', 'denied', 'onhold']; // Updated "declined" to "denied"
+    $validStatuses = ['approved', 'denied', 'onhold'];
     if (!in_array($status, $validStatuses)) {
         error_log("Invalid status: $status");
         echo json_encode(['success' => false, 'error' => 'Invalid status.']);
         exit();
     }
 
-    // Update the status in the database
     $stmt = $conn->prepare("
         UPDATE gallery_images
         INNER JOIN user_gallery ON user_gallery.ID_gallery = gallery_images.gallery_ID

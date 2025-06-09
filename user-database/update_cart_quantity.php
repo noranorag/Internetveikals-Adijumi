@@ -11,7 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? null;
 
     if ($cart_ID && $action) {
-        // Fetch the current quantity and stock quantity
         $query = "SELECT quantity, ID_product FROM cart WHERE cart_ID = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param('i', $cart_ID);
@@ -23,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $currentQuantity = $cartItem['quantity'];
             $productID = $cartItem['ID_product'];
 
-            // Fetch the stock quantity of the product
             $productQuery = "SELECT stock_quantity FROM product WHERE product_ID = ?";
             $productStmt = $conn->prepare($productQuery);
             $productStmt->bind_param('i', $productID);
@@ -34,24 +32,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $product = $productResult->fetch_assoc();
                 $stockQuantity = $product['stock_quantity'];
 
-                // Update the quantity based on the action
                 if ($action === 'increase' && $currentQuantity < $stockQuantity) {
                     $newQuantity = $currentQuantity + 1;
                 } elseif ($action === 'decrease' && $currentQuantity > 1) {
                     $newQuantity = $currentQuantity - 1;
                 } else {
-                    // Redirect back with an error if the action is invalid
                     header("Location: ../cart.php?error=Nepareiza darbība vai nepietiekams daudzums.");
                     exit;
                 }
 
-                // Update the cart quantity in the database
                 $updateQuery = "UPDATE cart SET quantity = ? WHERE cart_ID = ?";
                 $updateStmt = $conn->prepare($updateQuery);
                 $updateStmt->bind_param('ii', $newQuantity, $cart_ID);
 
                 if ($updateStmt->execute()) {
-                    // Redirect back to the cart page
                     header("Location: ../cart.php");
                     exit;
                 } else {

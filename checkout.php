@@ -84,28 +84,28 @@ $userId = $_SESSION['user_id'] ?? null;
                 <div class="form-group">
                     <div class="delivery-option">
                         <label>
-                            <img src="images/omniva.png" alt="Omniva pakomāts" style="width: 80px; margin-right: 10px;"> <!-- Updated path -->
+                            <img src="images/omniva.png" alt="Omniva pakomāts" style="width: 80px; margin-right: 10px;"> 
                             <input type="radio" name="delivery" value="omniva pakomāts" required onclick="handleDeliveryOption('omniva-pakomats')">
                             Piegāde ar Omniva pakomātu <span class="shipping-price text-muted">(€3.00)</span>
                         </label>
                     </div>
                     <div class="delivery-option">
                         <label>
-                            <img src="images/omniva.png" alt="Omniva kurjers" style="width: 80px; margin-right: 10px;"> <!-- Updated path -->
+                            <img src="images/omniva.png" alt="Omniva kurjers" style="width: 80px; margin-right: 10px;">
                             <input type="radio" name="delivery" value="omniva kurjers" required onclick="handleDeliveryOption('omniva-kurjers')">
                             Piegāde ar Omniva kurjeru <span class="shipping-price text-muted">(€12.00)</span>
                         </label>
                     </div>
                     <div class="delivery-option">
                         <label>
-                            <img src="images/dpd.png" alt="DPD" style="width: 80px; margin-right: 10px;"> <!-- Updated path -->
+                            <img src="images/dpd.png" alt="DPD" style="width: 80px; margin-right: 10px;"> 
                             <input type="radio" name="delivery" value="dpd" required onclick="handleDeliveryOption('dpd')">
                             Piegāde ar DPD <span class="shipping-price text-muted">(€2.50)</span>
                         </label>
                     </div>
                     <div class="delivery-option">
                         <label>
-                            <img src="images/latvijaspasts.png" alt="Latvijas pasts" style="width: 80px; margin-right: 10px;"> <!-- Updated path -->
+                            <img src="images/latvijaspasts.png" alt="Latvijas pasts" style="width: 80px; margin-right: 10px;"> 
                             <input type="radio" name="delivery" value="latvijas pasts" required onclick="handleDeliveryOption('pasts')">
                             Piegāde pa pastu <span class="shipping-price text-muted">(€4.00)</span>
                         </label>
@@ -223,7 +223,7 @@ $userId = $_SESSION['user_id'] ?? null;
         <input type="hidden" name="house" id="house">
         <input type="hidden" name="apartment" id="apartment">
         <input type="hidden" name="postal_code" id="postal-code">
-        <input type="hidden" name="shipping_price" id="shipping-price"> <!-- Ensure this field exists -->
+        <input type="hidden" name="shipping_price" id="shipping-price">
     </form>
 
     <?php
@@ -231,7 +231,7 @@ $userId = $_SESSION['user_id'] ?? null;
     ?>
 
     <script>
-        const freeShipping = <?= json_encode($freeShipping) ?>; // Use json_encode to ensure proper boolean handling
+        const freeShipping = <?= json_encode($freeShipping) ?>;
         const userId = <?= json_encode($userId) ?>;
     </script>
 

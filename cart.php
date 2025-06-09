@@ -48,7 +48,7 @@ $freeShippingThreshold = 55;
 $remainingAmount = max(0, $freeShippingThreshold - $totalPrice); 
 $progressPercentage = min(100, ($totalPrice / $freeShippingThreshold) * 100); 
 
-$shippingPrice = $remainingAmount <= 0 ? 0 : 5; // Example shipping price if not free
+$shippingPrice = $remainingAmount <= 0 ? 0 : 5;
 
 $hasError = false;
 $errorMessage = '';
@@ -68,7 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
         }
     }
 
-    // Redirect to the checkout page if there are no errors
     if (!$hasError) {
         $freeShipping = $remainingAmount <= 0 ? 'true' : 'false';
         header("Location: checkout.php?freeShipping=$freeShipping");

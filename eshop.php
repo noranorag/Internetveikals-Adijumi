@@ -105,7 +105,6 @@ $limit = 20;
 $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $offset = ($page - 1) * $limit;
 
-// --- MAIN QUERY with LIMIT ---
 $query = "
     SELECT p.* 
     FROM product p
@@ -128,7 +127,6 @@ $stmt->execute();
 $result = $stmt->get_result();
 $products = $result->num_rows > 0 ? $result->fetch_all(MYSQLI_ASSOC) : [];
 
-// --- TOTAL PRODUCTS COUNT ---
 $countQuery = "
     SELECT COUNT(*) AS total
     FROM product p
@@ -137,7 +135,7 @@ $countQuery = "
 ";
 $countStmt = $conn->prepare($countQuery);
 if (!empty($bindParams)) {
-    $countParams = array_slice($bindParams, 0, -2); // no limit/offset
+    $countParams = array_slice($bindParams, 0, -2); 
     $countTypes = substr($types, 0, -2);
     $countStmt->bind_param($countTypes, ...$countParams);
 }
@@ -201,12 +199,10 @@ $totalPages = ceil($totalProducts / $limit);
                 <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
                     <div class="card text-center h-100 position-relative">
                         <?php if ($product['reserved'] == 1): ?>
-                            <!-- Rezervēts label -->
                             <div class="reserved-label position-absolute text-white bg-primary px-2 py-1" style="top: 10px; left: 10px; z-index: 1; border-radius: 5px;">
                                 Rezervēts
                             </div>
                         <?php elseif ($product['stock_quantity'] == 0): ?>
-                            <!-- Izpārdots label -->
                             <div class="sold-out-label position-absolute text-white bg-danger px-2 py-1" style="top: 10px; left: 10px; z-index: 1; border-radius: 5px;">
                                 Izpārdots
                             </div>
@@ -227,7 +223,6 @@ $totalPages = ceil($totalProducts / $limit);
     <?php if ($totalPages > 1): ?>
         <nav aria-label="Product pagination">
             <ul class="pagination justify-content-center mt-4">
-                <!-- Previous Page Link -->
                 <?php
                     $queryParams = $_GET;
                     $queryParams['page'] = max(1, $page - 1);
@@ -236,7 +231,6 @@ $totalPages = ceil($totalProducts / $limit);
                     <a class="page-link" href="?<?= http_build_query($queryParams) ?>" tabindex="-1">&laquo;</a>
                 </li>
 
-                <!-- Page Numbers -->
                 <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                     <?php
                         $queryParams['page'] = $i;
@@ -246,7 +240,6 @@ $totalPages = ceil($totalProducts / $limit);
                     </li>
                 <?php endfor; ?>
 
-                <!-- Next Page Link -->
                 <?php
                     $queryParams['page'] = min($totalPages, $page + 1);
                 ?>

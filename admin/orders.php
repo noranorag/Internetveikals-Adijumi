@@ -3,7 +3,7 @@ session_start();
 include '../database/db_connection.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
-    header('Location: ../index.php'); // Redirect to the main page
+    header('Location: ../index.php'); 
     exit();
 }
 
@@ -43,7 +43,7 @@ include '../user-database/check_notpaid.php';
                         <option value="Jauns">Jauns</option>
                         <option value="Pieņemts">Pieņemts</option>
                         <option value="Nosūtīts">Nosūtīts</option>
-                        <option value="Neapmaksāts">Neapmaksāts</option> <!-- Added new status -->
+                        <option value="Neapmaksāts">Neapmaksāts</option> 
                     </select>
                 </div>
             </div>
@@ -58,11 +58,10 @@ include '../user-database/check_notpaid.php';
                         <th>Piegāde</th>
                         <th>Statuss</th>
                         <th>Datums</th>
-                        <th>Darbības</th> <!-- Changed column header -->
+                        <th>Darbības</th>
                     </tr>
                 </thead>
                 <tbody id="orderTableBody">
-                    <!-- Dynamic content will be inserted here -->
                 </tbody>
             </table>
             </div>
@@ -70,7 +69,6 @@ include '../user-database/check_notpaid.php';
         <div>
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center">
-                    <!-- Pagination links can be added here -->
                 </ul>
             </nav>
         </div>
@@ -125,14 +123,12 @@ include '../user-database/check_notpaid.php';
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Order items will be dynamically inserted here -->
                             </tbody>
                         </table>
                     </div>
                     <div class="form-group">
                         <label for="orderStatus">Statuss:</label>
                         <select class="form-control" id="orderStatus">
-                            <!-- Options will be dynamically populated -->
                         </select>
                     </div>
                     <div class="form-group">

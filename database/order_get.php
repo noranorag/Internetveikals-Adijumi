@@ -13,10 +13,8 @@ if ($orderId > 0) {
     if ($orderResult->num_rows > 0) {
         $order = $orderResult->fetch_assoc();
 
-        // Include delivery_number in the response
         $order['delivery_number'] = $order['delivery_number'];
 
-        // Fetch order items
         $itemsQuery = "SELECT oi.ID_product, oi.quantity, oi.price, p.name AS product_name
                        FROM order_items oi
                        JOIN product p ON oi.ID_product = p.product_ID

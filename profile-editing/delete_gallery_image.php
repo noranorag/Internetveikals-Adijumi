@@ -1,7 +1,7 @@
 <?php
 require '../database/db_connection.php';
 
-header('Content-Type: application/json; charset=utf-8'); // Ensure the response is JSON
+header('Content-Type: application/json; charset=utf-8'); 
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -17,12 +17,11 @@ if (!$galleryId) {
 
 
 try {
-    // Delete the image from the database
     $stmt = $conn->prepare("DELETE FROM gallery_images WHERE gallery_ID = ?");
     $stmt->bind_param('i', $galleryId);
 
     if ($stmt->execute()) {
-        echo json_encode(['success' => true]); // Properly formatted JSON
+        echo json_encode(['success' => true]);
     } else {
         echo json_encode(['success' => false, 'error' => 'Neizdevās dzēst bildi.']);
     }

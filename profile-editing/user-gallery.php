@@ -8,7 +8,6 @@ if (!isset($_SESSION['user_id'])) {
 
 $userId = $_SESSION['user_id'];
 
-// Fetch gallery images posted by the user
 $sqlGallery = "
     SELECT gi.gallery_ID, gi.image, gi.uploaded_at, gi.approved, gi.review
     FROM gallery_images gi

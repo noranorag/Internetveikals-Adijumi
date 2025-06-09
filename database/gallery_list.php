@@ -3,7 +3,6 @@ require 'db_connection.php';
 
 $status = $_GET['status'] ?? null;
 
-// Base query to fetch gallery images with filtering for "onhold" or "approved" statuses
 $query = "
     SELECT 
         ug.user_gallery_ID AS id,
@@ -21,8 +20,6 @@ $query = "
         user u ON ug.ID_user = u.user_ID
     WHERE 
         gi.approved IN ('onhold', 'approved')"; 
-
-// Add additional filtering if a specific status is provided
 if (!empty($status) && in_array($status, ['approved', 'onhold'])) {
     $query .= " AND gi.approved = ?";
 }
@@ -31,7 +28,6 @@ $query .= " ORDER BY FIELD(gi.approved, 'onhold', 'approved'), gi.uploaded_at DE
 
 $stmt = $conn->prepare($query);
 
-// Bind the status parameter if provided
 if (!empty($status) && in_array($status, ['approved', 'onhold'])) {
     $stmt->bind_param("s", $status);
 }
@@ -48,7 +44,7 @@ while ($row = $result->fetch_assoc()) {
         'image_path' => htmlspecialchars($row['image_path']),
         'uploaded_at' => htmlspecialchars($row['uploaded_at']),
         'status' => htmlspecialchars($row['status']),
-        'review' => htmlspecialchars($row['review']), // Add review to the response
+        'review' => htmlspecialchars($row['review']), 
         'posted_by' => htmlspecialchars($row['posted_by']),
     );
 }

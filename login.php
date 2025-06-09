@@ -17,7 +17,6 @@
                             <h3>Ielogošanās</h3>
                         </div>
                         <div class="card-body">
-                            <!-- Error message placeholder -->
                             <p id="errorMessage" class="text-danger text-center" style="display: none;"></p>
 
                             <form id="loginForm" action="database/login_process.php" method="POST">
@@ -45,7 +44,7 @@
 
     <script>
     document.getElementById('loginForm').addEventListener('submit', function (e) {
-        e.preventDefault(); // Prevent default form submission
+        e.preventDefault();
 
         const formData = new FormData(this);
 
@@ -57,10 +56,8 @@
         .then(data => {
             const errorMessage = document.getElementById('errorMessage');
             if (data.success) {
-                // Redirect on success
                 window.location.href = data.redirect;
             } else {
-                // Show error message
                 errorMessage.textContent = data.message;
                 errorMessage.style.display = 'block';
             }
