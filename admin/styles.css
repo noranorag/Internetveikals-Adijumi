@@ -450,10 +450,14 @@ th, td {
 }
 
 #modalImage {
-    max-width: 70vw;
-    max-height: 70vh;
-    object-fit: contain;
+    max-width: 90%; /* Allow the image to take up 90% of the modal's width */
+    max-height: 80vh; /* Allow the image to take up 80% of the viewport height */
+    object-fit: contain; /* Maintain the aspect ratio of the image */
+    margin: 0 auto; /* Center the image horizontally */
+    display: block; /* Ensure the image is treated as a block element */
 }
+
+
 
 #gallery img {
     cursor: pointer;

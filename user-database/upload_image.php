@@ -10,27 +10,32 @@ if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
     die("Error: No image file uploaded.");
 }
 
+if (!isset($_POST['review']) || empty(trim($_POST['review']))) {
+    die("Error: Review field is required.");
+}
+
 $user_id = $_SESSION['user_id'];
-$target_dir = "images/"; // Updated to remove "../"
+$review = $conn->real_escape_string(trim($_POST['review']));
+$target_dir = "images/";
 $image_name = basename($_FILES['image']['name']);
 $image_path = $target_dir . $image_name;
 $uploaded_at = date('Y-m-d H:i:s');
 
-if (!is_dir("../" . $target_dir)) { // Ensure the directory exists
-    mkdir("../" . $target_dir, 0777, true); 
+if (!is_dir("../" . $target_dir)) {
+    mkdir("../" . $target_dir, 0777, true);
 }
 
-if (!is_writable("../" . $target_dir)) { // Check if the directory is writable
+if (!is_writable("../" . $target_dir)) {
     die("Error: Target directory is not writable.");
 }
 
-if (!move_uploaded_file($_FILES['image']['tmp_name'], "../" . $image_path)) { // Adjust path for file upload
+if (!move_uploaded_file($_FILES['image']['tmp_name'], "../" . $image_path)) {
     die("Error: Failed to upload the image.");
 }
 
-$query = "INSERT INTO gallery_images (image, uploaded_at) VALUES (?, ?)";
+$query = "INSERT INTO gallery_images (image, review, uploaded_at) VALUES (?, ?, ?)";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("ss", $image_path, $uploaded_at);
+$stmt->bind_param("sss", $image_path, $review, $uploaded_at);
 
 if ($stmt->execute()) {
     $gallery_id = $stmt->insert_id;
@@ -40,7 +45,7 @@ if ($stmt->execute()) {
     $stmt->bind_param("ii", $user_id, $gallery_id);
 
     if ($stmt->execute()) {
-        $_SESSION['success_message'] = "Bilde ir veiksmīgi nosūtīta apstiprināšanai";
+        $_SESSION['success_message'] = "Bilde ir veiksmīgi nosūtīta apstiprināšanai.";
     } else {
         $_SESSION['error_message'] = "Error: Failed to associate the image with the user.";
     }

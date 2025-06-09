@@ -11,6 +11,7 @@ $query = "
         gi.image AS image_path,
         gi.uploaded_at,
         gi.approved AS status,
+        gi.review, -- Include the review field
         u.email AS posted_by
     FROM 
         user_gallery ug
@@ -19,7 +20,7 @@ $query = "
     INNER JOIN 
         user u ON ug.ID_user = u.user_ID
     WHERE 
-        gi.approved IN ('onhold', 'approved')"; // Filter for "onhold" or "approved" statuses
+        gi.approved IN ('onhold', 'approved')"; 
 
 // Add additional filtering if a specific status is provided
 if (!empty($status) && in_array($status, ['approved', 'onhold'])) {
@@ -47,6 +48,7 @@ while ($row = $result->fetch_assoc()) {
         'image_path' => htmlspecialchars($row['image_path']),
         'uploaded_at' => htmlspecialchars($row['uploaded_at']),
         'status' => htmlspecialchars($row['status']),
+        'review' => htmlspecialchars($row['review']), // Add review to the response
         'posted_by' => htmlspecialchars($row['posted_by']),
     );
 }

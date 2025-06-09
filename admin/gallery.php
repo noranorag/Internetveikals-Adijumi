@@ -50,6 +50,7 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 
                             <th>ID</th>
                             <th>Bilde</th>
                             <th>Lietotājs</th>
+                            <th>Atsauksme</th>
                             <th>Statuss</th>
                             <th>Darbības</th>
                         </tr>
@@ -76,10 +77,14 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="addImageForm" enctype="multipart/form-data">
+                        <form id="addImageForm" enctype="multipart/form-data" method="POST" action="../user-database/upload_image.php">
                             <div class="form-group">
                                 <label for="imageFile">Bilde</label>
                                 <input type="file" class="form-control-file" id="imageFile" name="image" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="review">Atsauksme</label>
+                                <textarea class="form-control" id="review" name="review" rows="3" placeholder="Ierakstiet atsauksmi par šo bildi..." required></textarea>
                             </div>
                             <button type="submit" class="btn btn-main">Pievienot</button>
                         </form>
@@ -87,23 +92,22 @@ if (!isset($_SESSION['user_id']) || !in_array($_SESSION['user_role'], ['admin', 
                 </div>
             </div>
         </div>
-    </div>
 
     <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-labelledby="imagePreviewModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="imagePreviewModalLabel">Attēla priekšskatījums</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body text-center">
-                <img id="modalImage" src="" alt="Preview" style="max-width: 100%; height: auto;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imagePreviewModalLabel">Attēla priekšskatījums</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="" alt="Preview" style="max-width: 400px; height: auto;">
+                </div>
             </div>
         </div>
     </div>
-</div>
 
     
 

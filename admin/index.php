@@ -146,18 +146,19 @@ try {
                 </div>
             </div>
             <div class="table-container-index mt-4">
-                <h3>Pēdējie Pasūtījumi</h3>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Pasūtījuma ID</th>
-                            <th>Klients</th>
-                            <th>Datums</th>
-                            <th>Statuss</th>
-                            <th>Kopā</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+            <h3>Pēdējie Pasūtījumi</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Pasūtījuma ID</th>
+                        <th>Klients</th>
+                        <th>Datums</th>
+                        <th>Statuss</th>
+                        <th>Kopā</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (!empty($recentOrders)): ?>
                         <?php foreach ($recentOrders as $order): ?>
                             <tr>
                                 <td><?php echo $order['order_ID']; ?></td>
@@ -167,9 +168,14 @@ try {
                                 <td><?php echo $order['total_amount']; ?> €</td>
                             </tr>
                         <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="5" class="text-center">Nav pieejamu pasūtījumu.</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>

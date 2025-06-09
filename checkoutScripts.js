@@ -152,18 +152,18 @@ function fetchDPDPakomati() {
 }
 
 function handleDeliveryOption(option) {
-    // Hide all sections
+    
     document.getElementById('omniva-dropdown').style.display = 'none';
     document.getElementById('dpd-dropdown').style.display = 'none';
     document.getElementById('address-container').style.display = 'none';
 
-    // Show the appropriate section based on the selected option
+    
     if (option === 'omniva-pakomats') {
         document.getElementById('omniva-dropdown').style.display = 'block';
-        fetchOmnivaPakomati(); // Load Omniva locations
+        fetchOmnivaPakomati(); 
     } else if (option === 'dpd') {
         document.getElementById('dpd-dropdown').style.display = 'block';
-        fetchDPDPakomati(); // Load DPD locations
+        fetchDPDPakomati(); 
     } else if (option === 'omniva-kurjers' || option === 'pasts') {
         document.getElementById('address-container').style.display = 'block';
     }
@@ -172,7 +172,7 @@ function handleDeliveryOption(option) {
 function showOrderSummary() {
     console.log("Starting showOrderSummary...");
 
-    // Collect user information
+    
     const name = document.querySelector('input[name="name"]').value.trim();
     const surname = document.querySelector('input[name="surname"]').value.trim();
     const email = document.querySelector('input[name="email"]').value.trim();
@@ -180,12 +180,12 @@ function showOrderSummary() {
 
     console.log("User Information:", { name, surname, email, phone });
 
-    // Collect delivery method
+    
     const selectedDelivery = document.querySelector('input[name="delivery"]:checked');
     const deliveryMethod = selectedDelivery ? selectedDelivery.value : '';
     console.log("Selected Delivery Method:", deliveryMethod);
 
-    // Collect parcel location or address
+    
     let deliveryAddress = '';
     let address = {
         country: '',
@@ -204,20 +204,20 @@ function showOrderSummary() {
         deliveryAddress = selectedOption ? selectedOption.textContent : '';
         console.log("Omniva Pakomāts Address:", deliveryAddress);
 
-        deliveryPrice = freeShipping ? 0 : 3.00; // Free shipping logic
+        deliveryPrice = freeShipping ? 0 : 3.00; 
         document.getElementById('parcel-location-summary').style.display = 'block';
         document.getElementById('summary-parcel-location').textContent = deliveryAddress;
-        document.getElementById('address-summary').style.display = 'none'; // Hide address summary
+        document.getElementById('address-summary').style.display = 'none'; 
     } else if (deliveryMethod === 'dpd') {
         console.log("DPD selected.");
         const selectedOption = document.getElementById('dpd-pakomati').selectedOptions[0];
         deliveryAddress = selectedOption ? selectedOption.textContent : '';
         console.log("DPD Address:", deliveryAddress);
 
-        deliveryPrice = freeShipping ? 0 : 2.50; // Free shipping logic
+        deliveryPrice = freeShipping ? 0 : 2.50; 
         document.getElementById('parcel-location-summary').style.display = 'block';
         document.getElementById('summary-parcel-location').textContent = deliveryAddress;
-        document.getElementById('address-summary').style.display = 'none'; // Hide address summary
+        document.getElementById('address-summary').style.display = 'none'; 
     } else if (deliveryMethod === 'omniva kurjers') {
         console.log("Omniva Kurjers selected.");
         address.country = document.querySelector('input[name="country"]').value.trim();
@@ -229,7 +229,7 @@ function showOrderSummary() {
 
         console.log("Address Fields:", address);
 
-        deliveryPrice = 12.00; // Omniva Kurjers always has a price
+        deliveryPrice = 12.00; 
         deliveryAddress = `${address.street} ${address.house}, ${address.city}, ${address.country}, ${address.postalCode}`;
         if (address.apartment) {
             deliveryAddress += `, Dzīvoklis: ${address.apartment}`;
@@ -244,7 +244,7 @@ function showOrderSummary() {
         document.getElementById('summary-house').textContent = address.house;
         document.getElementById('summary-apartment').textContent = address.apartment || 'Nav norādīts';
         document.getElementById('summary-postal-code').textContent = address.postalCode;
-        document.getElementById('parcel-location-summary').style.display = 'none'; // Hide parcel location summary
+        document.getElementById('parcel-location-summary').style.display = 'none'; 
     } else if (deliveryMethod === 'latvijas pasts') {
         console.log("Latvijas Pasts selected.");
         address.country = document.querySelector('input[name="country"]').value.trim();
@@ -256,7 +256,7 @@ function showOrderSummary() {
 
         console.log("Address Fields:", address);
 
-        deliveryPrice = freeShipping ? 0 : 4.00; // Free shipping logic
+        deliveryPrice = freeShipping ? 0 : 4.00; 
         deliveryAddress = `${address.street} ${address.house}, ${address.city}, ${address.country}, ${address.postalCode}`;
         if (address.apartment) {
             deliveryAddress += `, Dzīvoklis: ${address.apartment}`;
@@ -271,14 +271,14 @@ function showOrderSummary() {
         document.getElementById('summary-house').textContent = address.house;
         document.getElementById('summary-apartment').textContent = address.apartment || 'Nav norādīts';
         document.getElementById('summary-postal-code').textContent = address.postalCode;
-        document.getElementById('parcel-location-summary').style.display = 'none'; // Hide parcel location summary
+        document.getElementById('parcel-location-summary').style.display = 'none'; 
     } else {
         console.log("No valid delivery method selected.");
         document.getElementById('parcel-location-summary').style.display = 'none';
         document.getElementById('address-summary').style.display = 'none';
     }
 
-    // Update user information in the summary
+    
     document.getElementById('summary-name').textContent = name;
     document.getElementById('summary-surname').textContent = surname;
     document.getElementById('summary-email').textContent = email;
@@ -287,14 +287,14 @@ function showOrderSummary() {
 
     console.log("Fetching cart items...");
 
-    // Fetch cart items and update the summary
+    
     fetch('ordering/get_cart_info.php')
         .then(response => response.json())
         .then(cartItems => {
             console.log("Cart Items:", cartItems);
 
             const cartItemsContainer = document.getElementById('cart-items');
-            cartItemsContainer.innerHTML = ''; // Clear previous items
+            cartItemsContainer.innerHTML = ''; 
 
             let totalPrice = 0;
 
@@ -310,10 +310,10 @@ function showOrderSummary() {
                 totalPrice += item.product_price * item.quantity;
             });
 
-            // Update total price in the summary
+            
             document.getElementById('summary-product-total').textContent = `€${totalPrice.toFixed(2)}`;
-            document.getElementById('summary-shipping-price').textContent = `€${deliveryPrice.toFixed(2)}`; // Update delivery price
-            document.getElementById('summary-total-cost').textContent = `€${(totalPrice + deliveryPrice).toFixed(2)}`; // Adjust total cost
+            document.getElementById('summary-shipping-price').textContent = `€${deliveryPrice.toFixed(2)}`; 
+            document.getElementById('summary-total-cost').textContent = `€${(totalPrice + deliveryPrice).toFixed(2)}`; 
         })
         .catch(error => console.error('Error fetching cart items:', error));
 
@@ -321,7 +321,7 @@ function showOrderSummary() {
 }
 
 function updateDeliveryPrices() {
-    console.log("Free Shipping Status in JavaScript:", freeShipping); // Debug the freeShipping variable
+    console.log("Free Shipping Status in JavaScript:", freeShipping); 
 
     const deliveryOptions = [
         { id: 'omniva pakomāts', label: 'Piegāde ar Omniva pakomātu', price: 3.00 },
@@ -353,27 +353,27 @@ function updateDeliveryPrices() {
     });
 }
 
-// Call the function when the page loads
+
 document.addEventListener('DOMContentLoaded', updateDeliveryPrices);
 
 
 function collectOrderData(event) {
-    event.preventDefault(); // Prevent the default form submission behavior
+    event.preventDefault(); 
 
     console.log("Collecting order data...");
 
-    // Collect delivery method
+    
     const selectedDelivery = document.querySelector('input[name="delivery"]:checked');
     const deliveryMethod = selectedDelivery ? selectedDelivery.value : '';
     const pickupAddress = document.getElementById('summary-parcel-location')?.textContent.trim() || '';
 
-    // Collect user information
+    
     const name = document.querySelector('input[name="name"]').value.trim();
     const surname = document.querySelector('input[name="surname"]').value.trim();
     const email = document.querySelector('input[name="email"]').value.trim();
     const phone = document.querySelector('input[name="phone"]').value.trim();
 
-    // Collect address information
+    
     const country = document.querySelector('input[name="country"]')?.value.trim() || '';
     const city = document.querySelector('input[name="city"]')?.value.trim() || '';
     const street = document.querySelector('input[name="street"]')?.value.trim() || '';
@@ -381,7 +381,7 @@ function collectOrderData(event) {
     const apartment = document.querySelector('input[name="apartment"]')?.value.trim() || '';
     const postalCode = document.querySelector('input[name="postal_code"]')?.value.trim() || '';
 
-    // Collect total amount and shipping price
+    
     const totalAmount = document.getElementById('summary-total-cost')?.textContent.replace('€', '').trim() || '0.00';
     const shippingPrice = document.getElementById('summary-shipping-price')?.textContent.replace('€', '').trim() || '0.00';
 
@@ -402,7 +402,7 @@ function collectOrderData(event) {
         shippingPrice
     });
 
-    // Populate hidden form fields
+    
     const formFields = {
         'delivery-method': deliveryMethod,
         'pickup-address': pickupAddress,
@@ -429,7 +429,7 @@ function collectOrderData(event) {
         }
     });
 
-    // Submit the form
+    
     document.getElementById('final-checkout-form').submit();
 }
 
@@ -438,7 +438,7 @@ function populateUserInfo() {
         url: 'ordering/get_user_info.php',
         method: 'GET',
         success: function (data) {
-            // Populate form fields with user data
+            
             $('input[name="name"]').val(data.name);
             $('input[name="surname"]').val(data.surname);
             $('input[name="email"]').val(data.email);
@@ -456,7 +456,7 @@ function populateUserInfo() {
     });
 }
 
-// Call the function when the page loads
+
 $(document).ready(function () {
     if (typeof userId !== 'undefined' && userId) {
         populateUserInfo();

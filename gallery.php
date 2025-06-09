@@ -33,6 +33,7 @@ $query = "
     SELECT 
         gi.gallery_ID AS gallery_id,
         gi.image AS image_path,
+        gi.review AS review, -- Fetch the review
         u.email AS posted_by,
         u.name AS user_name,
         u.surname AS user_surname
@@ -54,7 +55,8 @@ if ($result) {
     while ($row = mysqli_fetch_assoc($result)) {
         $galleryItems[] = [
             'gallery_id' => htmlspecialchars($row['gallery_id']),
-            'image_path' => htmlspecialchars($row['image_path']), 
+            'image_path' => htmlspecialchars($row['image_path']),
+            'review' => htmlspecialchars($row['review']), // Add review to the array
             'posted_by' => htmlspecialchars($row['posted_by']),
             'user_name' => htmlspecialchars($row['user_name']),
             'user_surname' => htmlspecialchars($row['user_surname']),
@@ -105,32 +107,24 @@ if ($result) {
         </div>
         <div class="gallery">
             <?php foreach ($galleryItems as $item): ?>
-                <div class="gallery-item" data-toggle="modal" data-target="#imageModal" data-name="<?= $item['user_name'] . ' ' . $item['user_surname'] ?>" data-product="<?= $item['user_name'] . ' ' . $item['user_surname'] ?>">
+                <div class="gallery-item" 
+                    data-toggle="modal" 
+                    data-target="#imageModal" 
+                    data-name="<?= $item['user_name'] . ' ' . $item['user_surname'] ?>" 
+                    data-review="<?= htmlspecialchars($item['review']) ?>" 
+                    data-image="<?= $item['image_path'] ?>">
                     <img src="<?= $item['image_path'] ?>" alt="Gallery Image">
-                    <div class="overlay"><?= $item['user_name'] . ' ' . $item['user_surname'] ?><br></div>
+                    <div class="overlay">
+                        <span class="review">
+                            "<?= strlen($item['review']) > 50 ? htmlspecialchars(substr($item['review'], 0, 50)) . '...' : htmlspecialchars($item['review']) ?>"
+                        </span>
+                        <span class="user-name mt-2">- <?= $item['user_name'] . ' ' . $item['user_surname'] ?></span>
+                    </div>
                 </div>
             <?php endforeach; ?>
         </div>
     </div>
 
-    <!-- Image Modal -->
-    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body text-center">
-                    <img src="" id="modalImage" class="img-fluid" alt="Gallery Image">
-                </div>
-                <div class="modal-footer d-flex justify-content-center align-items-center">
-                    <p class="mb-0 text-center">Pievienoja lietotājs: <span id="modalProduct"></span></p>
-                </div>
-            </div>
-        </div>
-    </div>
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center mt-4">
             <!-- Previous Page Link -->
@@ -161,26 +155,19 @@ if ($result) {
         </div>
     </div>
 
-   <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+   <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-
-            <div class="modal-header">
-                <h5 class="modal-title" id="loginModalLabel">Tu neesi ielogojies</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Aizvērt">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-
-            <div class="modal-body">
-                <p>Vai ielogoties?</p>
-            </div>
-
-            <div class="modal-footer">
-                <a href="<?= $basePath ?>login.php" class="btn btn-primary">Ielogoties</a>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Aizvērt</button>
-            </div>
-
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="" id="modalImage" class="img-fluid mt-3" alt="Gallery Image">
+                    <p class="review-full font-italic" id="modalReview"></p> <!-- Full review -->
+                    <p class="user-name font-weight-bold mt-2" id="modalProduct"></p> <!-- Name and surname -->
+                </div>
             </div>
         </div>
     </div>
@@ -199,6 +186,10 @@ if ($result) {
                         <div class="form-group">
                             <label for="imageInput">Izvēlies bildi:</label>
                             <input type="file" class="form-control-file" id="imageInput" name="image" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="review">Komentārs</label>
+                            <textarea class="form-control" id="review" name="review" rows="3" placeholder="Ierakstiet atsauksmi par šo bildi..." required></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -221,15 +212,16 @@ if ($result) {
 
     <script>
         $('#imageModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget);
-            var name = button.data('name');
-            var imageSrc = button.find('img').attr('src');
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var name = button.data('name'); // Extract user name
+            var review = button.data('review'); // Extract review
+            var imageSrc = button.data('image'); // Extract image source
 
             var modal = $(this);
-            modal.find('#modalImage').attr('src', imageSrc);
-            modal.find('#modalProduct').text(name);
+            modal.find('#modalImage').attr('src', imageSrc); // Set the image source
+            modal.find('#modalReview').text('"' + review + '"'); // Add quotes around the review
+            modal.find('#modalProduct').text('- ' + name); // Add a dash before the name
         });
-
     </script>
 </body>
 </html>

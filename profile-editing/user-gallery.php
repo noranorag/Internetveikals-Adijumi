@@ -10,7 +10,7 @@ $userId = $_SESSION['user_id'];
 
 // Fetch gallery images posted by the user
 $sqlGallery = "
-    SELECT gi.gallery_ID, gi.image, gi.uploaded_at, gi.approved
+    SELECT gi.gallery_ID, gi.image, gi.uploaded_at, gi.approved, gi.review
     FROM gallery_images gi
     INNER JOIN user_gallery ug ON gi.gallery_ID = ug.ID_gallery
     WHERE ug.ID_user = ?
@@ -53,7 +53,7 @@ while ($image = $resultGallery->fetch_assoc()) {
                 <div class="col-md-4 mb-4">
                     <div class="card">
                         <img src="<?= htmlspecialchars('../' . $image['image']) ?>" class="card-img-top" alt="Galerijas bilde">
-                        <div class="card-body text-center"> <!-- Added text-center class -->
+                        <div class="card-body text-center">
                             <p class="card-text"><strong>Augšupielādēts:</strong> <?= htmlspecialchars((new DateTime($image['uploaded_at']))->format('d/m/Y')) ?></p>
                             <p class="card-text">
                                 <strong>Statuss:</strong>
@@ -66,6 +66,10 @@ while ($image = $resultGallery->fetch_assoc()) {
                                     echo 'Gaida apstiprinājumu';
                                 }
                                 ?>
+                            </p>
+                            <p class="card-text">
+                                <strong>Komentārs:</strong>
+                                <?= htmlspecialchars($image['review']) ?>
                             </p>
                             <button class="btn btn-danger btn-sm mt-2 custom-delete-btn" data-toggle="modal" data-target="#deleteImageModal" data-id="<?= htmlspecialchars($image['gallery_ID']) ?>">Dzēst</button>
                         </div>

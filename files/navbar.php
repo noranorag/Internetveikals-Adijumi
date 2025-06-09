@@ -54,6 +54,8 @@ if (isset($_SESSION['user_id']) || session_id()) {
         $cartItems = $result->fetch_all(MYSQLI_ASSOC);
     }
 }
+
+$currentPage = basename($_SERVER['SCRIPT_NAME']); // Get the current page name
 ?>
 
 <script src="<?= $basePath ?>scripts.js" defer></script>
@@ -69,16 +71,16 @@ if (isset($_SESSION['user_id']) || session_id()) {
         </button>
         <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
             <ul class="navbar-nav nav-links">
-                <li class="nav-item mx-3">
+                <li class="nav-item mx-3 <?= $currentPage === 'index.php' ? 'active' : '' ?>">
                     <a class="nav-link" href="<?= $basePath ?>index.php">Sākums</a>
                 </li>
-                <li class="nav-item mx-3">
+                <li class="nav-item mx-3 <?= $currentPage === 'eshop.php' ? 'active' : '' ?>">
                     <a class="nav-link" href="<?= $basePath ?>eshop.php">Internetveikals</a>
                 </li>
-                <li class="nav-item mx-3">
+                <li class="nav-item mx-3 <?= $currentPage === 'gallery.php' ? 'active' : '' ?>">
                     <a class="nav-link" href="<?= $basePath ?>gallery.php">Galerija</a>
                 </li>
-                <li class="nav-item mx-3">
+                <li class="nav-item mx-3 <?= $currentPage === 'fair.php' ? 'active' : '' ?>">
                     <a class="nav-link" href="<?= $basePath ?>fair.php">Tirdziņi</a>
                 </li>
             </ul>

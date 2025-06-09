@@ -18,9 +18,9 @@
             <div class="col-sm-6 col-md-3 mb-4">
                 <h5 class="footer-heading">Kontakti</h5>
                 <ul class="footer-links">
-                    <li><i class="fas fa-phone"></i> +371 123 456 78</li>
-                    <li><i class="fas fa-envelope"></i> info@adijumi.lv</li>
-                    <li><i class="fas fa-map-marker-alt"></i> Rīga, Latvija</li>
+                    <li><i class="fas fa-phone"></i> +371 26837755</li>
+                    <li><i class="fas fa-envelope"></i> gunita.sjbuve@inbox.lv</li>
+                    <li><i class="fas fa-map-marker-alt"></i> Kuldīga, Latvija</li>
                 </ul>
             </div>
 

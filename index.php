@@ -58,7 +58,7 @@ try {
     <?php include 'files/navbar.php'; ?>
 
     <section class="hero-section">
-        <img src="images/kombinzoni.jpeg" alt="Cover Image" class="hero-image">
+        <img src="images/aizmugure1.jpg" alt="Cover Image" class="hero-image">
         <div class="hero-text">
             <h1>Pašdarināti adījumi</h1>
             <p>Dažādu veidu adījumi visai ģimenei</p>
@@ -66,17 +66,17 @@ try {
         </div>
         <div class="hero-categories">
             <div class="category">
-                <img src="images/berniem.png" alt="Bērniem" class="category-image" loading="lazy">
+                <img src="images/bernuKombenzons.jpg" alt="Bērniem" class="category-image" loading="lazy">
                 <h2>Bērniem</h2>
                 <a href="eshop.php?big_category=Bērniem" class="category-button">Apskatīt kolekciju</a>
             </div>
             <div class="category">
-                <img src="images/sievietem.png" alt="Sievietēm" class="category-image" loading="lazy">
+                <img src="images/sieviesuZekes.jpeg" alt="Sievietēm" class="category-image" loading="lazy">
                 <h2>Sievietēm</h2>
                 <a href="eshop.php?big_category=Sievietēm" class="category-button">Apskatīt kolekciju</a>
             </div>
             <div class="category">
-                <img src="images/viriesiem.png" alt="Vīriešiem" class="category-image" loading="lazy">
+                <img src="images/viriesuZekes.jpeg" alt="Vīriešiem" class="category-image" loading="lazy">
                 <h2>Vīriešiem</h2>
                 <a href="eshop.php?big_category=Vīriešiem" class="category-button">Apskatīt kolekciju</a>
             </div>
@@ -86,7 +86,7 @@ try {
     <section class="about-us-section">
         <section class="carousel-container">
             <div class="carousel">
-                <div><h3>Bērnu kombinzoni</h3></div>
+                <div><h3>Bērnu kombinezoni</h3></div>
                 <div><h3>Dažādas zeķes</h3></div>
                 <div><h3>Cepures</h3></div>
                 <div><h3>Mauči</h3></div>
@@ -94,7 +94,7 @@ try {
                 <div><h3>Bērnu komplekti</h3></div>
                 <div><h3>Un citi adījumi</h3></div>
                 <!-- ----------------------------------- -->
-                <div><h3>Bērnu kombinzoni</h3></div>
+                <div><h3>Bērnu kombinezoni</h3></div>
                 <div><h3>Dažādas zeķes</h3></div>
                 <div><h3>Cepures</h3></div>
                 <div><h3>Mauči</h3></div>
@@ -141,14 +141,11 @@ try {
             <div class="col-md-6">
                 <h3 class="section-title-dark">Par produktiem</h3>
                 <p class="section-text-dark">
-                    Mūsu adījumi ir rūpīgi veidoti, izmantojot augstākās kvalitātes materiālus, lai nodrošinātu komfortu un izturību. 
-                    Katrs produkts ir darināts ar mīlestību un uzmanību pret detaļām, lai tas būtu ne tikai praktisks, bet arī estētiski pievilcīgs. 
-                    Mēs lepojamies ar mūsu plašo adījumu klāstu, kas piemērots visai ģimenei – no bērniem līdz pieaugušajiem. 
-                    Izvēloties mūsu produktus, jūs iegūstat ne tikai siltumu un komfortu, bet arī unikālu dizainu, kas izceļ jūsu stilu.
+                    Katrs produkts ir ar rokām darināts ar rūpību un mīlestību, padarot katru izstrādājumu unikālu un īpašu. Tie nav rūpnieciski ražojumi – tie ir roku darbi, kas iemieso siltumu, pacietību un vēlmi radīt ko skaistu un noderīgu. Adījumi top nelielos daudzumos, ievērojot kvalitāti, nevis kvantitāti. Katra detaļa ir pārdomāta, katrs valdziņš – adīts ar uzmanību, lai rezultāts būtu ne tikai skaists, bet arī praktisks, ērts un ilgtspējīgs.
                 </p>
             </div>
             <div class="col-md-6 position-relative">
-                <img src="images/sievietem.png" alt="Adījumi" class="about-products-image">
+                <img src="images/musuadijumi.jpeg" alt="Adījumi" class="about-products-image">
             </div>
         </div>
     </div>
@@ -158,14 +155,12 @@ try {
     <div class="container">
         <div class="row align-items-center">
             <div class="col-md-6">
-                <img src="images/berniem.png" alt="Bērniem" class="image-text-image">
+                <img src="images/bernuadijumi.jpg" alt="Bērniem" class="image-text-image">
             </div>
             <div class="col-md-6">
                 <h3 class="section-title-dark">Par bērnu adījumiem</h3>
                 <p class="section-text-dark">
-                    Mūsu bērnu adījumi ir veidoti ar īpašu rūpību, lai nodrošinātu maksimālu komfortu un siltumu. 
-                    Katrs adījums ir darināts no augstas kvalitātes materiāliem, kas ir maigi pret bērna ādu. 
-                    Mēs piedāvājam plašu klāstu ar dažādiem dizainiem un krāsām, kas piemēroti visiem vecumiem un gaumēm.
+                    Bērnu adījumi ir radīti ar īpašu maigumu un uzmanību, lai nodrošinātu siltumu un komfortu pašiem mazākajiem. Tiek izmantotas tikai mīkstas, ādai draudzīgas dzijas, kas ir piemērotas jutīgai bērnu ādai un nerada diskomfortu. Dizaini ir ne tikai vizuāli pievilcīgi, bet arī funkcionāli – viegli uzvelkami, praktiski un pielāgoti bērnu vajadzībām. Katrs adījums ir kā neliels mīlestības apliecinājums – gan bērna ikdienai, gan sirsnīgai dāvanai.
                 </p>
             </div>
         </div>

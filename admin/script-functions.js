@@ -972,6 +972,7 @@ $('#confirmDeleteOrder').on('click', function () {
                     <td>${item.id}</td>
                     <td><img src="../${item.image_path}" style="max-width: 100px; height: auto;"></td>
                     <td>${item.posted_by}</td>
+                    <td>${item.review ? `"${item.review}"` : 'Nav atsauksmes'}</td> <!-- Add review here -->
                     <td>${statusText}</td>
                     <td>${actionButtons}</td>
                 </tr>
