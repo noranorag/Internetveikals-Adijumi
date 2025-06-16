@@ -1,0 +1,24 @@
+# Enable URL rewriting
+RewriteEngine On
+
+# Redirect requests without .php extension to the corresponding .php file
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.*)$ $1.php [L]
+
+# Allow access to files with .php extension directly
+<FilesMatch "\.php$">
+    Require all granted
+</FilesMatch>
+
+# Deny direct access to the images directory listing but allow access to image files
+RewriteCond %{REQUEST_URI} ^/images/$
+RewriteRule ^.*$ - [F,L]
+
+# Deny direct access to the invoices directory listing but allow access to invoice files
+RewriteCond %{REQUEST_URI} ^/invoices/$
+RewriteRule ^.*$ - [F,L]
+
+# Disable directory listing globally
+Options -Indexes

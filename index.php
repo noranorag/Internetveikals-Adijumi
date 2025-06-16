@@ -1,4 +1,10 @@
 <?php
+// Start the session at the very beginning
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Include necessary files
 include 'database/db_connection.php';
 include 'user-database/check_reserved.php';
 
@@ -41,6 +47,7 @@ try {
     error_log("Database query error: " . $e->getMessage());
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

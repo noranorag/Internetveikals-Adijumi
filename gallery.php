@@ -1,5 +1,10 @@
 <?php
-require 'database/db_connection.php'; 
+// Start the session at the very beginning
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+require 'database/db_connection.php';
 
 $imagesPerPage = 21;
 
@@ -27,7 +32,7 @@ $query = "
     SELECT 
         gi.gallery_ID AS gallery_id,
         gi.image AS image_path,
-        gi.review AS review, -- Fetch the review
+        gi.review AS review,
         u.email AS posted_by,
         u.name AS user_name,
         u.surname AS user_surname
@@ -50,7 +55,7 @@ if ($result) {
         $galleryItems[] = [
             'gallery_id' => htmlspecialchars($row['gallery_id']),
             'image_path' => htmlspecialchars($row['image_path']),
-            'review' => htmlspecialchars($row['review']), 
+            'review' => htmlspecialchars($row['review']),
             'posted_by' => htmlspecialchars($row['posted_by']),
             'user_name' => htmlspecialchars($row['user_name']),
             'user_surname' => htmlspecialchars($row['user_surname']),

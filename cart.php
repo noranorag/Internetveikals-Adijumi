@@ -1,5 +1,14 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (headers_sent($file, $line)) {
+    error_log("Headers already sent in $file on line $line");
+}
+
+error_log("Session data in cart.php: " . print_r($_SESSION, true));
+
 include 'database/db_connection.php';
 
 if ($conn->connect_error) {
@@ -10,6 +19,9 @@ include 'user-database/check_reserved.php';
 
 $userID = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 $sessionID = session_id();
+
+$hasError = false;
+$errorMessage = '';
 
 if ($userID) {
     $query = "
@@ -42,6 +54,18 @@ if ($result->num_rows > 0) {
 $totalPrice = 0;
 foreach ($cartItems as $item) {
     $totalPrice += $item['price'] * $item['quantity'];
+
+    // Check if the product is reserved or out of stock
+    if ($item['reserved'] == 1) {
+        $hasError = true;
+        $errorMessage = 'Prece "' . htmlspecialchars($item['name']) . '" ir rezervēta un nav pieejama.';
+    } elseif ($item['stock_quantity'] == 0) {
+        $hasError = true;
+        $errorMessage = 'Prece "' . htmlspecialchars($item['name']) . '" nav noliktavā.';
+    } elseif ($item['quantity'] > $item['stock_quantity']) {
+        $hasError = true;
+        $errorMessage = 'Prece "' . htmlspecialchars($item['name']) . '" nav pieejama tik lielā daudzumā. Pieejams: ' . $item['stock_quantity'] . ' gab.';
+    }
 }
 
 $freeShippingThreshold = 55;
@@ -50,30 +74,21 @@ $progressPercentage = min(100, ($totalPrice / $freeShippingThreshold) * 100);
 
 $shippingPrice = $remainingAmount <= 0 ? 0 : 5;
 
-$hasError = false;
-$errorMessage = '';
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
-    foreach ($cartItems as $item) {
-        if ($item['reserved'] == 1 || $item['stock_quantity'] == 0) {
-            $hasError = true;
-            $errorMessage = 'Daži produkti tavā grozā ir rezervēti vai nav pieejami noliktavā.';
-            break;
-        }
+    if ($hasError) {
+        error_log("Checkout blocked due to reserved, out-of-stock, or excessive quantity items.");
+    } else {
+        error_log("Apmaksāt button clicked. Redirecting to checkout.php.");
 
-        if ($item['quantity'] > $item['stock_quantity']) {
-            $hasError = true;
-            $errorMessage = 'Daži produkti tavā grozā pārsniedz pieejamo daudzumu noliktavā.';
-            break;
-        }
-    }
+        $_SESSION['cart_items'] = $cartItems;
+        $_SESSION['total_price'] = $totalPrice;
+        $_SESSION['shipping_price'] = $shippingPrice;
 
-    if (!$hasError) {
-        $freeShipping = $remainingAmount <= 0 ? 'true' : 'false';
-        header("Location: checkout.php?freeShipping=$freeShipping");
-        exit;
+        header("Location: checkout.php");
+        exit();
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -163,44 +178,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['checkout'])) {
             <?php endif; ?>
         </div>
 
-            <div class="col-md-4">
-                <div class="summary-box">
-                    <h5 class="mb-4">Kopsavilkums</h5>
-                    <div class="border-top pt-3">
-                        <?php if (!empty($cartItems)): ?>
-                            <?php foreach ($cartItems as $item): ?>
-                                <div class="d-flex justify-content-between">
-                                    <span><?= htmlspecialchars($item['name']) ?></span>
-                                    <span>€<?= number_format($item['price'], 2) ?></span>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </div>
-                    <div class="d-flex justify-content-between border-top pt-3 mt-3">
-                        <strong>Kopā</strong>
-                        <strong>€<?= number_format($totalPrice, 2) ?></strong>
-                    </div>
-                    <?php if ($remainingAmount > 0): ?>
-                        <div class="d-flex justify-content-between mt-2">
-                            <span></span> 
-                            <span class="text-muted">+ Piegādes cena</span>
-                        </div>
+        <div class="col-md-4">
+            <div class="summary-box">
+                <h5 class="mb-4">Kopsavilkums</h5>
+                <div class="border-top pt-3">
+                    <?php if (!empty($cartItems)): ?>
+                        <?php foreach ($cartItems as $item): ?>
+                            <div class="d-flex justify-content-between">
+                                <span><?= htmlspecialchars($item['name']) ?></span>
+                                <span>€<?= number_format($item['price'], 2) ?></span>
+                            </div>
+                        <?php endforeach; ?>
                     <?php endif; ?>
-                    <?php
-                    $freeShipping = $remainingAmount <= 0;
-                    ?>
-                    <form method="POST">
-                        <input type="hidden" name="checkout" value="1">
-                        <button class="btn btn-dark w-100 mt-4">Apmaksāt</button>
-                    </form>
                 </div>
+                <div class="d-flex justify-content-between border-top pt-3 mt-3">
+                    <strong>Kopā</strong>
+                    <strong>€<?= number_format($totalPrice, 2) ?></strong>
+                </div>
+                <?php if ($remainingAmount > 0): ?>
+                    <div class="d-flex justify-content-between mt-2">
+                        <span></span> 
+                        <span class="text-muted">+ Piegādes cena</span>
+                    </div>
+                <?php endif; ?>
+                <form method="POST">
+                    <input type="hidden" name="checkout" value="1">
+                    <button class="btn btn-dark w-100 mt-4" <?= $hasError ? 'disabled' : '' ?>>Apmaksāt</button>
+                </form>
             </div>
         </div>
     </div>
   </div>
 
   <?php include 'files/messages.php'; ?>
-
   <?php include 'files/footer.php'; ?>
 
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

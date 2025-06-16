@@ -59,6 +59,81 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+
+function validateRegistrationForm(form) {
+    const firstName = form.querySelector('#first_name').value.trim();
+    const lastName = form.querySelector('#last_name').value.trim();
+    const email = form.querySelector('#email').value.trim();
+    const phone = form.querySelector('#phone').value.trim();
+    const password = form.querySelector('#password').value.trim();
+    const errorMessage = form.querySelector('#errorMessage');
+
+    if (errorMessage) {
+        errorMessage.textContent = '';
+        errorMessage.style.display = 'none';
+    }
+
+    if (firstName.length < 2) {
+        showError(errorMessage, 'Vārds nedrīkst būt īsāks par 2 rakstzīmēm.');
+        return false;
+    }
+    if (firstName.length > 50) {
+        showError(errorMessage, 'Vārds nedrīkst pārsniegt 50 rakstzīmes.');
+        return false;
+    }
+
+    if (lastName.length < 2) {
+        showError(errorMessage, 'Uzvārds nedrīkst būt īsāks par 2 rakstzīmēm.');
+        return false;
+    }
+    if (lastName.length > 50) {
+        showError(errorMessage, 'Uzvārds nedrīkst pārsniegt 50 rakstzīmes.');
+        return false;
+    }
+
+    if (email.length < 5) {
+        showError(errorMessage, 'E-pasta adrese nedrīkst būt īsāka par 5 rakstzīmēm.');
+        return false;
+    }
+    if (email.length > 255) {
+        showError(errorMessage, 'E-pasta adrese nedrīkst pārsniegt 255 rakstzīmes.');
+        return false;
+    }
+    if (!email.includes('@')) {
+        showError(errorMessage, 'E-pasta adresei jābūt derīgai un jāietver "@" simbols.');
+        return false;
+    }
+
+    if (phone.length < 8) {
+        showError(errorMessage, 'Tālrunis nedrīkst būt īsāks par 8 rakstzīmēm.');
+        return false;
+    }
+    if (phone.length > 12) {
+        showError(errorMessage, 'Tālrunis nedrīkst pārsniegt 12 rakstzīmes.');
+        return false;
+    }
+
+    if (password.length < 8) {
+        showError(errorMessage, 'Parolei jābūt vismaz 8 rakstzīmes garai.');
+        return false;
+    }
+    if (password.length > 255) {
+        showError(errorMessage, 'Parole nedrīkst pārsniegt 255 rakstzīmes.');
+        return false;
+    }
+
+    return true; 
+}
+
+function showError(errorMessageElement, message) {
+    if (errorMessageElement) {
+        errorMessageElement.textContent = message;
+        errorMessageElement.style.display = 'block';
+    }
+}
+
+
+
 function toggleFilterModal() {
     const filterModal = document.getElementById('filterModal');
     filterModal.classList.toggle('show');
@@ -276,34 +351,38 @@ function closeModal() {
 
 
 function checkLoginForHeart(event) {
-    event.preventDefault(); // Prevent the default link behavior
+    event.preventDefault();
 
-    fetch('/Internetveikals-Adijumi2/check_login.php', { // Use absolute path for the fetch request
+    // Use an absolute path to ensure the correct file is accessed
+    fetch('/check_login.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
     })
-    .then(response => response.json())
-    .then(data => {
-        if (!data.loggedIn) {
-            console.log('User is not logged in. Showing login modal.');
-            const loginModal = document.getElementById('loginModal');
-            if (loginModal) {
-                loginModal.classList.add('show'); // Show the modal
-
-                // Update the redirect URL in the login form
-                const loginButton = loginModal.querySelector('.btn-primary');
-                if (loginButton) {
-                    loginButton.href = `/Internetveikals-Adijumi2/login.php?redirect=/Internetveikals-Adijumi2/favourites.php`; // Use absolute path
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Error during login check: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            if (data.loggedIn) {
+                // Redirect to favourites page if logged in
+                window.location.href = '/favourites.php';
+            } else {
+                // Show login modal if not logged in
+                const loginModal = document.getElementById('loginModal');
+                if (loginModal) {
+                    loginModal.classList.add('show'); // Ensure the modal is displayed
+                } else {
+                    alert('Lūdzu, ielogojieties, lai piekļūtu favorītiem.');
                 }
             }
-        } else {
-            console.log('User is logged in. Redirecting to favourites.');
-            window.location.href = '/Internetveikals-Adijumi2/favourites.php'; // Use absolute path
-        }
-    })
-    .catch(error => console.error('Error during login check:', error));
+        })
+        .catch((error) => {
+            console.error('Error during login check:', error);
+        });
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -314,10 +393,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(response => response.json())
                 .then(data => {
                     if (data.loggedIn) {
-                        // If logged in, show the modal
+                        
                         $('#addImageModal').modal('show');
                     } else {
-                        // If not logged in, show the login modal
+                        
                         $('#loginModal').modal('show');
                     }
                 })
@@ -351,9 +430,9 @@ function addToCart(productID) {
             button.disabled = true;
 
             console.log('Calling updateCartCount...');
-            updateCartCount(); // Update the cart count dynamically
+            updateCartCount(); 
 
-            // Show the notification
+            
             showCartNotification(productID);
         } else {
             alert('Kļūda pievienojot grozam: ' + data.error);
@@ -365,7 +444,7 @@ function addToCart(productID) {
 }
 
 function showCartNotification(productID) {
-    // Fetch product details for the notification
+    
     fetch(`user-database/get_product_details.php?product_ID=${productID}`)
         .then(response => response.json())
         .then(data => {
@@ -375,15 +454,15 @@ function showCartNotification(productID) {
                 const notificationName = document.getElementById('notificationName');
                 const notificationPrice = document.getElementById('notificationPrice');
 
-                // Update notification content
+                
                 notificationImage.src = data.product.image;
                 notificationName.textContent = data.product.name;
                 notificationPrice.textContent = `Cena: €${data.product.price}`;
 
-                // Show the notification
+                
                 notification.style.display = 'flex';
 
-                // Hide the notification after 5 seconds
+                
                 setTimeout(() => {
                     notification.style.display = 'none';
                 }, 5000);
@@ -398,7 +477,7 @@ function showCartNotification(productID) {
 
 function updateCartCount() {
     console.log('updateCartCount: Fetching cart count...');
-    fetch('user-database/get_cart_counts.php') // Ensure this path is correct
+    fetch('user-database/get_cart_counts.php') 
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -412,7 +491,7 @@ function updateCartCount() {
                 const cartIcon = document.querySelector('.fa-shopping-cart');
                 if (data.cartCount > 0) {
                     if (!cartBadge) {
-                        // Create the badge if it doesn't exist
+                        
                         const badge = document.createElement('span');
                         badge.className = 'badge badge-danger position-absolute cart-badge';
                         badge.style.top = '-5px';
@@ -420,11 +499,11 @@ function updateCartCount() {
                         badge.textContent = data.cartCount;
                         cartIcon.parentElement.appendChild(badge);
                     } else {
-                        // Update the badge count
+                        
                         cartBadge.textContent = data.cartCount;
                     }
                 } else if (cartBadge) {
-                    // Remove the badge if the cart is empty
+                    
                     cartBadge.remove();
                 }
             } else {
@@ -456,10 +535,10 @@ $('#confirmDeleteImage').on('click', function () {
         url: 'delete_gallery_image.php',
         type: 'POST',
         data: { gallery_ID: imageId },
-        success: function (result) { // jQuery automatically parses JSON
+        success: function (result) { 
             if (result.success) {
                 $('#deleteImageModal').modal('hide');
-                location.reload(); // Reload the page to reflect changes
+                location.reload(); 
             } else {
                 alert(result.error || 'Neizdevās dzēst bildi.');
             }
@@ -469,3 +548,4 @@ $('#confirmDeleteImage').on('click', function () {
         }
     });
 });
+

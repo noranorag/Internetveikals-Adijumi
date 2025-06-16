@@ -1,4 +1,9 @@
 <?php
+// Start the session at the very beginning
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 require 'database/db_connection.php';
 
 $currentDate = date('Y-m-d');
@@ -24,9 +29,8 @@ $query = "
 ";
 $result = mysqli_query($conn, $query);
 
+// Fetch all upcoming fairs
 $upcomingFairs = [];
-$lateFairs = [];
-
 if ($result) {
     while ($row = mysqli_fetch_assoc($result)) {
         $fair = [
@@ -36,22 +40,20 @@ if ($result) {
             'image' => htmlspecialchars($row['image']),
             'link' => htmlspecialchars($row['link']),
             'status' => htmlspecialchars($row['status']),
-            'date' => htmlspecialchars($row['date']), 
+            'date' => htmlspecialchars($row['date']),
         ];
         if ($fair['status'] === 'upcoming') {
             $upcomingFairs[] = $fair;
-        } elseif ($fair['status'] === 'late') {
-            $lateFairs[] = $fair;
         }
     }
 }
 
 $lateFairsPerPage = 8;
-
 $latePage = isset($_GET['late_page']) && is_numeric($_GET['late_page']) ? (int)$_GET['late_page'] : 1;
-
 $lateOffset = ($latePage - 1) * $lateFairsPerPage;
 
+// Fetch paginated late fairs
+$lateFairs = [];
 $lateFairsQuery = "
     SELECT 
         fair_ID AS id,
@@ -66,10 +68,8 @@ $lateFairsQuery = "
     ORDER BY fair_ID DESC
     LIMIT $lateFairsPerPage OFFSET $lateOffset
 ";
-
 $lateFairsResult = mysqli_query($conn, $lateFairsQuery);
 
-$lateFairs = [];
 if ($lateFairsResult) {
     while ($row = mysqli_fetch_assoc($lateFairsResult)) {
         $lateFairs[] = [
@@ -79,7 +79,7 @@ if ($lateFairsResult) {
             'image' => htmlspecialchars($row['image']),
             'link' => htmlspecialchars($row['link']),
             'status' => htmlspecialchars($row['status']),
-            'date' => htmlspecialchars($row['date']), 
+            'date' => htmlspecialchars($row['date']),
         ];
     }
 }

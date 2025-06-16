@@ -1,14 +1,18 @@
 <?php
-require('libs/fpdf/tfpdf.php');
+require_once __DIR__ . '/dompdf/autoload.inc.php'; // Include dompdf
+
+use Dompdf\Dompdf;
+
+// Database connection
 include 'database/db_connection.php';
 
-
+// Get the order ID from the URL
 $orderId = $_GET['order_id'] ?? null;
 if (!$orderId) {
     die('Order ID is missing.');
 }
 
-
+// Fetch the order details from the database
 $stmt = $conn->prepare("SELECT * FROM orders WHERE order_ID = ?");
 $stmt->bind_param('i', $orderId);
 $stmt->execute();
@@ -18,10 +22,10 @@ if (!$order) {
     die('Order not found.');
 }
 
+// Fetch the shipping price
+$shippingPrice = $order['shipping_price'] ?? 0.00;
 
-$shippingPrice = $order['shipping_price'] ?? 0.00; 
-
-
+// Fetch the products associated with the order
 $productStmt = $conn->prepare("
     SELECT 
         p.name AS product_name, 
@@ -35,73 +39,72 @@ $productStmt->bind_param('i', $orderId);
 $productStmt->execute();
 $products = $productStmt->get_result();
 
+// Start building the HTML for the invoice
+$html = '<style>
+    body {
+        font-family: DejaVu Sans, sans-serif; /* Use DejaVu Sans for UTF-8 support */
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        border: 1px solid black;
+        padding: 5px;
+        text-align: left;
+    }
+    .details {
+        margin-top: 20px;
+    }
+    .details div {
+        margin-bottom: 5px;
+    }
+</style>';
 
-$pdf = new tFPDF();
-$pdf->SetTitle('Rēķins', true); 
-$pdf->AddPage();
-
-
-$pdf->AddFont('Times', '', 'times.ttf', true); 
-$pdf->AddFont('Times', 'B', 'timesbd.ttf', true); 
-
-
-$pdf->SetFont('Times', 'B', 14);
-$pdf->Cell(0, 10, 'Rēķins', 0, 1, 'C');
-
-
-$pdf->SetFont('Times', '', 10);
-$pdf->Cell(95, 10, 'Datums: ' . date('d/m/Y'), 0, 0, 'L'); 
-$pdf->Cell(95, 10, 'Nr. GGG-' . $orderId . '/' . date('Y'), 0, 1, 'R');
-
-
-$pdf->Ln(5);
-
-
-$pdf->SetFont('Times', 'B', 11);
-$pdf->Cell(95, 10, 'Pakalpojumu sniedzējs', 0, 0, 'L');
-$pdf->Cell(95, 10, 'Pakalpojumu saņēmējs', 0, 1, 'L');
-
-$pdf->SetFont('Times', '', 11);
-$pdf->Cell(95, 5, 'Nosaukums: G.G.G., IU', 0, 0, 'L');
-$pdf->Cell(95, 5, 'Nosaukums: ' . $order['name'] . ' ' . $order['surname'], 0, 1, 'L');
-$pdf->Cell(95, 10, 'Reģ. Nr.: 41202014505', 0, 0, 'L');
-$pdf->Cell(95, 10, 'Reģ. Nr.: -', 0, 1, 'L');
-$pdf->Cell(95, 5, 'Juridiskā adrese: "Pinnes", Alsungas pag., Kuldīgas', 0, 0, 'L');
-$pdf->Cell(95, 5, 'Juridiskā adrese: -', 0, 1, 'L');
-$pdf->Cell(95, 5, 'nov. LV-3306', 0, 0, 'L');
-$pdf->Cell(95, 5, '', 0, 1, 'L'); 
-
-$pdf->Cell(115, 10, 'Konts: LV82UNLA005002007793', 0, 1, 'L');
-
-$pdf->Cell(95, 10, 'Norēķinu veids: Ar pārskaitījumu', 0, 0, 'L');
-$pdf->Cell(95, 10, 'Samaksas termiņš: Priekšapmaksa', 0, 1, 'L');
+$html .= '<div style="text-align: center; margin-bottom: 20px;">
+    <h2 style="font-size: 24px; margin: 0;">Rēķins</h2>
+</div>';
 
 
-$pdf->Ln(5);
+$html .= '<div style="width: 100%; margin-bottom: 20px;">
+    <span style="float: left;">Datums: ' . date('d/m/Y') . '</span>
+    <span style="float: right;">Nr. GGG-' . $orderId . '/' . date('Y') . '</span>
+</div>';
 
+// Add provider and recipient details side by side, aligned on the same line
+$html .= '<div style="display: flex; justify-content: space-between; margin-top: 20px; width: 100%;">
+    <div style="width: 48%; text-align: left; word-wrap: break-word;">
+        <div style="font-weight: bold; white-space: nowrap;">Pakalpojumu sniedzējs</div>
+        <div style="margin-bottom: 10px;"></div> <!-- Added extra space -->
+        <div>Nosaukums: G.G.G., IU</div>
+        <div>Reģ. Nr.: 41202014505</div>
+        <div>Juridiskā adrese: "Pinnes", Alsungas pag., Kuldīgas nov. LV-3306</div>
+        <div>Konts: LV82UNLA005002007793</div>
+        <div>Norēķinu veids: Ar pārskaitījumu</div>
+    </div>
+    <div style="width: 48%; text-align: left; word-wrap: break-word;">
+        <div style="font-weight: bold; white-space: nowrap;">Pakalpojumu saņēmējs</div>
+        <div>Nosaukums: ' . $order['name'] . ' ' . $order['surname'] . '</div>
+        <div>Reģ. Nr.: -</div>
+        <div>Juridiskā adrese: -</div>
+        <div>Samaksas termiņš: Priekšapmaksa</div>
+    </div>
+</div>';
 
-$pdf->SetFont('Times', 'B', 10);
-$pdf->Cell(10, 10, 'Nr.', 1, 0, 'C');
-$pdf->Cell(90, 10, 'Pakalpojuma nosaukums; pakalpojuma sniegšanas datums', 1, 0, 'C');
-$pdf->Cell(20, 10, 'Mērvienība', 1, 0, 'C');
-$pdf->Cell(20, 10, 'Daudzums', 1, 0, 'C');
+// Add a table for the products
+$html .= '<table style="margin-top: 20px;">
+    <thead>
+        <tr>
+            <th>Nr.</th>
+            <th>Pakalpojuma nosaukums; pakalpojuma sniegšanas datums</th>
+            <th>Mērvienība</th>
+            <th>Daudzums</th>
+            <th>Cena EUR bez PVN</th>
+            <th>Summa EUR bez PVN</th>
+        </tr>
+    </thead>
+    <tbody>';
 
-
-$x = $pdf->GetX(); 
-$y = $pdf->GetY(); 
-
-$pdf->MultiCell(25, 5, "Cena EUR\nbez PVN", 1, 'C'); 
-$x2 = $pdf->GetX(); 
-$pdf->SetXY($x + 25, $y); 
-
-$pdf->MultiCell(25, 5, "Summa EUR\nbez PVN", 1, 'C'); 
-$pdf->SetXY($x2 + 25, $y); 
-
-
-$pdf->Ln(10);
-
-
-$pdf->SetFont('Times', '', 11);
 $counter = 1;
 $total = 0;
 while ($product = $products->fetch_assoc()) {
@@ -110,76 +113,52 @@ while ($product = $products->fetch_assoc()) {
     $sum = $price * $quantity;
     $total += $sum;
 
-    $pdf->Cell(10, 10, $counter++, 1, 0, 'C');
-    $pdf->Cell(90, 10, $product['product_name'], 1, 0, 'L');
-    $pdf->Cell(20, 10, 'gab.', 1, 0, 'C');
-    $pdf->Cell(20, 10, $quantity, 1, 0, 'C');
-    $pdf->Cell(25, 10, number_format($price, 2), 1, 0, 'R');
-    $pdf->Cell(25, 10, number_format($sum, 2), 1, 1, 'R');
+    $html .= '<tr>
+        <td style="text-align: center;">' . $counter++ . '</td>
+        <td>' . $product['product_name'] . '</td>
+        <td style="text-align: center;">gab.</td>
+        <td style="text-align: center;">' . $quantity . '</td>
+        <td style="text-align: right;">' . number_format($price, 2) . '</td>
+        <td style="text-align: right;">' . number_format($sum, 2) . '</td>
+    </tr>';
 }
 
-
+// Add the shipping price to the total
 $total += $shippingPrice;
 
-$pdf->Cell(10, 10, $counter++, 1, 0, 'C');
-$pdf->Cell(90, 10, 'Piegāde', 1, 0, 'L');
-$pdf->Cell(20, 10, '-', 1, 0, 'C');
-$pdf->Cell(20, 10, '-', 1, 0, 'C');
-$pdf->Cell(25, 10, number_format($shippingPrice, 2), 1, 0, 'R'); 
-$pdf->Cell(25, 10, number_format($shippingPrice, 2), 1, 1, 'R'); 
+$html .= '<tr>
+    <td style="text-align: center;">' . $counter++ . '</td>
+    <td>Piegāde</td>
+    <td style="text-align: center;">-</td>
+    <td style="text-align: center;">-</td>
+    <td style="text-align: right;">' . number_format($shippingPrice, 2) . '</td>
+    <td style="text-align: right;">' . number_format($shippingPrice, 2) . '</td>
+</tr>';
 
+$html .= '</tbody></table>';
 
+// Add totals
+$html .= '<table style="margin-top: 20px;">
+    <tr>
+        <td style="width: 70%;"></td>
+        <td style="width: 15%; font-weight: bold;">Kopā:</td>
+        <td style="width: 15%; text-align: right;">' . number_format($total, 2) . ' EUR</td>
+    </tr>
+</table>';
 
-$pdf->SetFont('Times', 'B', 10);
-$pdf->Cell(140, 10, '', 0, 0, 'C'); 
-$pdf->Cell(25, 10, 'Kopā:', 1, 0, 'L'); 
-$pdf->Cell(25, 10, number_format($total, 2), 1, 1, 'R'); 
+// Add a note
+$html .= '<p style="margin-top: 20px;">Rēķins jāsamaksā 12 stundu laikā, vai arī tas var tikt anulēts.</p>';
 
+// Initialize dompdf
+$dompdf = new Dompdf();
+$dompdf->loadHtml($html);
 
-$pdf->SetFont('Times', '', 10);
-$pdf->Cell(140, 10, '', 0, 0, 'C'); 
-$pdf->Cell(25, 10, 'Atlaide:', 1, 0, 'L'); 
-$pdf->Cell(25, 10, '-', 1, 1, 'R'); 
+// Set paper size and orientation
+$dompdf->setPaper('A4', 'portrait');
 
+// Render the HTML as PDF
+$dompdf->render();
 
-$pdf->Cell(140, 10, '', 0, 0, 'C'); 
-$pdf->MultiCell(25, 5, "Summa\nar atlaidi:", 1, 'L'); 
-$pdf->SetXY($pdf->GetX() + 165, $pdf->GetY() - 10); 
-$pdf->Cell(25, 10, '-', 1, 1, 'R'); 
-
-
-$pdf->Cell(140, 10, '', 0, 0, 'C'); 
-$pdf->Cell(25, 10, 'PVN likme 21%:', 1, 0, 'L'); 
-$pdf->Cell(25, 10, '-', 1, 1, 'R'); 
-
-
-$pdf->SetFont('Times', 'B', 10);
-$pdf->Cell(140, 10, '', 0, 0, 'C'); 
-$pdf->MultiCell(25, 5, "Summa\napmaksai:", 1, 'L'); 
-$pdf->SetXY($pdf->GetX() + 165, $pdf->GetY() - 10); 
-$pdf->Cell(25, 10, number_format($total, 2), 1, 1, 'R'); 
-
-$pdf->Ln(5); 
-
-
-$pdf->SetFont('Times', '', 11);
-$pdf->Cell(0, 10, 'Rēķins jāsamaksā 12 stundu laikā, vai arī tas var tikt anulēts.', 0, 1, 'L'); 
-
-
-$invoiceDir = 'invoices/';
-if (!is_dir($invoiceDir)) {
-    mkdir($invoiceDir, 0777, true); 
-}
-
-$invoiceFile = $invoiceDir . 'invoice_' . $orderId . '.pdf';
-$pdf->Output('F', $invoiceFile); 
-
-
-$updateInvoicePathStmt = $conn->prepare("UPDATE orders SET invoice_path = ? WHERE order_ID = ?");
-$updateInvoicePathStmt->bind_param('si', $invoiceFile, $orderId);
-$updateInvoicePathStmt->execute();
-$updateInvoicePathStmt->close();
-
-
-$pdf->Output('I', 'Rekins.pdf');
+// Output the PDF to the browser
+$dompdf->stream('Rekins.pdf', ['Attachment' => false]);
 ?>

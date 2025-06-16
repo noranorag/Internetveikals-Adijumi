@@ -1,4 +1,10 @@
 <?php
+// Start the session at the very beginning
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Include necessary files
 include 'database/db_connection.php';
 
 if ($conn->connect_error) {
@@ -7,6 +13,7 @@ if ($conn->connect_error) {
 
 include 'user-database/check_reserved.php';
 
+// Fetch active products
 $query = "SELECT * FROM product WHERE active = 'active'";
 $result = $conn->query($query);
 
@@ -16,9 +23,10 @@ if ($result->num_rows > 0) {
     $products = [];
 }
 
+// Fetch user favorites if logged in
 $favorites = [];
-if (isset($_SESSION['user_id'])) { 
-    $userID = $_SESSION['user_id']; 
+if (isset($_SESSION['user_id'])) {
+    $userID = $_SESSION['user_id'];
     $stmt = $conn->prepare("SELECT product_ID FROM favourites WHERE user_ID = ?");
     $stmt->bind_param("i", $userID);
     $stmt->execute();
@@ -27,9 +35,8 @@ if (isset($_SESSION['user_id'])) {
         $favorites[] = $row['product_ID'];
     }
 }
-?>
 
-<?php
+// Fetch categories
 $query = "SELECT * FROM category WHERE active = 1 ORDER BY big_category, name";
 $result = $conn->query($query);
 
@@ -42,33 +49,31 @@ if ($result->num_rows > 0) {
         ];
     }
 }
-?>
 
-<?php
-$bindParams = []; 
-$types = ''; 
-
-$whereClauses = ["p.active = 'active'"]; 
+// Handle filters
+$bindParams = [];
+$types = '';
+$whereClauses = ["p.active = 'active'"];
 
 if (!empty($_GET['search'])) {
-    $searchQuery = '%' . htmlspecialchars($_GET['search']) . '%'; 
-    $whereClauses[] = "(p.name LIKE ? OR p.short_description LIKE ?)"; 
+    $searchQuery = '%' . htmlspecialchars($_GET['search']) . '%';
+    $whereClauses[] = "(p.name LIKE ? OR p.short_description LIKE ?)";
     $bindParams[] = $searchQuery;
     $bindParams[] = $searchQuery;
-    $types .= 'ss'; 
+    $types .= 'ss';
 }
 
 if (!empty($_GET['big_category'])) {
     $selectedBigCategory = htmlspecialchars($_GET['big_category']);
     $whereClauses[] = "c.big_category = ?";
     $bindParams[] = $selectedBigCategory;
-    $types .= 's'; 
+    $types .= 's';
 } elseif (!empty($_GET['subcategory'])) {
-    $selectedSubcategories = array_map('intval', $_GET['subcategory']); 
+    $selectedSubcategories = array_map('intval', $_GET['subcategory']);
     $subcategoryPlaceholders = implode(',', array_fill(0, count($selectedSubcategories), '?'));
     $whereClauses[] = "c.category_ID IN ($subcategoryPlaceholders)";
     $bindParams = array_merge($bindParams, $selectedSubcategories);
-    $types .= str_repeat('i', count($selectedSubcategories)); 
+    $types .= str_repeat('i', count($selectedSubcategories));
 }
 
 if (!empty($_GET['price_min']) && !empty($_GET['price_max'])) {
@@ -77,7 +82,7 @@ if (!empty($_GET['price_min']) && !empty($_GET['price_max'])) {
     $whereClauses[] = "p.price BETWEEN ? AND ?";
     $bindParams[] = $priceMin;
     $bindParams[] = $priceMax;
-    $types .= 'dd'; 
+    $types .= 'dd';
 }
 
 $whereSQL = implode(' AND ', $whereClauses);
@@ -101,6 +106,7 @@ if ($result->num_rows > 0) {
     $products = [];
 }
 
+// Pagination
 $limit = 20;
 $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $offset = ($page - 1) * $limit;
@@ -135,7 +141,7 @@ $countQuery = "
 ";
 $countStmt = $conn->prepare($countQuery);
 if (!empty($bindParams)) {
-    $countParams = array_slice($bindParams, 0, -2); 
+    $countParams = array_slice($bindParams, 0, -2);
     $countTypes = substr($types, 0, -2);
     $countStmt->bind_param($countTypes, ...$countParams);
 }
@@ -143,8 +149,6 @@ $countStmt->execute();
 $countResult = $countStmt->get_result();
 $totalProducts = $countResult->fetch_assoc()['total'];
 $totalPages = ceil($totalProducts / $limit);
-
-
 ?>
 
 <!DOCTYPE html>

@@ -1,6 +1,11 @@
-
 <?php
-session_start();
+// Start the session at the very beginning
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Debug: Log session data
+error_log("Session data in favourites.php: " . print_r($_SESSION, true));
 
 include 'database/db_connection.php';
 

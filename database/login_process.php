@@ -2,7 +2,7 @@
 session_start();
 require 'db_connection.php';
 
-header('Content-Type: application/json'); 
+header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
@@ -30,15 +30,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $_SESSION['user_email'] = $user['email'];
             $_SESSION['user_role'] = $user['role'];
 
-            $base_url = dirname(dirname($_SERVER['SCRIPT_NAME'])); 
+            // Transfer cart items from session_ID to user_ID
+            $sessionID = session_id();
+            $stmt = $conn->prepare("
+                UPDATE cart 
+                SET ID_user = ?, session_ID = NULL 
+                WHERE session_ID = ?
+            ");
+            $stmt->bind_param("is", $user['user_ID'], $sessionID);
+            $stmt->execute();
 
-            if ($user['role'] === 'admin' || $user['role'] === 'moder') {
-                $redirect = $base_url . '/admin/index.php';
-            } else if ($user['role'] === 'user') {
-                $redirect = $base_url . '/index.php';
+            // Redirect based on user role
+            if ($user['role'] === 'user') {
+                $redirect = 'index.php';
+            } elseif ($user['role'] === 'admin' || $user['role'] === 'moder') {
+                $redirect = '/admin/index.php';
             } else {
-                $redirect = $base_url . '/index.php'; 
+                $redirect = 'index.php'; // Default redirect for unknown roles
             }
+
             echo json_encode(['success' => true, 'redirect' => $redirect]);
             exit();
         } else {

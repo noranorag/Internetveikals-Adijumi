@@ -11,7 +11,7 @@
                     <li><a href="index.php">Sākums</a></li>
                     <li><a href="eshop.php">Internetveikals</a></li>
                     <li><a href="gallery.php">Galerija</a></li>
-                    <li><a href="#">Kontakti</a></li>
+                    <li><a href="fair.php">Tirdziņi</a></li>
                 </ul>
             </div>
 
@@ -27,8 +27,8 @@
             <div class="col-sm-6 col-md-3 mb-4">
                 <h5 class="footer-heading">Politikas</h5>
                 <ul class="footer-links">
-                    <li><a href="privatuma-politika.php">Privātuma politika</a></li>
-                    <li><a href="sikdatnu-politika.php">Sīkdatņu politika</a></li>
+                    <li><a href="politics.php">Privātuma politika</a></li>
+                    <li><a href="politics.php">Sīkdatņu politika</a></li>
                     <li><a href="#">Vairāk...</a></li>
                 </ul>
             </div>

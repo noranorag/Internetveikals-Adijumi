@@ -52,11 +52,7 @@ $userId = $_SESSION['user_id'] ?? null;
         <?php endif; ?>
 
             <div id="information" class="form-section">
-                <?php if (!isset($_SESSION['user_id'])): ?>
-                    <div class="login-prompt text-center mb-4">
-                        <p>Ir konts? <a href="login.php" class="btn btn-outline-main">Ielogojies</a> lai aizpildītu informāciju</p>
-                    </div>
-                <?php endif; ?>
+                
                 <div id="information-errors" class="text-danger mb-3" style="display: none;"></div>
                 <div class="form-group">
                     <label>Vārds *</label>
